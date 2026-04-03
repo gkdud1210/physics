@@ -740,6 +740,13 @@ function switchTab(tab) {
 function loadProblem(idx) {
   currentIdx = idx % PROBLEMS.length;
   answered   = false;
+
+  // 다시 풀기 시 현재 문제 오답 기록 초기화
+  const record = getRecord();
+  record.wrong = record.wrong.filter(w => w.id !== PROBLEMS[currentIdx].id);
+  saveRecord(record);
+  document.getElementById('stat-wrong').textContent = record.wrong.length;
+
   document.getElementById('feedback-box').className   = 'feedback';
   document.getElementById('explanation-box').className= 'explanation';
   document.getElementById('explanation-text').innerHTML = '';
@@ -828,9 +835,23 @@ function submitAnswer() {
   document.getElementById('stat-correct').textContent = record.correct.length;
   document.getElementById('stat-wrong').textContent   = record.wrong.length;
 
+  // 해설 자동 표시 (정답·오답 모두)
+  const expHtml = lang==='ko' ? p.explanation_ko : p.explanation_en;
+  if (expHtml) {
+    document.getElementById('lbl-solution').textContent = t('solution');
+    document.getElementById('explanation-text').innerHTML = expHtml;
+    document.getElementById('explanation-box').classList.add('visible');
+    if (window.renderMathInElement) {
+      renderMathInElement(document.getElementById('explanation-text'), {
+        delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+        throwOnError: false
+      });
+    }
+  }
+
   document.getElementById('action-row').style.display = 'flex';
   document.getElementById('retry-btn').textContent = t('retry');
-  document.getElementById('hint-btn').textContent  = t('hint');
+  document.getElementById('hint-btn').textContent  = t('hideHint');
   document.getElementById('next-btn').textContent  = t('next');
 }
 
