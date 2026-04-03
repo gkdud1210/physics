@@ -217,6 +217,73 @@
   /* ACTION ROW */
   .action-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
 
+  /* ── SPLASH ───────────────────────────────────── */
+  #splash {
+    position: fixed; inset: 0; z-index: 999;
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #splash.hide { opacity: 0; visibility: hidden; }
+
+  .splash-emoji {
+    font-size: 5rem;
+    animation: wave 1.2s ease-in-out infinite;
+    transform-origin: 70% 80%;
+  }
+  @keyframes wave {
+    0%,100% { transform: rotate(-8deg); }
+    50%      { transform: rotate(12deg); }
+  }
+
+  .splash-title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -1px;
+    text-align: center;
+    animation: popIn .5s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(.7) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .splash-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,.55);
+    font-weight: 500;
+    animation: popIn .5s .15s cubic-bezier(.34,1.56,.64,1) both;
+  }
+
+  .splash-btn {
+    margin-top: 8px;
+    background: rgba(255,255,255,.12);
+    border: 1.5px solid rgba(255,255,255,.25);
+    color: #fff;
+    border-radius: 999px;
+    padding: 12px 32px;
+    font-size: .95rem;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: background .2s, transform .2s;
+    animation: popIn .5s .3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .splash-btn:hover { background: rgba(255,255,255,.22); transform: scale(1.05); }
+
+  .splash-timer {
+    display: flex; gap: 6px; align-items: center;
+    animation: popIn .5s .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .splash-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,.25);
+    transition: background .3s;
+  }
+  .splash-dot.active { background: var(--blue-400); }
+
   /* PROGRESS BAR */
   .progress-wrap { background: var(--gray-200); border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 8px; }
   .progress-bar { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue-500), var(--blue-400)); transition: width .6s ease; }
@@ -254,6 +321,21 @@
 </style>
 </head>
 <body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-emoji">👋</div>
+  <div>
+    <div class="splash-title">안녕 건우야!</div>
+    <div class="splash-sub">오늘도 물리 공부 파이팅 ⚡</div>
+  </div>
+  <button class="splash-btn" onclick="hideSplash()">문제 풀기 시작 →</button>
+  <div class="splash-timer">
+    <div class="splash-dot active" id="dot0"></div>
+    <div class="splash-dot" id="dot1"></div>
+    <div class="splash-dot" id="dot2"></div>
+  </div>
+</div>
 
 <nav class="nav">
   <div class="nav-logo">
@@ -859,6 +941,23 @@ function resetProgress() {
   loadProblem(0);
   renderProgress();
 }
+
+/* ============================================================
+   SPLASH
+   ============================================================ */
+function hideSplash() {
+  document.getElementById('splash').classList.add('hide');
+}
+
+(function() {
+  const dots = [0,1,2].map(i => document.getElementById('dot'+i));
+  let tick = 0;
+  const iv = setInterval(() => {
+    tick++;
+    dots.forEach((d,i) => d.classList.toggle('active', i === tick % 3));
+    if (tick >= 3) { clearInterval(iv); hideSplash(); }
+  }, 1000);
+})();
 
 /* ============================================================
    INIT
