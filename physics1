@@ -1,0 +1,239 @@
+# =========================
+# main.py
+# =========================
+from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+from database import SessionLocal, engine
+import models
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+# DB Dependency
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# -----------------
+# AUTH (simple)
+# -----------------
+@app.post("/register")
+def register(username: str, password: str, role: str, db: Session = Depends(get_db)):
+    user = models.User(username=username, password=password, role=role)
+    db.add(user)
+    db.commit()
+    return {"message": "User created"}
+
+@app.post("/login")
+def login(username: str, password: str, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter_by(username=username, password=password).first()
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid credentials")
+    return {"message": "Login success", "user_id": user.id, "role": user.role}
+
+# -----------------
+# PROBLEMS
+# -----------------
+@app.post("/problems")
+def create_problem(problem: dict, db: Session = Depends(get_db)):
+    p = models.Problem(**problem)
+    db.add(p)
+    db.commit()
+    return {"message": "Problem created"}
+
+@app.get("/problems")
+def get_problems(db: Session = Depends(get_db)):
+    return db.query(models.Problem).all()
+
+# -----------------
+# ASSIGNMENTS
+# -----------------
+@app.post("/assignments")
+def create_assignment(data: dict, db: Session = Depends(get_db)):
+    a = models.Assignment(title_ko=data["title_ko"], title_en=data["title_en"], due_date=data["due_date"])
+    db.add(a)
+    db.commit()
+
+    for pid in data["problem_ids"]:
+        ap = models.AssignmentProblem(assignment_id=a.id, problem_id=pid)
+        db.add(ap)
+    db.commit()
+
+    return {"message": "Assignment created"}
+
+@app.get("/assignments/{id}")
+def get_assignment(id: int, db: Session = Depends(get_db)):
+    return db.query(models.Assignment).filter_by(id=id).first()
+
+# -----------------
+# SUBMIT
+# -----------------
+@app.post("/submit")
+def submit(data: dict, db: Session = Depends(get_db)):
+    problem = db.query(models.Problem).filter_by(id=data["problem_id"]).first()
+    is_correct = problem.correct_answer == data["answer"]
+
+    s = models.Submission(
+        student_id=data["student_id"],
+        assignment_id=data["assignment_id"],
+        problem_id=data["problem_id"],
+        student_answer=data["answer"],
+        is_correct=is_correct
+    )
+    db.add(s)
+    db.commit()
+
+    return {"correct": is_correct}
+
+# -----------------
+# WRONG ANSWERS
+# -----------------
+@app.get("/wrong-answers/{student_id}")
+def wrong_answers(student_id: int, db: Session = Depends(get_db)):
+    subs = db.query(models.Submission).filter_by(student_id=student_id, is_correct=False).all()
+
+    result = []
+    for s in subs:
+        p = db.query(models.Problem).filter_by(id=s.problem_id).first()
+        result.append({
+            "question_ko": p.question_text_ko,
+            "question_en": p.question_text_en,
+            "your_answer": s.student_answer,
+            "correct_answer": p.correct_answer,
+            "explanation_ko": p.explanation_ko,
+            "explanation_en": p.explanation_en
+        })
+    return result
+
+
+# =========================
+# models.py
+# =========================
+from sqlalchemy import Column, Integer, String, Boolean
+from database import Base
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+    password = Column(String)
+    role = Column(String)
+
+class Problem(Base):
+    __tablename__ = "problems"
+    id = Column(Integer, primary_key=True)
+    title_ko = Column(String)
+    title_en = Column(String)
+    concept_ko = Column(String)
+    concept_en = Column(String)
+    difficulty = Column(String)
+    question_text_ko = Column(String)
+    question_text_en = Column(String)
+    correct_answer = Column(String)
+    explanation_ko = Column(String)
+    explanation_en = Column(String)
+
+class Assignment(Base):
+    __tablename__ = "assignments"
+    id = Column(Integer, primary_key=True)
+    title_ko = Column(String)
+    title_en = Column(String)
+    due_date = Column(String)
+
+class AssignmentProblem(Base):
+    __tablename__ = "assignment_problems"
+    id = Column(Integer, primary_key=True)
+    assignment_id = Column(Integer)
+    problem_id = Column(Integer)
+
+class Submission(Base):
+    __tablename__ = "submissions"
+    id = Column(Integer, primary_key=True)
+    student_id = Column(Integer)
+    assignment_id = Column(Integer)
+    problem_id = Column(Integer)
+    student_answer = Column(String)
+    is_correct = Column(Boolean)
+
+
+# =========================
+# database.py
+# =========================
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+# =========================
+# basic frontend (index.html)
+# =========================
+"""
+<!DOCTYPE html>
+<html>
+<head>
+<title>Physics App</title>
+</head>
+<body>
+<h1>Physics Assignment</h1>
+
+<button onclick="setLang('ko')">KO</button>
+<button onclick="setLang('en')">EN</button>
+
+<div id="question"></div>
+<input id="answer" />
+<button onclick="submit()">Submit</button>
+
+<script>
+let lang = localStorage.getItem('lang') || 'ko';
+
+function setLang(l){
+  lang = l;
+  localStorage.setItem('lang', l);
+}
+
+async function load(){
+  let res = await fetch('/problems');
+  let data = await res.json();
+  let p = data[0];
+
+  document.getElementById('question').innerText = 
+    lang === 'ko' ? p.question_text_ko : p.question_text_en;
+}
+
+async function submit(){
+  let ans = document.getElementById('answer').value;
+  let res = await fetch('/submit', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      student_id: 1,
+      assignment_id: 1,
+      problem_id: 1,
+      answer: ans
+    })
+  });
+  let data = await res.json();
+  alert(data.correct ? 'Correct!' : 'Wrong!');
+}
+
+load();
+</script>
+</body>
+</html>
+"""
+
+# =========================
+# RUN
+# =========================
+# pip install fastapi uvicorn sqlalchemy
+# uvicorn main:app --reload

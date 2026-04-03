@@ -684,8 +684,14 @@ let answered = false;
 const STUDENT_ID = 1;
 const ASSIGNMENT_ID = 1;
 
-// Go Live(5500) 등 다른 포트에서 열릴 때도 API는 항상 FastAPI(:8000)로
-const API = window.location.port === '8000' ? '' : 'http://localhost:8000';
+// 환경 자동 감지: GitHub Pages → Render / 로컬 → localhost:8000
+const API = (() => {
+  const h = window.location.hostname;
+  if (h === 'localhost' || h === '127.0.0.1') {
+    return window.location.port === '8000' ? '' : 'http://localhost:8000';
+  }
+  return 'https://physics-study-api.onrender.com';
+})();
 
 /* ============================================================
    LANG
