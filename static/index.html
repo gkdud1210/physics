@@ -71,6 +71,16 @@
     font-size: 1rem;
     box-shadow: 0 4px 12px rgba(59,130,246,.4);
   }
+  .home-btn {
+    background: rgba(255,255,255,.10);
+    border: none; border-radius: 8px;
+    color: rgba(255,255,255,.8); font-size: 1rem;
+    width: 36px; height: 36px;
+    cursor: pointer; transition: background .2s, transform .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .home-btn:hover { background: rgba(255,255,255,.2); transform: scale(1.1); }
+
   .lang-toggle { display: flex; background: rgba(255,255,255,.10); border-radius: 8px; overflow: hidden; }
   .lang-btn {
     background: transparent; border: none;
@@ -326,8 +336,8 @@
 <div id="splash">
   <div class="splash-emoji">👋</div>
   <div>
-    <div class="splash-title">안녕 건우야!</div>
-    <div class="splash-sub">오늘도 물리 공부 파이팅 ⚡</div>
+    <div class="splash-title">안녕 건우!</div>
+    <div class="splash-sub">물리 공부 파이팅 ⚡</div>
   </div>
   <button class="splash-btn" onclick="hideSplash()">문제 풀기 시작 →</button>
   <div class="splash-timer">
@@ -338,13 +348,16 @@
 </div>
 
 <nav class="nav">
-  <div class="nav-logo">
+  <div class="nav-logo" onclick="showSplash()" style="cursor:pointer" title="홈으로">
     <div class="icon">⚡</div>
     Physics Study
   </div>
-  <div class="lang-toggle">
-    <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">KO</button>
-    <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="home-btn" onclick="showSplash()" title="홈으로">🏠</button>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">KO</button>
+      <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
   </div>
 </nav>
 
@@ -968,6 +981,11 @@ function resetProgress() {
    ============================================================ */
 function hideSplash() {
   document.getElementById('splash').classList.add('hide');
+}
+
+function showSplash() {
+  const splash = document.getElementById('splash');
+  splash.classList.remove('hide');
 }
 
 (function() {
