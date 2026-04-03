@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Copy static to docs
-        run: cp static/index.html docs/index.html
+        run: mkdir -p docs && cp static/index.html docs/index.html
       - uses: actions/configure-pages@v4
       - uses: actions/upload-pages-artifact@v3
         with:
