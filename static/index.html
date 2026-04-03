@@ -11,7 +11,8 @@
     delimiters: [
       {left:'$$', right:'$$', display:true},
       {left:'$', right:'$', display:false}
-    ]
+    ],
+    throwOnError: false
   })"></script>
 <style>
   :root {
@@ -26,31 +27,27 @@
     --blue-50:  #eff6ff;
     --green:    #10b981;
     --red:      #ef4444;
-    --yellow:   #f59e0b;
     --white:    #ffffff;
     --gray-100: #f1f5f9;
     --gray-200: #e2e8f0;
     --gray-400: #94a3b8;
     --gray-600: #475569;
     --gray-800: #1e293b;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
     --shadow-md: 0 4px 16px rgba(15,23,42,.10);
     --shadow-lg: 0 10px 40px rgba(15,23,42,.14);
     --radius:   12px;
     --radius-lg:18px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
     min-height: 100vh;
     color: var(--gray-800);
-    padding: 0;
   }
 
-  /* ─── TOP NAV ─────────────────────────────────── */
+  /* NAV */
   .nav {
     background: rgba(255,255,255,.06);
     backdrop-filter: blur(16px);
@@ -60,18 +57,11 @@
     align-items: center;
     justify-content: space-between;
     height: 64px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
   }
   .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--white);
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: -.3px;
+    display: flex; align-items: center; gap: 10px;
+    color: var(--white); font-weight: 700; font-size: 1.1rem;
   }
   .nav-logo .icon {
     width: 34px; height: 34px;
@@ -81,411 +71,180 @@
     font-size: 1rem;
     box-shadow: 0 4px 12px rgba(59,130,246,.4);
   }
-  .nav-right { display: flex; align-items: center; gap: 12px; }
-  .lang-toggle {
-    display: flex;
-    background: rgba(255,255,255,.10);
-    border-radius: 8px;
-    overflow: hidden;
-  }
+  .lang-toggle { display: flex; background: rgba(255,255,255,.10); border-radius: 8px; overflow: hidden; }
   .lang-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255,255,255,.6);
-    font-size: .8rem;
-    font-weight: 600;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition: all .2s;
-    letter-spacing: .5px;
+    background: transparent; border: none;
+    color: rgba(255,255,255,.6); font-size: .8rem; font-weight: 600;
+    padding: 6px 14px; cursor: pointer; transition: all .2s;
   }
-  .lang-btn.active {
-    background: var(--blue-600);
-    color: var(--white);
-    border-radius: 6px;
-  }
+  .lang-btn.active { background: var(--blue-600); color: var(--white); border-radius: 6px; }
   .lang-btn:hover:not(.active) { color: var(--white); }
 
-  /* ─── MAIN LAYOUT ─────────────────────────────── */
-  .main {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 32px 16px 64px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
+  /* MAIN */
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 16px 64px; display: flex; flex-direction: column; gap: 24px; }
 
-  /* ─── STAT BAR ────────────────────────────────── */
-  .stat-bar {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-  }
+  /* STAT BAR */
+  .stat-bar { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
   .stat-card {
     background: rgba(255,255,255,.08);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,.12);
     border-radius: var(--radius);
-    padding: 20px;
-    text-align: center;
-    color: var(--white);
+    padding: 20px; text-align: center; color: var(--white);
   }
-  .stat-num {
-    font-size: 1.8rem;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .stat-num.green  { color: #6ee7b7; }
-  .stat-num.red    { color: #fca5a5; }
-  .stat-num.blue   { color: var(--blue-300); }
-  .stat-label { font-size: .78rem; color: rgba(255,255,255,.55); font-weight: 500; letter-spacing: .3px; }
+  .stat-num { font-size: 1.8rem; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .stat-num.green { color: #6ee7b7; }
+  .stat-num.red   { color: #fca5a5; }
+  .stat-num.blue  { color: var(--blue-300); }
+  .stat-label { font-size: .78rem; color: rgba(255,255,255,.55); font-weight: 500; }
 
-  /* ─── CARD BASE ───────────────────────────────── */
-  .card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
-  }
+  /* CARD */
+  .card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden; }
   .card-header {
-    padding: 20px 28px;
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 20px 28px; border-bottom: 1px solid var(--gray-200);
+    display: flex; align-items: center; justify-content: space-between;
   }
   .card-title {
-    font-size: .85rem;
-    font-weight: 700;
-    color: var(--blue-700);
-    letter-spacing: .4px;
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: .85rem; font-weight: 700; color: var(--blue-700);
+    letter-spacing: .4px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
   }
   .card-title::before {
-    content: '';
-    width: 4px; height: 16px;
+    content: ''; width: 4px; height: 16px;
     background: linear-gradient(180deg, var(--blue-500), var(--blue-700));
-    border-radius: 2px;
-    display: block;
+    border-radius: 2px; display: block;
   }
   .card-body { padding: 28px; }
 
-  /* ─── TABS ────────────────────────────────────── */
-  .tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--gray-100);
-    border-radius: 10px;
-    padding: 4px;
-  }
+  /* TABS */
+  .tabs { display: flex; gap: 4px; background: var(--gray-100); border-radius: 10px; padding: 4px; }
   .tab {
-    flex: 1;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 0;
-    font-size: .85rem;
-    font-weight: 600;
-    color: var(--gray-400);
-    cursor: pointer;
-    transition: all .2s;
+    flex: 1; background: transparent; border: none; border-radius: 8px;
+    padding: 10px 0; font-size: .85rem; font-weight: 600;
+    color: var(--gray-400); cursor: pointer; transition: all .2s;
   }
-  .tab.active {
-    background: var(--white);
-    color: var(--blue-700);
-    box-shadow: var(--shadow-sm);
-  }
+  .tab.active { background: var(--white); color: var(--blue-700); box-shadow: var(--shadow-sm); }
   .tab:hover:not(.active) { color: var(--gray-600); }
 
-  /* ─── PROBLEM CARD ────────────────────────────── */
-  #problem-section, #wrong-section, #progress-section {
-    display: none;
-  }
-  #problem-section.visible,
-  #wrong-section.visible,
-  #progress-section.visible { display: block; }
+  /* SECTIONS */
+  #problem-section, #wrong-section, #progress-section { display: none; }
+  #problem-section.visible, #wrong-section.visible, #progress-section.visible { display: block; }
 
-  .problem-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
+  /* BADGE */
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: .75rem;
-    font-weight: 600;
-    letter-spacing: .3px;
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: .75rem; font-weight: 600; letter-spacing: .3px;
   }
-  .badge-blue { background: var(--blue-100); color: var(--blue-700); }
-  .badge-green { background: #d1fae5; color: #065f46; }
+  .badge-blue   { background: var(--blue-100); color: var(--blue-700); }
+  .badge-green  { background: #d1fae5; color: #065f46; }
   .badge-yellow { background: #fef3c7; color: #92400e; }
-  .badge-red { background: #fee2e2; color: #991b1b; }
+  .badge-red    { background: #fee2e2; color: #991b1b; }
 
-  .problem-number {
-    font-size: .8rem;
-    color: var(--gray-400);
-    margin-left: auto;
-    font-weight: 600;
-  }
+  .problem-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .problem-number { font-size: .8rem; color: var(--gray-400); margin-left: auto; font-weight: 600; }
 
+  /* QUESTION BOX */
   .question-box {
     background: linear-gradient(135deg, var(--blue-50), #f0f9ff);
     border: 1.5px solid var(--blue-100);
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 24px;
-    position: relative;
-    overflow: hidden;
+    border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+    position: relative; overflow: hidden;
   }
   .question-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 4px; height: 100%;
+    content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
     background: linear-gradient(180deg, var(--blue-500), var(--blue-700));
   }
-  .question-text {
-    font-size: 1.05rem;
-    line-height: 1.75;
-    color: var(--gray-800);
-    padding-left: 8px;
-    font-weight: 500;
-  }
+  .question-text { font-size: 1.05rem; line-height: 1.75; color: var(--gray-800); padding-left: 8px; font-weight: 500; }
 
-  /* ─── ANSWER INPUT ────────────────────────────── */
+  /* ANSWER */
   .answer-area { display: flex; flex-direction: column; gap: 14px; }
-  .input-label {
-    font-size: .8rem;
-    font-weight: 700;
-    color: var(--gray-600);
-    letter-spacing: .3px;
-    text-transform: uppercase;
-  }
+  .input-label { font-size: .8rem; font-weight: 700; color: var(--gray-600); letter-spacing: .3px; text-transform: uppercase; }
   .answer-row { display: flex; gap: 12px; }
   .answer-input {
-    flex: 1;
-    border: 2px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 14px 18px;
-    font-size: .95rem;
-    color: var(--gray-800);
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-    font-family: inherit;
+    flex: 1; border: 2px solid var(--gray-200); border-radius: var(--radius);
+    padding: 14px 18px; font-size: .95rem; color: var(--gray-800);
+    outline: none; transition: border-color .2s, box-shadow .2s; font-family: inherit;
   }
-  .answer-input:focus {
-    border-color: var(--blue-500);
-    box-shadow: 0 0 0 4px rgba(59,130,246,.12);
-  }
+  .answer-input:focus { border-color: var(--blue-500); box-shadow: 0 0 0 4px rgba(59,130,246,.12); }
   .answer-input::placeholder { color: var(--gray-400); }
 
+  /* BUTTONS */
   .btn {
-    border: none;
-    border-radius: var(--radius);
-    padding: 14px 28px;
-    font-size: .9rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all .2s;
-    letter-spacing: .2px;
-    white-space: nowrap;
+    border: none; border-radius: var(--radius); padding: 14px 28px;
+    font-size: .9rem; font-weight: 700; cursor: pointer;
+    transition: all .2s; letter-spacing: .2px; white-space: nowrap;
   }
   .btn-primary {
     background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-    color: var(--white);
-    box-shadow: 0 4px 12px rgba(37,99,235,.3);
+    color: var(--white); box-shadow: 0 4px 12px rgba(37,99,235,.3);
   }
-  .btn-primary:hover {
-    background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
-    transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(37,99,235,.4);
-  }
+  .btn-primary:hover { background: linear-gradient(135deg, var(--blue-500), var(--blue-600)); transform: translateY(-1px); }
   .btn-primary:active { transform: translateY(0); }
-  .btn-ghost {
-    background: var(--gray-100);
-    color: var(--gray-600);
-  }
+  .btn-ghost { background: var(--gray-100); color: var(--gray-600); }
   .btn-ghost:hover { background: var(--gray-200); }
-
-  /* ─── FEEDBACK ────────────────────────────────── */
-  .feedback {
-    display: none;
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    margin-top: 4px;
-    border: 1.5px solid;
-    animation: feedIn .3s ease;
-  }
-  @keyframes feedIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .feedback.correct {
-    display: flex;
-    background: #f0fdf4;
-    border-color: #86efac;
-    color: #166534;
-  }
-  .feedback.wrong {
-    display: flex;
-    background: #fef2f2;
-    border-color: #fca5a5;
-    color: #991b1b;
-  }
-  .feedback-icon { font-size: 1.3rem; margin-right: 12px; flex-shrink: 0; }
-  .feedback-body {}
-  .feedback-title { font-weight: 700; font-size: .9rem; margin-bottom: 2px; }
-  .feedback-sub { font-size: .83rem; opacity: .8; }
-
-  /* ─── EXPLANATION ─────────────────────────────── */
-  .explanation {
-    display: none;
-    background: linear-gradient(135deg, #fefce8, #fff7ed);
-    border: 1.5px solid #fbbf24;
-    border-radius: var(--radius);
-    padding: 0;
-    margin-top: 12px;
-    animation: feedIn .3s ease;
-    overflow: hidden;
-  }
-  .explanation.visible { display: block; }
-  .explanation-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 20px;
-    background: linear-gradient(90deg, #fbbf24, #f59e0b);
-    color: #fff;
-    font-weight: 700;
-    font-size: .83rem;
-    letter-spacing: .4px;
-    text-transform: uppercase;
-  }
-  .explanation-body {
-    padding: 20px 24px;
-    font-size: .9rem;
-    line-height: 1.85;
-    color: #44403c;
-  }
-  .explanation-body b { color: #92400e; }
-  .explanation-body .katex-display { margin: .6em 0; }
-  .explanation-body table { width: 100%; border-radius: 6px; overflow: hidden; }
-
-  /* ─── SHOW HINT BUTTON ─────────────────────────── */
   .btn-hint {
     background: linear-gradient(135deg, #fef3c7, #fde68a);
-    color: #92400e;
-    border: 1.5px solid #fbbf24;
-    box-shadow: none;
+    color: #92400e; border: 1.5px solid #fbbf24;
   }
   .btn-hint:hover { background: linear-gradient(135deg, #fde68a, #fbbf24); color: #78350f; }
 
-  /* ─── PROGRESS BAR ────────────────────────────── */
-  .progress-wrap {
-    background: var(--gray-200);
-    border-radius: 999px;
-    height: 8px;
-    overflow: hidden;
-    margin-bottom: 8px;
+  /* FEEDBACK */
+  .feedback {
+    display: none; border-radius: var(--radius); padding: 18px 20px;
+    margin-top: 4px; border: 1.5px solid;
+    animation: feedIn .3s ease;
   }
-  .progress-bar {
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--blue-500), var(--blue-400));
-    transition: width .6s ease;
-  }
-  .progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: .78rem;
-    color: var(--gray-400);
-    font-weight: 600;
-  }
+  @keyframes feedIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+  .feedback.correct { display: flex; background: #f0fdf4; border-color: #86efac; color: #166534; }
+  .feedback.wrong   { display: flex; background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+  .feedback-icon { font-size: 1.3rem; margin-right: 12px; flex-shrink: 0; }
+  .feedback-title { font-weight: 700; font-size: .9rem; margin-bottom: 2px; }
+  .feedback-sub   { font-size: .83rem; opacity: .8; }
 
-  /* ─── WRONG ANSWER LIST ───────────────────────── */
+  /* EXPLANATION */
+  .explanation { display: none; border-radius: var(--radius); margin-top: 12px; animation: feedIn .3s ease; overflow: hidden; border: 1.5px solid #fbbf24; }
+  .explanation.visible { display: block; }
+  .explanation-header {
+    display: flex; align-items: center; gap: 8px; padding: 13px 20px;
+    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    color: #fff; font-weight: 700; font-size: .83rem; letter-spacing: .4px; text-transform: uppercase;
+  }
+  .explanation-body { padding: 20px 24px; font-size: .9rem; line-height: 1.85; color: #44403c; background: linear-gradient(135deg, #fefce8, #fff7ed); }
+  .explanation-body b { color: #92400e; }
+  .explanation-body .katex-display { margin: .6em 0; }
+
+  /* ACTION ROW */
+  .action-row { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { background: var(--gray-200); border-radius: 999px; height: 8px; overflow: hidden; margin-bottom: 8px; }
+  .progress-bar { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--blue-500), var(--blue-400)); transition: width .6s ease; }
+  .progress-label { display: flex; justify-content: space-between; font-size: .78rem; color: var(--gray-400); font-weight: 600; }
+
+  /* WRONG LIST */
   .wrong-list { display: flex; flex-direction: column; gap: 16px; }
-  .wrong-item {
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius);
-    overflow: hidden;
-    transition: box-shadow .2s;
-  }
+  .wrong-item { border: 1.5px solid var(--gray-200); border-radius: var(--radius); overflow: hidden; transition: box-shadow .2s; }
   .wrong-item:hover { box-shadow: var(--shadow-md); }
-  .wrong-item-header {
-    padding: 16px 20px;
-    background: var(--gray-100);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
+  .wrong-item-header { padding: 16px 20px; background: var(--gray-100); display: flex; align-items: flex-start; gap: 10px; }
   .wrong-q { font-size: .9rem; font-weight: 500; color: var(--gray-800); line-height: 1.5; }
   .wrong-item-body { padding: 16px 20px; display: flex; gap: 24px; flex-wrap: wrap; }
-  .answer-chip {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
+  .answer-chip { display: flex; flex-direction: column; gap: 3px; }
   .chip-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--gray-400); }
   .chip-val { font-size: .9rem; font-weight: 600; }
   .chip-val.mine { color: var(--red); }
   .chip-val.correct-ans { color: var(--green); }
-  .wrong-exp {
-    padding: 14px 20px;
-    background: #fffbeb;
-    border-top: 1px solid #fde68a;
-    font-size: .83rem;
-    color: #78350f;
-    line-height: 1.65;
-  }
+  .wrong-exp { padding: 14px 20px; background: #fffbeb; border-top: 1px solid #fde68a; font-size: .83rem; color: #78350f; line-height: 1.65; }
 
-  /* ─── EMPTY STATE ─────────────────────────────── */
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--gray-400);
-  }
+  /* EMPTY */
+  .empty { text-align: center; padding: 60px 20px; color: var(--gray-400); }
   .empty-icon { font-size: 3rem; margin-bottom: 12px; }
   .empty-text { font-size: .9rem; font-weight: 500; }
 
-  /* ─── NEXT BUTTON AREA ────────────────────────── */
-  .action-row {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 6px;
-  }
-
-  /* ─── LOADING SKELETON ────────────────────────── */
-  .skeleton {
-    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.4s infinite;
-    border-radius: 8px;
-  }
-  @keyframes shimmer {
-    0%   { background-position: -200% 0; }
-    100% { background-position:  200% 0; }
-  }
-  .sk-line { height: 14px; margin-bottom: 10px; }
-  .sk-line.lg { height: 22px; width: 60%; }
-  .sk-line.full { width: 100%; }
-  .sk-line.w80  { width: 80%; }
-
-  /* ─── RESPONSIVE ──────────────────────────────── */
   @media (max-width: 600px) {
     .nav { padding: 0 16px; }
     .main { padding: 20px 12px 48px; }
-    .stat-bar { grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .stat-bar { gap: 8px; }
     .stat-card { padding: 14px 8px; }
     .stat-num { font-size: 1.4rem; }
     .card-body { padding: 20px; }
@@ -496,124 +255,84 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">
     <div class="icon">⚡</div>
     Physics Study
   </div>
-  <div class="nav-right">
-    <div class="lang-toggle">
-      <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">KO</button>
-      <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
-    </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" id="btn-ko" onclick="setLang('ko')">KO</button>
+    <button class="lang-btn"        id="btn-en" onclick="setLang('en')">EN</button>
   </div>
 </nav>
 
-<!-- MAIN -->
 <div class="main">
 
-  <!-- STATS -->
-  <div class="stat-bar" id="stat-bar">
+  <div class="stat-bar">
     <div class="stat-card">
-      <div class="stat-num blue" id="stat-total">—</div>
-      <div class="stat-label" data-ko="전체 문제" data-en="Total">전체 문제</div>
+      <div class="stat-num blue" id="stat-total">10</div>
+      <div class="stat-label" id="lbl-total">전체 문제</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num green" id="stat-correct">—</div>
-      <div class="stat-label" data-ko="정답" data-en="Correct">정답</div>
+      <div class="stat-num green" id="stat-correct">0</div>
+      <div class="stat-label" id="lbl-correct">정답</div>
     </div>
     <div class="stat-card">
-      <div class="stat-num red" id="stat-wrong">—</div>
-      <div class="stat-label" data-ko="오답" data-en="Wrong">오답</div>
+      <div class="stat-num red" id="stat-wrong">0</div>
+      <div class="stat-label" id="lbl-wrong">오답</div>
     </div>
   </div>
 
-  <!-- TAB CARD -->
   <div class="card">
     <div class="card-body" style="padding-bottom:0">
       <div class="tabs">
-        <button class="tab active" id="tab-problem" onclick="switchTab('problem')" data-ko="문제 풀기" data-en="Practice">문제 풀기</button>
-        <button class="tab"        id="tab-wrong"   onclick="switchTab('wrong')"   data-ko="오답 노트" data-en="Mistakes">오답 노트</button>
-        <button class="tab"        id="tab-progress" onclick="switchTab('progress')" data-ko="진도" data-en="Progress">진도</button>
+        <button class="tab active" id="tab-problem"  onclick="switchTab('problem')" >문제 풀기</button>
+        <button class="tab"        id="tab-wrong"    onclick="switchTab('wrong')"   >오답 노트</button>
+        <button class="tab"        id="tab-progress" onclick="switchTab('progress')">진도</button>
       </div>
     </div>
 
     <!-- PROBLEM TAB -->
     <div id="problem-section" class="visible">
       <div class="card-header">
-        <span class="card-title" data-ko="오늘의 문제" data-en="Today's Problem">오늘의 문제</span>
+        <span class="card-title" id="lbl-today">오늘의 문제</span>
         <span class="problem-number" id="prob-counter"></span>
       </div>
       <div class="card-body">
-
-        <!-- loading -->
-        <div id="loading-skeleton">
-          <div class="skeleton sk-line lg" style="margin-bottom:18px"></div>
-          <div class="skeleton sk-line full"></div>
-          <div class="skeleton sk-line w80"></div>
-          <div class="skeleton sk-line full" style="margin-bottom:24px"></div>
-          <div class="skeleton sk-line" style="width:40%;height:44px;border-radius:10px"></div>
+        <div class="problem-meta">
+          <span class="badge badge-blue" id="prob-concept"></span>
+          <span class="badge" id="prob-difficulty"></span>
         </div>
-
-        <!-- content (hidden until loaded) -->
-        <div id="problem-content" style="display:none">
-          <div class="problem-meta">
-            <span class="badge badge-blue" id="prob-concept"></span>
-            <span class="badge" id="prob-difficulty"></span>
-          </div>
-
-          <div class="question-box">
-            <div class="question-text" id="question-text"></div>
-          </div>
-
-          <div class="answer-area">
-            <div class="input-label" data-ko="정답 입력" data-en="Your Answer">정답 입력</div>
-            <div class="answer-row">
-              <input
-                type="text"
-                class="answer-input"
-                id="answer-input"
-                placeholder="답을 입력하세요…"
-                onkeydown="if(event.key==='Enter') submitAnswer()"
-              />
-              <button class="btn btn-primary" onclick="submitAnswer()" id="submit-btn">
-                제출
-              </button>
-            </div>
-          </div>
-
-          <!-- feedback -->
-          <div class="feedback" id="feedback-box">
-            <div class="feedback-icon" id="feedback-icon"></div>
-            <div class="feedback-body">
-              <div class="feedback-title" id="feedback-title"></div>
-              <div class="feedback-sub"  id="feedback-sub"></div>
-            </div>
-          </div>
-
-          <!-- explanation -->
-          <div class="explanation" id="explanation-box">
-            <div class="explanation-header">
-              <span>📐</span>
-              <span id="explanation-header-text">풀이 해설</span>
-            </div>
-            <div class="explanation-body" id="explanation-text"></div>
-          </div>
-
-          <div class="action-row" id="action-row" style="display:none">
-            <button class="btn btn-ghost" onclick="loadProblem(currentIdx)" id="retry-btn">다시 풀기</button>
-            <button class="btn btn-hint" onclick="toggleExplanation()" id="hint-btn">📐 해설보기</button>
-            <button class="btn btn-primary" onclick="nextProblem()" id="next-btn">다음 문제 →</button>
+        <div class="question-box">
+          <div class="question-text" id="question-text"></div>
+        </div>
+        <div class="answer-area">
+          <div class="input-label" id="lbl-answer">정답 입력</div>
+          <div class="answer-row">
+            <input type="text" class="answer-input" id="answer-input"
+              placeholder="답을 입력하세요…"
+              onkeydown="if(event.key==='Enter') submitAnswer()" />
+            <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()">제출</button>
           </div>
         </div>
 
-        <!-- empty -->
-        <div id="problem-empty" style="display:none">
-          <div class="empty">
-            <div class="empty-icon">📚</div>
-            <div class="empty-text" data-ko="등록된 문제가 없습니다." data-en="No problems found.">등록된 문제가 없습니다.</div>
+        <div class="feedback" id="feedback-box">
+          <div class="feedback-icon" id="feedback-icon"></div>
+          <div>
+            <div class="feedback-title" id="feedback-title"></div>
+            <div class="feedback-sub"   id="feedback-sub"></div>
           </div>
+        </div>
+
+        <div class="explanation" id="explanation-box">
+          <div class="explanation-header">📐 <span id="lbl-solution">풀이 해설</span></div>
+          <div class="explanation-body" id="explanation-text"></div>
+        </div>
+
+        <div class="action-row" id="action-row" style="display:none">
+          <button class="btn btn-ghost" id="retry-btn" onclick="loadProblem(currentIdx)">다시 풀기</button>
+          <button class="btn btn-hint"  id="hint-btn"  onclick="toggleExplanation()">📐 해설보기</button>
+          <button class="btn btn-primary" id="next-btn" onclick="nextProblem()">다음 문제 →</button>
         </div>
       </div>
     </div>
@@ -621,14 +340,14 @@
     <!-- WRONG TAB -->
     <div id="wrong-section">
       <div class="card-header">
-        <span class="card-title" data-ko="오답 노트" data-en="Mistake Review">오답 노트</span>
+        <span class="card-title" id="lbl-wrong-title">오답 노트</span>
         <span class="badge badge-red" id="wrong-count-badge"></span>
       </div>
       <div class="card-body">
         <div id="wrong-list" class="wrong-list"></div>
         <div id="wrong-empty" class="empty" style="display:none">
           <div class="empty-icon">🎉</div>
-          <div class="empty-text" data-ko="오답이 없어요! 훌륭해요." data-en="No mistakes! Great job.">오답이 없어요! 훌륭해요.</div>
+          <div class="empty-text" id="lbl-no-wrong">오답이 없어요! 훌륭해요.</div>
         </div>
       </div>
     </div>
@@ -636,13 +355,13 @@
     <!-- PROGRESS TAB -->
     <div id="progress-section">
       <div class="card-header">
-        <span class="card-title" data-ko="학습 진도" data-en="Study Progress">학습 진도</span>
+        <span class="card-title" id="lbl-progress-title">학습 진도</span>
       </div>
       <div class="card-body">
         <div style="margin-bottom:24px">
           <div class="progress-label" style="margin-bottom:8px">
-            <span data-ko="전체 정답률" data-en="Accuracy">전체 정답률</span>
-            <span id="pct-label">—</span>
+            <span id="lbl-accuracy">전체 정답률</span>
+            <span id="pct-label">0%</span>
           </div>
           <div class="progress-wrap">
             <div class="progress-bar" id="progress-bar" style="width:0%"></div>
@@ -652,167 +371,407 @@
             <span id="pct-total-label"></span>
           </div>
         </div>
-
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
           <div style="background:var(--blue-50);border:1.5px solid var(--blue-100);border-radius:var(--radius);padding:18px;text-align:center">
-            <div style="font-size:1.6rem;font-weight:800;color:var(--blue-700)" id="prog-solved">—</div>
-            <div style="font-size:.78rem;color:var(--blue-500);font-weight:600;margin-top:4px" data-ko="풀어본 문제" data-en="Solved">풀어본 문제</div>
+            <div style="font-size:1.6rem;font-weight:800;color:var(--blue-700)" id="prog-solved">0</div>
+            <div style="font-size:.78rem;color:var(--blue-500);font-weight:600;margin-top:4px" id="lbl-solved">풀어본 문제</div>
           </div>
           <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:var(--radius);padding:18px;text-align:center">
             <div style="font-size:1.6rem;font-weight:800;color:#16a34a" id="prog-streak">🔥 0</div>
-            <div style="font-size:.78rem;color:#16a34a;font-weight:600;margin-top:4px" data-ko="연속 정답" data-en="Streak">연속 정답</div>
+            <div style="font-size:.78rem;color:#16a34a;font-weight:600;margin-top:4px" id="lbl-streak">연속 정답</div>
           </div>
+        </div>
+        <div style="margin-top:20px;text-align:right">
+          <button class="btn btn-ghost" onclick="resetProgress()" style="font-size:.8rem;padding:8px 16px" id="lbl-reset">기록 초기화</button>
         </div>
       </div>
     </div>
 
-  </div><!-- .card -->
-</div><!-- .main -->
+  </div>
+</div>
 
 <script>
 /* ============================================================
-   STATE
+   문제 데이터 (백엔드 없이 내장)
+   ============================================================ */
+const PROBLEMS = [
+  {
+    id: 1,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'easy',
+    question_ko: '정지해 있던 물체가 $2\\ m/s^2$의 일정한 가속도로 운동한다. 4초 후의 속도는? (단위: m/s)',
+    question_en: 'An object starting from rest accelerates at $2\\ m/s^2$. What is its velocity after 4 s? (m/s)',
+    answer: '8',
+    explanation_ko:
+      '<b>📌 적용 공식</b><br>$$v = v_0 + at$$<b>🔍 풀이</b><br>' +
+      '처음 속도 $v_0 = 0\\ m/s$, 가속도 $a = 2\\ m/s^2$, 시간 $t = 4\\ s$<br><br>' +
+      '$$v = 0 + 2 \\times 4 = 8\\ m/s$$' +
+      '<b>💡 핵심 개념</b><br>가속도가 일정하면 속도는 시간에 <b>비례</b>하여 선형 증가합니다.',
+    explanation_en:
+      '<b>Formula:</b> $v = v_0 + at$<br><br>$$v = 0 + 2 \\times 4 = 8\\ m/s$$',
+  },
+  {
+    id: 2,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'easy',
+    question_ko: '$4\\ m/s$로 운동하던 물체의 속도가 3초 후 $10\\ m/s$가 되었다. 가속도의 크기는? (단위: m/s²)',
+    question_en: 'An object at $4\\ m/s$ reaches $10\\ m/s$ after 3 s. Find acceleration. (m/s²)',
+    answer: '2',
+    explanation_ko:
+      '<b>📌 적용 공식</b><br>$$a = \\frac{v - v_0}{t}$$<b>🔍 풀이</b><br>' +
+      '$v_0 = 4\\ m/s$, $v = 10\\ m/s$, $t = 3\\ s$<br><br>' +
+      '$$a = \\frac{10 - 4}{3} = \\frac{6}{3} = 2\\ m/s^2$$' +
+      '<b>💡 핵심 개념</b><br>가속도 = 단위 시간 동안의 속도 변화량',
+    explanation_en:
+      '<b>Formula:</b> $a = \\dfrac{v-v_0}{t}$<br><br>$$a = \\frac{10-4}{3} = 2\\ m/s^2$$',
+  },
+  {
+    id: 3,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'medium',
+    question_ko: '정지 상태에서 $1\\ m/s^2$로 출발한 기차가 $50\\ m$를 이동하는 데 걸린 시간은? (단위: 초)',
+    question_en: 'A train starts from rest at $a=1\\ m/s^2$. Time to travel $50\\ m$? (s)',
+    answer: '10',
+    explanation_ko:
+      '<b>📌 적용 공식</b><br>$$s = v_0 t + \\frac{1}{2}at^2$$<b>🔍 풀이</b><br>' +
+      '$v_0=0$, $a=1\\ m/s^2$, $s=50\\ m$ 대입<br><br>' +
+      '$$50 = \\frac{1}{2}(1)t^2 \\implies t^2 = 100 \\implies t = 10\\ s$$' +
+      '<b>💡 핵심 개념</b><br>정지 출발 시 $s \\propto t^2$ (시간의 제곱에 비례)',
+    explanation_en:
+      '<b>Formula:</b> $s=\\frac{1}{2}at^2$<br><br>$$50=\\frac{1}{2}(1)t^2 \\implies t=10\\ s$$',
+  },
+  {
+    id: 4,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'easy',
+    question_ko: '$20\\ m/s$로 달리던 차가 5초 만에 정지했다. 이동 거리는? (단위: m)',
+    question_en: 'A car at $20\\ m/s$ stops in 5 s. Stopping distance? (m)',
+    answer: '50',
+    explanation_ko:
+      '<b>📌 방법 — 평균 속도 이용</b><br>' +
+      '$$\\bar{v} = \\frac{v_0+v}{2} = \\frac{20+0}{2} = 10\\ m/s$$' +
+      '$$s = \\bar{v} \\times t = 10 \\times 5 = 50\\ m$$' +
+      '<b>💡 핵심 개념</b><br>등가속도에서 평균 속도 = $\\dfrac{v_0+v}{2}$',
+    explanation_en:
+      '$$s = \\frac{v_0+v}{2} \\times t = \\frac{20+0}{2} \\times 5 = 50\\ m$$',
+  },
+  {
+    id: 5,
+    concept_ko: '그래프 해석', concept_en: 'Graph Analysis',
+    difficulty: 'easy',
+    question_ko: '$v$-$t$ 그래프에서 그래프와 시간축 사이의 면적이 의미하는 것은? (한 단어로)',
+    question_en: 'In a $v$-$t$ graph, the area under the curve represents? (one word)',
+    answer: '변위',
+    explanation_ko:
+      '<b>📌 v-t 그래프 세 가지 물리량</b><br>' +
+      '<table style="border-collapse:collapse;margin:8px 0;font-size:.85rem">' +
+      '<tr><td style="padding:4px 12px 4px 0;font-weight:700">y절편</td><td>처음 속도 $v_0$</td></tr>' +
+      '<tr><td style="padding:4px 12px 4px 0;font-weight:700">기울기</td><td>가속도 $a = \\frac{\\Delta v}{\\Delta t}$</td></tr>' +
+      '<tr style="background:#fef9c3"><td style="padding:4px 12px 4px 0;font-weight:700">넓이</td><td>변위 $s = \\int v\\,dt$</td></tr>' +
+      '</table>' +
+      '<b>⚠️ 주의:</b> 시간축 <b>아래</b> 면적은 <b>음(−) 변위</b>입니다.',
+    explanation_en:
+      '• Slope = acceleration $a$<br>• Area = displacement $\\displaystyle s=\\int v\\,dt$<br>• y-intercept = $v_0$',
+  },
+  {
+    id: 6,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'hard',
+    question_ko: '$10\\ m/s$로 운동하던 물체가 $2\\ m/s^2$로 가속하여 $16\\ m/s$가 되었다. 이동 거리는? (단위: m)',
+    question_en: 'Object at $10\\ m/s$ accelerates at $2\\ m/s^2$ to $16\\ m/s$. Distance? (m)',
+    answer: '39',
+    explanation_ko:
+      '<b>📌 적용 공식 — 시간 없이 풀 때</b><br>$$v^2 = v_0^2 + 2as$$<b>🔍 풀이</b><br>' +
+      '$v_0=10$, $v=16$, $a=2$<br><br>' +
+      '$$16^2 = 10^2 + 2(2)s$$$$256 = 100 + 4s$$$$s = 39\\ m$$' +
+      '<b>💡 언제?</b> 시간 $t$가 없고 속도·가속도·거리만 주어질 때',
+    explanation_en:
+      '<b>Formula:</b> $v^2=v_0^2+2as$<br><br>$$16^2=10^2+4s \\implies s=39\\ m$$',
+  },
+  {
+    id: 7,
+    concept_ko: '뉴턴 법칙', concept_en: "Newton's Laws",
+    difficulty: 'medium',
+    question_ko: '마찰 없는 빗면에서 질량이 다른 두 물체를 같은 높이에서 놓으면 가속도의 관계는?',
+    question_en: 'Two objects of different mass on a frictionless incline — how do accelerations compare?',
+    answer: '같다',
+    explanation_ko:
+      '<b>📌 뉴턴 제2법칙</b><br>$$mg\\sin\\theta = ma \\implies \\boxed{a = g\\sin\\theta}$$' +
+      '질량 $m$이 <b>약분</b>됩니다!<br>' +
+      '→ 가속도는 질량과 <b>무관</b>하게 $a=g\\sin\\theta$로 동일합니다.<br><br>' +
+      '<b>💡 갈릴레오의 사고 실험</b><br>마찰 없으면 무게와 관계없이 같은 가속도로 운동합니다.',
+    explanation_en:
+      '$$mg\\sin\\theta=ma \\implies a=g\\sin\\theta$$Mass cancels → same acceleration regardless of mass.',
+  },
+  {
+    id: 8,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'medium',
+    question_ko: '정지 상태에서 출발한 물체가 1초 동안 $d$만큼 이동했다면, 2초 동안 총 이동 거리는? ($d$의 배수로)',
+    question_en: 'From rest, object travels $d$ in 1 s. Total distance in 2 s? (in multiples of $d$)',
+    answer: '4d',
+    explanation_ko:
+      '<b>📌 공식</b><br>$$s=\\frac{1}{2}at^2 \\implies s \\propto t^2$$<b>🔍 풀이</b><br>' +
+      '$$\\frac{s_2}{s_1} = \\frac{t_2^2}{t_1^2} = \\frac{4}{1} = 4 \\implies s_2 = 4d$$' +
+      '<b>💡 홀수 법칙</b><br>연속 등시간 구간 변위 비 = $1:3:5:7:\\cdots$',
+    explanation_en:
+      '$s\\propto t^2$, so $s_2/s_1 = (2/1)^2 = 4 \\implies s_2=4d$',
+  },
+  {
+    id: 9,
+    concept_ko: '가속도 방향', concept_en: 'Direction of Acceleration',
+    difficulty: 'easy',
+    question_ko: '속도가 일정하게 감소하여 정지하는 물체의 가속도 방향은 운동 방향과 어떤가?',
+    question_en: 'Object uniformly decelerating to rest — acceleration direction vs. motion direction?',
+    answer: '반대',
+    explanation_ko:
+      '<b>📌 가속도 정의</b><br>$$\\vec{a} = \\frac{\\Delta\\vec{v}}{\\Delta t}$$' +
+      '감속: $\\Delta v < 0$ → $\\vec{a}$의 방향 = 운동 방향과 <b>반대</b><br><br>' +
+      '<table style="border-collapse:collapse;font-size:.85rem;margin:6px 0">' +
+      '<tr style="background:#dbeafe"><td style="padding:4px 10px">$a$ 방향 = $v$ 방향</td><td style="padding:4px 10px">속도 <b>증가</b></td></tr>' +
+      '<tr style="background:#fee2e2"><td style="padding:4px 10px">$a$ 방향 ≠ $v$ 방향</td><td style="padding:4px 10px">속도 <b>감소</b></td></tr>' +
+      '</table>',
+    explanation_en:
+      '$\\Delta v < 0$ → acceleration is opposite to velocity direction.',
+  },
+  {
+    id: 10,
+    concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
+    difficulty: 'medium',
+    question_ko: '$5\\ m/s$로 운동하던 물체가 2초 동안 $20\\ m$를 이동했다. 나중 속도는? (단위: m/s)',
+    question_en: 'Object at $5\\ m/s$ travels $20\\ m$ in 2 s. Final velocity? (m/s)',
+    answer: '15',
+    explanation_ko:
+      '<b>📌 등가속도 평균 속도</b><br>$$\\bar{v} = \\frac{v_0+v}{2} = \\frac{s}{t}$$<b>🔍 풀이</b><br>' +
+      '$$\\frac{s}{t} = \\frac{20}{2} = 10\\ m/s$$$$\\frac{5+v}{2} = 10 \\implies v = 15\\ m/s$$' +
+      '<b>⚠️ 주의:</b> 이 공식은 등가속도 조건에서만 성립합니다.',
+    explanation_en:
+      '$$\\bar{v}=\\frac{v_0+v}{2}=\\frac{s}{t}=10 \\implies \\frac{5+v}{2}=10 \\implies v=15\\ m/s$$',
+  },
+];
+
+/* ============================================================
+   STATE (localStorage 연동)
    ============================================================ */
 let lang = localStorage.getItem('lang') || 'ko';
-let problems = [];
 let currentIdx = 0;
-let sessionCorrect = 0;
-let sessionWrong = 0;
-let streak = 0;
 let answered = false;
 
-const STUDENT_ID = 1;
-const ASSIGNMENT_ID = 1;
+function getRecord() {
+  return JSON.parse(localStorage.getItem('physics_record') || '{"correct":[],"wrong":[]}');
+}
+function saveRecord(r) {
+  localStorage.setItem('physics_record', JSON.stringify(r));
+}
 
-// 환경 자동 감지: GitHub Pages → Render / 로컬 → localhost:8000
-const API = (() => {
-  const h = window.location.hostname;
-  if (h === 'localhost' || h === '127.0.0.1') {
-    return window.location.port === '8000' ? '' : 'http://localhost:8000';
-  }
-  return 'https://physics-study-api.onrender.com';
-})();
+function getStreak() { return parseInt(localStorage.getItem('physics_streak') || '0'); }
+function saveStreak(n) { localStorage.setItem('physics_streak', n); }
 
 /* ============================================================
    LANG
    ============================================================ */
+const T = {
+  ko: {
+    total:'전체 문제', correct:'정답', wrong:'오답',
+    today:'오늘의 문제', answer:'정답 입력', placeholder:'답을 입력하세요…',
+    submit:'제출', retry:'다시 풀기', hint:'📐 해설보기', hideHint:'해설 닫기', next:'다음 문제 →',
+    solution:'풀이 해설',
+    correct_msg:'정답입니다!', correct_sub:'훌륭해요. 해설로 개념을 확인해 보세요.',
+    wrong_msg:'틀렸습니다.', wrong_prefix:'정답: ',
+    tab_problem:'문제 풀기', tab_wrong:'오답 노트', tab_progress:'진도',
+    wrong_title:'오답 노트', no_wrong:'오답이 없어요! 훌륭해요.',
+    my_ans:'내 답', correct_ans:'정답',
+    progress_title:'학습 진도', accuracy:'전체 정답률',
+    solved:'풀어본 문제', streak:'연속 정답', reset:'기록 초기화',
+    correct_lbl: '정답 ', total_lbl: '총 ',
+    confirm_reset: '기록을 초기화할까요?',
+  },
+  en: {
+    total:'Total', correct:'Correct', wrong:'Wrong',
+    today:"Today's Problem", answer:'Your Answer', placeholder:'Enter your answer…',
+    submit:'Submit', retry:'Retry', hint:'📐 Show Solution', hideHint:'Hide Solution', next:'Next →',
+    solution:'Solution',
+    correct_msg:'Correct!', correct_sub:'Well done! Check the solution to reinforce the concept.',
+    wrong_msg:'Incorrect.', wrong_prefix:'Answer: ',
+    tab_problem:'Practice', tab_wrong:'Mistakes', tab_progress:'Progress',
+    wrong_title:'Mistake Review', no_wrong:'No mistakes! Great job.',
+    my_ans:'Your Answer', correct_ans:'Correct Answer',
+    progress_title:'Study Progress', accuracy:'Accuracy',
+    solved:'Solved', streak:'Streak', reset:'Reset Progress',
+    correct_lbl: 'Correct ', total_lbl: 'Total ',
+    confirm_reset: 'Reset all progress?',
+  }
+};
+
+function t(key) { return T[lang][key]; }
+
 function setLang(l) {
   lang = l;
   localStorage.setItem('lang', l);
-  document.getElementById('btn-ko').classList.toggle('active', l === 'ko');
-  document.getElementById('btn-en').classList.toggle('active', l === 'en');
-  // update all data-ko / data-en texts
-  document.querySelectorAll('[data-ko]').forEach(el => {
-    el.textContent = l === 'ko' ? el.dataset.ko : el.dataset.en;
-  });
-  // re-render current problem text if loaded
+  document.getElementById('btn-ko').classList.toggle('active', l==='ko');
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  applyLang();
   renderProblem();
-  loadWrongAnswers();
+  renderWrongList();
+}
+
+function applyLang() {
+  document.getElementById('lbl-total').textContent    = t('total');
+  document.getElementById('lbl-correct').textContent  = t('correct');
+  document.getElementById('lbl-wrong').textContent    = t('wrong');
+  document.getElementById('lbl-today').textContent    = t('today');
+  document.getElementById('lbl-answer').textContent   = t('answer');
+  document.getElementById('answer-input').placeholder = t('placeholder');
+  document.getElementById('submit-btn').textContent   = t('submit');
+  document.getElementById('lbl-solution').textContent = t('solution');
+  document.getElementById('tab-problem').textContent  = t('tab_problem');
+  document.getElementById('tab-wrong').textContent    = t('tab_wrong');
+  document.getElementById('tab-progress').textContent = t('tab_progress');
+  document.getElementById('lbl-wrong-title').textContent   = t('wrong_title');
+  document.getElementById('lbl-no-wrong').textContent      = t('no_wrong');
+  document.getElementById('lbl-progress-title').textContent= t('progress_title');
+  document.getElementById('lbl-accuracy').textContent  = t('accuracy');
+  document.getElementById('lbl-solved').textContent    = t('solved');
+  document.getElementById('lbl-streak').textContent    = t('streak');
+  document.getElementById('lbl-reset').textContent     = t('reset');
+  if (answered) {
+    document.getElementById('retry-btn').textContent = t('retry');
+    document.getElementById('next-btn').textContent  = t('next');
+  }
 }
 
 /* ============================================================
    TABS
    ============================================================ */
 function switchTab(tab) {
-  ['problem','wrong','progress'].forEach(t => {
-    document.getElementById(`${t}-section`).classList.toggle('visible', t === tab);
-    document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
+  ['problem','wrong','progress'].forEach(s => {
+    document.getElementById(`${s}-section`).classList.toggle('visible', s===tab);
+    document.getElementById(`tab-${s}`).classList.toggle('active', s===tab);
   });
-  if (tab === 'wrong') loadWrongAnswers();
-  if (tab === 'progress') renderProgress();
+  if (tab==='wrong')    renderWrongList();
+  if (tab==='progress') renderProgress();
 }
 
 /* ============================================================
-   LOAD PROBLEMS
+   PROBLEM
    ============================================================ */
-async function loadProblems() {
-  try {
-    const res = await fetch(`${API}/problems`);
-    problems = await res.json();
-  } catch(e) {
-    problems = [];
-  }
-  document.getElementById('stat-total').textContent = problems.length;
-  document.getElementById('loading-skeleton').style.display = 'none';
-  if (!problems.length) {
-    document.getElementById('problem-empty').style.display = 'block';
-  } else {
-    document.getElementById('problem-content').style.display = 'block';
-    loadProblem(0);
-  }
-}
-
 function loadProblem(idx) {
-  if (!problems.length) return;
-  currentIdx = idx % problems.length;
-  answered = false;
-
-  document.getElementById('feedback-box').className = 'feedback';
-  document.getElementById('explanation-box').className = 'explanation';
+  currentIdx = idx % PROBLEMS.length;
+  answered   = false;
+  document.getElementById('feedback-box').className   = 'feedback';
+  document.getElementById('explanation-box').className= 'explanation';
   document.getElementById('explanation-text').innerHTML = '';
-  document.getElementById('action-row').style.display = 'none';
-  document.getElementById('answer-input').value = '';
-  document.getElementById('submit-btn').disabled = false;
-
+  document.getElementById('action-row').style.display  = 'none';
+  document.getElementById('answer-input').value        = '';
+  document.getElementById('submit-btn').disabled       = false;
   renderProblem();
 }
 
 function renderProblem() {
-  if (!problems.length) return;
-  const p = problems[currentIdx];
+  const p = PROBLEMS[currentIdx];
+  document.getElementById('question-text').innerHTML =
+    lang==='ko' ? p.question_ko : p.question_en;
+  document.getElementById('prob-concept').textContent =
+    lang==='ko' ? p.concept_ko : p.concept_en;
 
-  const qText = lang === 'ko' ? p.question_text_ko : p.question_text_en;
-  document.getElementById('question-text').textContent = qText || '—';
-
-  const concept = lang === 'ko' ? p.concept_ko : p.concept_en;
-  document.getElementById('prob-concept').textContent = concept || '';
-
-  const diff = p.difficulty;
   const diffEl = document.getElementById('prob-difficulty');
-  diffEl.textContent = diff || '';
-  diffEl.className = 'badge ' + ({
-    easy: 'badge-green', medium: 'badge-yellow', hard: 'badge-red'
-  }[diff?.toLowerCase()] || 'badge-blue');
+  const diffMap = {easy:'badge-green', medium:'badge-yellow', hard:'badge-red'};
+  diffEl.textContent = p.difficulty;
+  diffEl.className   = 'badge ' + (diffMap[p.difficulty] || 'badge-blue');
 
   document.getElementById('prob-counter').textContent =
-    `${currentIdx + 1} / ${problems.length}`;
+    `${currentIdx+1} / ${PROBLEMS.length}`;
 
-  // update submit btn text
-  document.getElementById('submit-btn').textContent =
-    lang === 'ko' ? '제출' : 'Submit';
-  document.getElementById('answer-input').placeholder =
-    lang === 'ko' ? '답을 입력하세요…' : 'Enter your answer…';
+  // KaTeX 재렌더
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('question-text'), {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+      throwOnError: false
+    });
+  }
 }
 
-function nextProblem() {
-  loadProblem(currentIdx + 1);
+function nextProblem() { loadProblem(currentIdx + 1); }
+
+/* ============================================================
+   SUBMIT
+   ============================================================ */
+function submitAnswer() {
+  if (answered) return;
+  const input = document.getElementById('answer-input');
+  const ans   = input.value.trim();
+  if (!ans) {
+    input.style.borderColor = 'var(--red)';
+    setTimeout(() => input.style.borderColor = '', 800);
+    return;
+  }
+  answered = true;
+  document.getElementById('submit-btn').disabled = true;
+
+  const p = PROBLEMS[currentIdx];
+  const isCorrect = ans === p.answer;
+  const record    = getRecord();
+
+  const fb      = document.getElementById('feedback-box');
+  const fbIcon  = document.getElementById('feedback-icon');
+  const fbTitle = document.getElementById('feedback-title');
+  const fbSub   = document.getElementById('feedback-sub');
+
+  if (isCorrect) {
+    fb.className = 'feedback correct';
+    fbIcon.textContent  = '✅';
+    fbTitle.textContent = t('correct_msg');
+    fbSub.textContent   = t('correct_sub');
+
+    if (!record.correct.includes(p.id)) record.correct.push(p.id);
+    record.wrong = record.wrong.filter(w => w.id !== p.id);
+    saveStreak(getStreak() + 1);
+  } else {
+    fb.className = 'feedback wrong';
+    fbIcon.textContent  = '❌';
+    fbTitle.textContent = t('wrong_msg');
+    fbSub.textContent   = t('wrong_prefix') + p.answer;
+
+    const existing = record.wrong.find(w => w.id === p.id);
+    if (!existing) {
+      record.wrong.push({ id: p.id, myAnswer: ans });
+    } else {
+      existing.myAnswer = ans;
+    }
+    saveStreak(0);
+  }
+  saveRecord(record);
+
+  // 통계 업데이트
+  document.getElementById('stat-correct').textContent = record.correct.length;
+  document.getElementById('stat-wrong').textContent   = record.wrong.length;
+
+  document.getElementById('action-row').style.display = 'flex';
+  document.getElementById('retry-btn').textContent = t('retry');
+  document.getElementById('hint-btn').textContent  = t('hint');
+  document.getElementById('next-btn').textContent  = t('next');
 }
 
 /* ============================================================
-   TOGGLE EXPLANATION
+   EXPLANATION
    ============================================================ */
 function toggleExplanation() {
   const box = document.getElementById('explanation-box');
   const btn = document.getElementById('hint-btn');
-  const p   = problems[currentIdx];
-  const expHtml = lang === 'ko' ? p.explanation_ko : p.explanation_en;
+  const p   = PROBLEMS[currentIdx];
 
   if (box.classList.contains('visible')) {
     box.classList.remove('visible');
-    btn.textContent = lang === 'ko' ? '📐 해설보기' : '📐 Show Solution';
+    btn.textContent = t('hint');
   } else {
-    document.getElementById('explanation-header-text').textContent =
-      lang === 'ko' ? '풀이 해설' : 'Solution';
-    document.getElementById('explanation-text').innerHTML = expHtml || '—';
+    document.getElementById('lbl-solution').textContent = t('solution');
+    document.getElementById('explanation-text').innerHTML =
+      lang==='ko' ? p.explanation_ko : p.explanation_en;
     box.classList.add('visible');
-    btn.textContent = lang === 'ko' ? '해설 닫기' : 'Hide Solution';
-    // re-render KaTeX inside the newly shown content
+    btn.textContent = t('hideHint');
     if (window.renderMathInElement) {
       renderMathInElement(document.getElementById('explanation-text'), {
-        delimiters: [
-          {left:'$$', right:'$$', display:true},
-          {left:'$', right:'$', display:false}
-        ],
+        delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
         throwOnError: false
       });
     }
@@ -820,136 +779,95 @@ function toggleExplanation() {
 }
 
 /* ============================================================
-   SUBMIT
+   WRONG LIST
    ============================================================ */
-async function submitAnswer() {
-  if (answered) return;
-  const ans = document.getElementById('answer-input').value.trim();
-  if (!ans) {
-    document.getElementById('answer-input').style.borderColor = 'var(--red)';
-    setTimeout(() => document.getElementById('answer-input').style.borderColor = '', 800);
-    return;
-  }
-  answered = true;
-  document.getElementById('submit-btn').disabled = true;
+function renderWrongList() {
+  const record = getRecord();
+  const list   = document.getElementById('wrong-list');
+  const empty  = document.getElementById('wrong-empty');
+  const badge  = document.getElementById('wrong-count-badge');
 
-  let isCorrect = false;
-  try {
-    const res = await fetch(`${API}/submit`, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        student_id: STUDENT_ID,
-        assignment_id: ASSIGNMENT_ID,
-        problem_id: problems[currentIdx].id,
-        answer: ans
-      })
-    });
-    const data = await res.json();
-    isCorrect = data.correct;
-  } catch(e) {
-    // offline fallback: compare locally
-    isCorrect = ans === problems[currentIdx].correct_answer;
-  }
+  badge.textContent = record.wrong.length + (lang==='ko' ? '개' : '');
 
-  // feedback
-  const fb = document.getElementById('feedback-box');
-  const fbIcon = document.getElementById('feedback-icon');
-  const fbTitle = document.getElementById('feedback-title');
-  const fbSub = document.getElementById('feedback-sub');
-
-  if (isCorrect) {
-    fb.className = 'feedback correct';
-    fbIcon.textContent = '✅';
-    fbTitle.textContent = lang === 'ko' ? '정답입니다!' : 'Correct!';
-    fbSub.textContent  = lang === 'ko' ? '훌륭해요. 해설로 개념을 확인해 보세요.' : 'Well done! Check the solution to reinforce the concept.';
-    sessionCorrect++;
-    streak++;
-    document.getElementById('stat-correct').textContent = sessionCorrect;
-  } else {
-    fb.className = 'feedback wrong';
-    fbIcon.textContent = '❌';
-    fbTitle.textContent = lang === 'ko' ? '틀렸습니다.' : 'Incorrect.';
-    const correct = problems[currentIdx].correct_answer;
-    fbSub.textContent = (lang === 'ko' ? '정답: ' : 'Answer: ') + correct;
-    sessionWrong++;
-    streak = 0;
-    document.getElementById('stat-wrong').textContent = sessionWrong;
-  }
-
-  document.getElementById('action-row').style.display = 'flex';
-  document.getElementById('retry-btn').textContent  = lang === 'ko' ? '다시 풀기' : 'Retry';
-  document.getElementById('hint-btn').textContent   = lang === 'ko' ? '📐 해설보기' : '📐 Show Solution';
-  document.getElementById('next-btn').textContent   = lang === 'ko' ? '다음 문제 →' : 'Next →';
-}
-
-/* ============================================================
-   WRONG ANSWERS
-   ============================================================ */
-async function loadWrongAnswers() {
-  const list = document.getElementById('wrong-list');
-  list.innerHTML = `<div class="skeleton sk-line full" style="height:80px;border-radius:12px"></div>`;
-  let wrongs = [];
-  try {
-    const res = await fetch(`${API}/wrong-answers/${STUDENT_ID}`);
-    wrongs = await res.json();
-  } catch(e) {}
-
-  document.getElementById('wrong-count-badge').textContent =
-    wrongs.length + (lang === 'ko' ? '개' : '');
-
-  if (!wrongs.length) {
+  if (!record.wrong.length) {
     list.innerHTML = '';
-    document.getElementById('wrong-empty').style.display = 'block';
+    empty.style.display = 'block';
     return;
   }
-  document.getElementById('wrong-empty').style.display = 'none';
+  empty.style.display = 'none';
 
-  list.innerHTML = wrongs.map((w, i) => {
-    const q    = lang === 'ko' ? w.question_ko    : w.question_en;
-    const exp  = lang === 'ko' ? w.explanation_ko : w.explanation_en;
+  list.innerHTML = record.wrong.map((w, i) => {
+    const p   = PROBLEMS.find(x => x.id === w.id);
+    if (!p) return '';
+    const q   = lang==='ko' ? p.question_ko : p.question_en;
+    const exp = lang==='ko' ? p.explanation_ko : p.explanation_en;
     return `
     <div class="wrong-item">
       <div class="wrong-item-header">
         <span class="badge badge-red" style="flex-shrink:0">${i+1}</span>
-        <div class="wrong-q">${q || '—'}</div>
+        <div class="wrong-q" id="wq-${i}">${q}</div>
       </div>
       <div class="wrong-item-body">
         <div class="answer-chip">
-          <span class="chip-label">${lang === 'ko' ? '내 답' : 'Your Answer'}</span>
-          <span class="chip-val mine">${w.your_answer}</span>
+          <span class="chip-label">${t('my_ans')}</span>
+          <span class="chip-val mine">${w.myAnswer}</span>
         </div>
         <div class="answer-chip">
-          <span class="chip-label">${lang === 'ko' ? '정답' : 'Correct Answer'}</span>
-          <span class="chip-val correct-ans">${w.correct_answer}</span>
+          <span class="chip-label">${t('correct_ans')}</span>
+          <span class="chip-val correct-ans">${p.answer}</span>
         </div>
       </div>
-      ${exp ? `<div class="wrong-exp">${exp}</div>` : ''}
+      ${exp ? `<div class="wrong-exp" id="we-${i}">${exp}</div>` : ''}
     </div>`;
   }).join('');
+
+  // KaTeX 렌더
+  if (window.renderMathInElement) {
+    record.wrong.forEach((_, i) => {
+      const qEl = document.getElementById(`wq-${i}`);
+      const eEl = document.getElementById(`we-${i}`);
+      const opts = { delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError:false };
+      if (qEl) renderMathInElement(qEl, opts);
+      if (eEl) renderMathInElement(eEl, opts);
+    });
+  }
 }
 
 /* ============================================================
    PROGRESS
    ============================================================ */
 function renderProgress() {
-  const total   = sessionCorrect + sessionWrong;
-  const pct     = total ? Math.round(sessionCorrect / total * 100) : 0;
-  document.getElementById('progress-bar').style.width  = pct + '%';
-  document.getElementById('pct-label').textContent     = pct + '%';
-  document.getElementById('pct-correct-label').textContent =
-    (lang === 'ko' ? '정답 ' : 'Correct ') + sessionCorrect;
-  document.getElementById('pct-total-label').textContent  =
-    (lang === 'ko' ? '총 ' : 'Total ') + total;
+  const record = getRecord();
+  const total  = record.correct.length + record.wrong.length;
+  const pct    = total ? Math.round(record.correct.length / total * 100) : 0;
+  const streak = getStreak();
+
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('pct-label').textContent    = pct + '%';
+  document.getElementById('pct-correct-label').textContent = t('correct_lbl') + record.correct.length;
+  document.getElementById('pct-total-label').textContent   = t('total_lbl') + total;
   document.getElementById('prog-solved').textContent  = total;
   document.getElementById('prog-streak').textContent  = '🔥 ' + streak;
+}
+
+function resetProgress() {
+  if (!confirm(t('confirm_reset'))) return;
+  localStorage.removeItem('physics_record');
+  localStorage.removeItem('physics_streak');
+  document.getElementById('stat-correct').textContent = '0';
+  document.getElementById('stat-wrong').textContent   = '0';
+  loadProblem(0);
+  renderProgress();
 }
 
 /* ============================================================
    INIT
    ============================================================ */
+const record = getRecord();
+document.getElementById('stat-correct').textContent = record.correct.length;
+document.getElementById('stat-wrong').textContent   = record.wrong.length;
 setLang(lang);
-loadProblems();
+loadProblem(0);
 </script>
 </body>
 </html>
