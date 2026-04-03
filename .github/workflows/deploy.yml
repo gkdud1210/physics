@@ -1,16 +1,21 @@
-name: Deploy
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
 jobs:
-  deploy-pages:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -22,10 +27,3 @@ jobs:
           path: docs
       - id: deployment
         uses: actions/deploy-pages@v4
-
-  trigger-render:
-    runs-on: ubuntu-latest
-    if: ${{ secrets.RENDER_DEPLOY_HOOK != '' }}
-    steps:
-      - name: Trigger Render deploy
-        run: curl -s "${{ secrets.RENDER_DEPLOY_HOOK }}"
