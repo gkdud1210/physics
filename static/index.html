@@ -283,9 +283,52 @@
   }
   .splash-btn:hover { background: rgba(255,255,255,.22); transform: scale(1.05); }
 
+  /* 난이도 선택 */
+  .diff-select-label {
+    font-size: .85rem; color: rgba(255,255,255,.5); font-weight: 600;
+    letter-spacing: .5px; text-transform: uppercase;
+    animation: popIn .5s .25s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .diff-btns {
+    display: flex; gap: 14px;
+    animation: popIn .5s .3s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .diff-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: rgba(255,255,255,.08);
+    border: 2px solid rgba(255,255,255,.15);
+    border-radius: 16px;
+    padding: 18px 28px;
+    cursor: pointer;
+    color: #fff;
+    transition: all .2s;
+    backdrop-filter: blur(8px);
+  }
+  .diff-btn:hover      { transform: translateY(-4px); background: rgba(255,255,255,.15); }
+  .diff-btn.selected   { border-color: var(--blue-400); background: rgba(96,165,250,.25); }
+  .diff-btn .diff-icon { font-size: 1.8rem; }
+  .diff-btn .diff-name { font-size: 1.1rem; font-weight: 900; }
+  .diff-btn .diff-desc { font-size: .72rem; color: rgba(255,255,255,.5); font-weight: 500; }
+
+  .diff-easy   { }
+  .diff-medium { }
+  .diff-hard   { }
+
+  .splash-start {
+    background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+    border: none; border-radius: 999px;
+    color: #fff; font-size: .95rem; font-weight: 700;
+    padding: 13px 36px; cursor: pointer;
+    box-shadow: 0 4px 18px rgba(59,130,246,.4);
+    transition: all .2s;
+    animation: popIn .5s .4s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .splash-start:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(59,130,246,.5); }
+  .splash-start:disabled { opacity: .35; cursor: default; transform: none; }
+
   .splash-timer {
     display: flex; gap: 6px; align-items: center;
-    animation: popIn .5s .4s cubic-bezier(.34,1.56,.64,1) both;
+    animation: popIn .5s .5s cubic-bezier(.34,1.56,.64,1) both;
   }
   .splash-dot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -335,12 +378,33 @@
 <!-- SPLASH -->
 <div id="splash">
   <div class="splash-emoji">👋</div>
-  <div>
+  <div style="text-align:center">
     <div class="splash-title">안녕 건우!</div>
-    
-    <div class="splash-sub"> 물리 공부 파이팅! </div>
+    <div class="splash-sub">물리 공부 파이팅! ⚡</div>
   </div>
-  <button class="splash-btn" onclick="hideSplash()">문제 풀기 시작 →</button>
+
+  <div class="diff-select-label">난이도를 선택하세요</div>
+
+  <div class="diff-btns">
+    <button class="diff-btn diff-easy selected" id="dbtn-easy" onclick="selectDiff('easy')">
+      <span class="diff-icon">🌱</span>
+      <span class="diff-name">하</span>
+      <span class="diff-desc">기초 개념</span>
+    </button>
+    <button class="diff-btn diff-medium" id="dbtn-medium" onclick="selectDiff('medium')">
+      <span class="diff-icon">🔥</span>
+      <span class="diff-name">중</span>
+      <span class="diff-desc">발전 문제</span>
+    </button>
+    <button class="diff-btn diff-hard" id="dbtn-hard" onclick="selectDiff('hard')">
+      <span class="diff-icon">⚡</span>
+      <span class="diff-name">상</span>
+      <span class="diff-desc">심화 문제</span>
+    </button>
+  </div>
+
+  <button class="splash-start" id="splash-start-btn" onclick="startWithDiff()">문제 풀기 시작 →</button>
+
   <div class="splash-timer">
     <div class="splash-dot active" id="dot0"></div>
     <div class="splash-dot" id="dot1"></div>
@@ -524,7 +588,7 @@ const PROBLEMS = [
   {
     id: 3,
     concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
-    difficulty: 'medium',
+    difficulty: 'easy',
     question_ko: '정지 상태에서 $1\\ m/s^2$로 출발한 기차가 $50\\ m$를 이동하는 데 걸린 시간은? (단위: 초)',
     question_en: 'A train starts from rest at $a=1\\ m/s^2$. Time to travel $50\\ m$? (s)',
     answer: '10',
@@ -572,7 +636,7 @@ const PROBLEMS = [
   {
     id: 6,
     concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
-    difficulty: 'hard',
+    difficulty: 'easy',
     question_ko: '$10\\ m/s$로 운동하던 물체가 $2\\ m/s^2$로 가속하여 $16\\ m/s$가 되었다. 이동 거리는? (단위: m)',
     question_en: 'Object at $10\\ m/s$ accelerates at $2\\ m/s^2$ to $16\\ m/s$. Distance? (m)',
     answer: '39',
@@ -587,7 +651,7 @@ const PROBLEMS = [
   {
     id: 7,
     concept_ko: '뉴턴 법칙', concept_en: "Newton's Laws",
-    difficulty: 'medium',
+    difficulty: 'easy',
     question_ko: '마찰 없는 빗면에서 질량이 다른 두 물체를 같은 높이에서 놓으면 가속도의 관계는?',
     question_en: 'Two objects of different mass on a frictionless incline — how do accelerations compare?',
     answer: '같다',
@@ -602,7 +666,7 @@ const PROBLEMS = [
   {
     id: 8,
     concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
-    difficulty: 'medium',
+    difficulty: 'easy',
     question_ko: '정지 상태에서 출발한 물체가 1초 동안 $d$만큼 이동했다면, 2초 동안 총 이동 거리는? ($d$의 배수로)',
     question_en: 'From rest, object travels $d$ in 1 s. Total distance in 2 s? (in multiples of $d$)',
     answer: '4d',
@@ -633,7 +697,7 @@ const PROBLEMS = [
   {
     id: 10,
     concept_ko: '등가속도 운동', concept_en: 'Uniform Acceleration',
-    difficulty: 'medium',
+    difficulty: 'easy',
     question_ko: '$5\\ m/s$로 운동하던 물체가 2초 동안 $20\\ m$를 이동했다. 나중 속도는? (단위: m/s)',
     question_en: 'Object at $5\\ m/s$ travels $20\\ m$ in 2 s. Final velocity? (m/s)',
     answer: '15',
@@ -652,6 +716,8 @@ const PROBLEMS = [
 let lang = localStorage.getItem('lang') || 'ko';
 let currentIdx = 0;
 let answered = false;
+let selectedDiff = 'easy';   // 현재 선택된 난이도
+let filteredProblems = [];   // 난이도 필터링된 문제 목록
 
 function getRecord() {
   return JSON.parse(localStorage.getItem('physics_record') || '{"correct":[],"wrong":[]}');
@@ -752,12 +818,13 @@ function switchTab(tab) {
    PROBLEM
    ============================================================ */
 function loadProblem(idx) {
-  currentIdx = idx % PROBLEMS.length;
+  if (!filteredProblems.length) return;
+  currentIdx = idx % filteredProblems.length;
   answered   = false;
 
   // 다시 풀기 시 현재 문제 오답 기록 초기화
   const record = getRecord();
-  record.wrong = record.wrong.filter(w => w.id !== PROBLEMS[currentIdx].id);
+  record.wrong = record.wrong.filter(w => w.id !== filteredProblems[currentIdx].id);
   saveRecord(record);
   document.getElementById('stat-wrong').textContent = record.wrong.length;
 
@@ -771,7 +838,8 @@ function loadProblem(idx) {
 }
 
 function renderProblem() {
-  const p = PROBLEMS[currentIdx];
+  if (!filteredProblems.length) return;
+  const p = filteredProblems[currentIdx];
   document.getElementById('question-text').innerHTML =
     lang==='ko' ? p.question_ko : p.question_en;
   document.getElementById('prob-concept').textContent =
@@ -779,13 +847,12 @@ function renderProblem() {
 
   const diffEl = document.getElementById('prob-difficulty');
   const diffMap = {easy:'badge-green', medium:'badge-yellow', hard:'badge-red'};
-  diffEl.textContent = p.difficulty;
+  diffEl.textContent = DIFF_LABEL[p.difficulty] || p.difficulty;
   diffEl.className   = 'badge ' + (diffMap[p.difficulty] || 'badge-blue');
 
   document.getElementById('prob-counter').textContent =
-    `${currentIdx+1} / ${PROBLEMS.length}`;
+    `${currentIdx+1} / ${filteredProblems.length}`;
 
-  // KaTeX 재렌더
   if (window.renderMathInElement) {
     renderMathInElement(document.getElementById('question-text'), {
       delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
@@ -811,7 +878,7 @@ function submitAnswer() {
   answered = true;
   document.getElementById('submit-btn').disabled = true;
 
-  const p = PROBLEMS[currentIdx];
+  const p = filteredProblems[currentIdx];
   const isCorrect = ans === p.answer;
   const record    = getRecord();
 
@@ -875,7 +942,7 @@ function submitAnswer() {
 function toggleExplanation() {
   const box = document.getElementById('explanation-box');
   const btn = document.getElementById('hint-btn');
-  const p   = PROBLEMS[currentIdx];
+  const p   = filteredProblems[currentIdx];
 
   if (box.classList.contains('visible')) {
     box.classList.remove('visible');
@@ -980,33 +1047,64 @@ function resetProgress() {
 /* ============================================================
    SPLASH
    ============================================================ */
+const DIFF_LABEL = { easy:'하', medium:'중', hard:'상' };
+
+function selectDiff(diff) {
+  selectedDiff = diff;
+  ['easy','medium','hard'].forEach(d => {
+    document.getElementById('dbtn-'+d).classList.toggle('selected', d === diff);
+  });
+}
+
+function startWithDiff() {
+  filteredProblems = PROBLEMS.filter(p => p.difficulty === selectedDiff);
+  hideSplash();
+  if (!filteredProblems.length) {
+    showEmptyDiff();
+  } else {
+    loadProblem(0);
+  }
+}
+
+function showEmptyDiff() {
+  const label = DIFF_LABEL[selectedDiff];
+  document.getElementById('question-text').innerHTML =
+    `<span style="color:var(--gray-400);font-size:.95rem">난이도 <b>'${label}'</b> 문제가 아직 준비 중이에요 😊</span>`;
+  document.getElementById('prob-concept').textContent = '';
+  document.getElementById('prob-difficulty').textContent = '';
+  document.getElementById('prob-counter').textContent = '0 / 0';
+  document.getElementById('answer-input').value = '';
+  document.getElementById('answer-area') && (document.querySelector('.answer-area').style.visibility = 'hidden');
+}
+
 function hideSplash() {
   document.getElementById('splash').classList.add('hide');
+  document.querySelector('.answer-area').style.visibility = 'visible';
 }
 
 function showSplash() {
-  const splash = document.getElementById('splash');
-  splash.classList.remove('hide');
+  document.getElementById('splash').classList.remove('hide');
 }
 
+// 스플래시 점 애니메이션 (자동 닫힘 없음 — 난이도 선택 후 시작)
 (function() {
   const dots = [0,1,2].map(i => document.getElementById('dot'+i));
   let tick = 0;
-  const iv = setInterval(() => {
+  setInterval(() => {
     tick++;
     dots.forEach((d,i) => d.classList.toggle('active', i === tick % 3));
-    if (tick >= 3) { clearInterval(iv); hideSplash(); }
-  }, 1000);
+  }, 800);
 })();
 
 /* ============================================================
    INIT
    ============================================================ */
+filteredProblems = PROBLEMS.filter(p => p.difficulty === selectedDiff);
 const record = getRecord();
 document.getElementById('stat-correct').textContent = record.correct.length;
 document.getElementById('stat-wrong').textContent   = record.wrong.length;
+document.getElementById('stat-total').textContent   = filteredProblems.length;
 setLang(lang);
-loadProblem(0);
 </script>
 </body>
 </html>
