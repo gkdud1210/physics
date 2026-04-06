@@ -232,7 +232,8 @@
     position: fixed; inset: 0; z-index: 999;
     background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%);
     display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 28px;
+    align-items: center; justify-content: flex-start;
+    overflow: hidden;
     transition: opacity .6s ease, visibility .6s ease;
   }
   #splash.hide { opacity: 0; visibility: hidden; }
@@ -371,45 +372,446 @@
     .answer-row { flex-direction: column; }
     .btn { width: 100%; text-align: center; }
   }
+
+  /* ── CHAPTER MENU ───────────────────────────── */
+  #splash-ch-menu {
+    display: none; flex-direction: column; align-items: center;
+    gap: 22px; padding: 40px 16px; width: 100%; max-width: 480px;
+    flex: 1; justify-content: center;
+  }
+  .ch-menu-btns { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 320px; }
+  .ch-menu-btn {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; border-radius: 14px; border: 1.5px solid;
+    font-size: .95rem; font-weight: 700; cursor: pointer;
+    transition: all .2s; text-align: left; width: 100%; background: transparent;
+  }
+  .ch-menu-btn-concept {
+    border-color: rgba(251,191,36,.4); color: #fef3c7;
+    background: rgba(251,191,36,.08);
+  }
+  .ch-menu-btn-concept:hover:not(:disabled) { background: rgba(251,191,36,.18); transform: translateY(-2px); }
+  .ch-menu-btn-problem {
+    border-color: rgba(96,165,250,.4); color: #dbeafe;
+    background: rgba(96,165,250,.1);
+  }
+  .ch-menu-btn-problem:hover:not(:disabled) { background: rgba(96,165,250,.22); transform: translateY(-2px); }
+  .ch-menu-btn:disabled { opacity: .3; cursor: not-allowed; }
+  .ch-menu-btn-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .ch-menu-btn-label { font-size: .95rem; font-weight: 700; }
+  .ch-menu-btn-sub { font-size: .72rem; opacity: .6; margin-top: 2px; }
+
+  /* ── CONCEPT VIEW ────────────────────────────── */
+  #splash-concept {
+    display: none; flex-direction: column;
+    width: 100%; height: 100vh; overflow: hidden;
+  }
+  .concept-nav {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; flex-shrink: 0;
+    background: rgba(0,0,0,.25); border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .concept-nav-title { color: #fff; font-weight: 700; font-size: .95rem; }
+  .concept-scroll {
+    flex: 1; overflow-y: auto; padding: 20px 14px 56px;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent;
+    max-width: 640px; align-self: center; width: 100%;
+  }
+  .cv-block {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 18px 18px 20px; margin-bottom: 14px;
+  }
+  .cv-block-title {
+    font-size: .95rem; font-weight: 800; color: var(--blue-300);
+    margin-bottom: 12px; padding-bottom: 8px;
+    border-bottom: 1px solid rgba(96,165,250,.2);
+  }
+  .cv-p { font-size: .87rem; line-height: 1.75; margin-bottom: 12px; color: rgba(255,255,255,.78); }
+  .cv-list { font-size: .87rem; line-height: 1.85; color: rgba(255,255,255,.78); padding-left: 18px; }
+  .cv-list li { margin-bottom: 6px; }
+  .cv-cond { display: flex; flex-direction: column; gap: 9px; margin-bottom: 12px; }
+  .cv-cond-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(255,255,255,.04); border-radius: 10px; padding: 11px 12px;
+    font-size: .86rem; color: rgba(255,255,255,.78); line-height: 1.65;
+  }
+  .cv-tag {
+    flex-shrink: 0; background: rgba(96,165,250,.2); color: var(--blue-300);
+    font-size: .7rem; font-weight: 700; padding: 3px 8px;
+    border-radius: 6px; margin-top: 1px; white-space: nowrap;
+  }
+  .cv-formula-box {
+    background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.25);
+    border-radius: 10px; padding: 13px 15px;
+    font-size: .87rem; color: rgba(255,255,255,.85); line-height: 1.85;
+  }
+  .cv-stab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+  .cv-stab-card {
+    background: rgba(255,255,255,.05); border-radius: 10px; padding: 14px;
+    text-align: center; border: 1px solid rgba(255,255,255,.08);
+  }
+  .cv-stab-icon { font-size: 1.7rem; margin-bottom: 6px; }
+  .cv-stab-key { font-size: .74rem; color: rgba(255,255,255,.55); margin-bottom: 4px; }
+  .cv-stab-val { font-size: .85rem; font-weight: 700; color: #6ee7b7; }
+  .cv-warning {
+    background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3);
+    border-radius: 10px; padding: 13px 14px;
+    font-size: .85rem; color: #fca5a5; line-height: 1.75; margin-top: 10px;
+  }
+
+  /* ── SIMULATIONS ─────────────────────────────── */
+  .cv-sim-toggle {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px; padding: 13px 15px; cursor: pointer;
+    display: flex; align-items: center; gap: 12px;
+    transition: background .2s; margin-bottom: 8px; margin-top: 14px;
+  }
+  .cv-sim-toggle:hover { background: rgba(255,255,255,.12); }
+  .cv-sim-icon { font-size: 1.2rem; flex-shrink: 0; }
+  .cv-sim-toggle-info { flex: 1; }
+  .cv-sim-title { font-size: .88rem; font-weight: 700; color: #fff; }
+  .cv-sim-sub { font-size: .7rem; color: rgba(255,255,255,.42); margin-top: 2px; }
+  .cv-sim-arrow { color: rgba(255,255,255,.35); font-size: .8rem; transition: transform .25s; flex-shrink: 0; }
+  .cv-sim-arrow.open { transform: rotate(180deg); }
+  .cv-sim-body {
+    display: none; background: rgba(0,0,0,.25);
+    border: 1px solid rgba(255,255,255,.08); border-radius: 12px;
+    padding: 16px; margin-bottom: 6px;
+  }
+  .cv-sim-body.open { display: block; }
+  .sim-status-box {
+    margin-top: 12px; padding: 12px 14px; border-radius: 10px;
+    background: rgba(255,255,255,.05); text-align: center;
+    font-size: .86rem; line-height: 1.75;
+  }
+  .torque-table { width: 100%; border-collapse: collapse; font-size: .81rem; }
+  .torque-table th {
+    padding: 6px 8px; text-align: left;
+    color: rgba(255,255,255,.4); font-size: .7rem; font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .torque-table td { padding: 6px 6px; border-bottom: 1px solid rgba(255,255,255,.05); vertical-align: middle; }
+  .torque-table input[type="number"] {
+    background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.14);
+    border-radius: 6px; color: #fff; padding: 4px 6px;
+    width: 64px; font-size: .81rem; outline: none;
+  }
+  .torque-table input[type="number"]:focus { border-color: var(--blue-400); }
+  .torque-table select {
+    background: #1e293b; border: 1px solid rgba(255,255,255,.14);
+    border-radius: 6px; color: #fff; padding: 4px 6px; font-size: .79rem;
+  }
+  .torque-net-box {
+    margin-top: 12px; padding: 13px 15px; border-radius: 10px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .torque-net-label { font-size: .75rem; color: rgba(255,255,255,.45); }
+  .torque-add-btn {
+    background: rgba(96,165,250,.12); border: 1px solid rgba(96,165,250,.28);
+    color: var(--blue-300); border-radius: 8px; padding: 7px 14px;
+    font-size: .8rem; font-weight: 600; cursor: pointer; margin-top: 10px;
+    transition: background .2s;
+  }
+  .torque-add-btn:hover { background: rgba(96,165,250,.22); }
+  .tau-cell { font-weight: 700; }
+
+  /* ── CURRICULUM ──────────────────────────────── */
+  #splash-home {
+    width: 100%; height: 100vh; overflow-y: auto;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 16px; padding: 32px 16px 56px;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent;
+  }
+  #splash-difficulty {
+    display: none; flex-direction: column; align-items: center;
+    gap: 24px; padding: 32px 16px; width: 100%; max-width: 480px;
+    flex: 1; justify-content: center;
+  }
+  .curriculum {
+    width: 100%; max-width: 520px;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .curr-unit {
+    font-size: 1rem; font-weight: 800; color: var(--blue-300);
+    padding: 20px 4px 8px; letter-spacing: -.3px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    margin-bottom: 4px;
+  }
+  .curr-unit:first-child { padding-top: 4px; }
+  .curr-section {
+    font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.4);
+    padding: 12px 4px 4px; letter-spacing: .4px; text-transform: uppercase;
+  }
+  .curr-ch {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; text-align: left;
+    padding: 11px 14px; border-radius: 12px;
+    border: 1.5px solid rgba(255,255,255,.07);
+    background: rgba(255,255,255,.03);
+    cursor: default; transition: all .2s; color: #fff;
+  }
+  .curr-ch.locked { opacity: .42; cursor: default; }
+  .curr-ch.concept-ch {
+    border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.07); cursor: pointer;
+  }
+  .curr-ch.concept-ch:hover { background: rgba(251,191,36,.15); transform: translateX(5px); }
+  .curr-ch-num.concept { background: rgba(251,191,36,.25); color: #fde68a; }
+  .curr-badge.concept { background: rgba(251,191,36,.18); color: #fde68a; }
+  .curr-ch.active-ch {
+    border-color: rgba(96,165,250,.45);
+    background: rgba(96,165,250,.1);
+    cursor: pointer;
+  }
+  .curr-ch.active-ch:hover {
+    background: rgba(96,165,250,.2);
+    transform: translateX(5px);
+    box-shadow: 0 4px 20px rgba(59,130,246,.25);
+  }
+  .curr-ch-num {
+    min-width: 30px; height: 30px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; font-size: .78rem; font-weight: 800;
+    background: rgba(255,255,255,.07); color: rgba(255,255,255,.45);
+    flex-shrink: 0;
+  }
+  .curr-ch-num.avail { background: var(--blue-600); color: #fff; }
+  .curr-ch-info { flex: 1; min-width: 0; }
+  .curr-ch-name {
+    font-size: .88rem; font-weight: 700;
+    color: rgba(255,255,255,.85); margin-bottom: 2px;
+  }
+  .curr-ch-desc {
+    font-size: .7rem; color: rgba(255,255,255,.38); line-height: 1.4;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .curr-badge {
+    margin-left: auto; flex-shrink: 0;
+    font-size: .67rem; font-weight: 700; letter-spacing: .3px;
+    padding: 3px 9px; border-radius: 20px;
+    background: rgba(255,255,255,.07); color: rgba(255,255,255,.3);
+  }
+  .curr-badge.avail {
+    background: rgba(96,165,250,.2); color: var(--blue-300);
+  }
+  .back-btn {
+    align-self: flex-start;
+    background: rgba(255,255,255,.1); border: none; border-radius: 8px;
+    color: rgba(255,255,255,.7); font-size: .85rem; font-weight: 600;
+    padding: 8px 16px; cursor: pointer; transition: background .2s;
+  }
+  .back-btn:hover { background: rgba(255,255,255,.18); }
+  .chapter-subtitle {
+    font-size: .8rem; color: rgba(255,255,255,.45); margin-bottom: 6px;
+  }
+  .chapter-main-title {
+    font-size: 1.6rem; font-weight: 900; color: #fff; letter-spacing: -.5px;
+  }
 </style>
 </head>
 <body>
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="splash-emoji">👋</div>
-  <div style="text-align:center">
-    <div class="splash-title">안녕 건우!</div>
-    <div class="splash-sub">물리 공부 파이팅! ⚡</div>
-  </div>
 
-  <div class="diff-select-label">난이도를 선택하세요</div>
+  <!-- VIEW 1: 단원 선택 -->
+  <div id="splash-home">
+    <div class="splash-emoji">👋</div>
+    <div style="text-align:center">
+      <div class="splash-title">안녕 건우야!</div>
+      <div class="splash-sub">물리 공부 파이팅! ⚡</div>
+    </div>
+    <div class="diff-select-label">단원을 선택하세요</div>
 
-  <div class="diff-btns">
-    <button class="diff-btn diff-easy selected" id="dbtn-easy" onclick="selectDiff('easy')">
-      <span class="diff-icon">🌱</span>
-      <span class="diff-name">하</span>
-      <span class="diff-desc">기초 개념</span>
-    </button>
-    <button class="diff-btn diff-medium" id="dbtn-medium" onclick="selectDiff('medium')">
-      <span class="diff-icon">🔥</span>
-      <span class="diff-name">중</span>
-      <span class="diff-desc">발전 문제</span>
-    </button>
-    <button class="diff-btn diff-hard" id="dbtn-hard" onclick="selectDiff('hard')">
-      <span class="diff-icon">⚡</span>
-      <span class="diff-name">상</span>
-      <span class="diff-desc">심화 문제</span>
-    </button>
-  </div>
+    <div class="curriculum">
 
-  <button class="splash-start" id="splash-start-btn" onclick="startWithDiff()">문제 풀기 시작 →</button>
+      <div class="curr-unit">Ⅰ. 힘과 에너지</div>
 
-  <div class="splash-timer">
-    <div class="splash-dot active" id="dot0"></div>
-    <div class="splash-dot" id="dot1"></div>
-    <div class="splash-dot" id="dot2"></div>
-  </div>
+      <div class="curr-section">1. 힘과 운동</div>
+      <div class="curr-ch concept-ch" onclick="selectChapter('eq_stability')">
+        <span class="curr-ch-num concept">01</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">평형과 안정성</div>
+          <div class="curr-ch-desc">돌림힘의 평형, 물체의 무게 중심, 구조물의 안정성</div>
+        </div>
+        <span class="curr-badge concept">개념 보기 →</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">02</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">가속도 법칙</div>
+          <div class="curr-ch-desc">뉴턴 운동 제2법칙, 등가속도 직선 운동의 원인</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch active-ch" onclick="selectChapter('uniform_accel')">
+        <span class="curr-ch-num avail">03</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">등가속도 운동</div>
+          <div class="curr-ch-desc">가속도 공식을 활용한 거리와 속도 계산, 자유 낙하 운동</div>
+        </div>
+        <span class="curr-badge avail">학습 가능 →</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">04</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">작용 반작용과 운동량 보존</div>
+          <div class="curr-ch-desc">뉴턴 제3법칙, 충돌 시 운동량 보존 법칙</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+
+      <div class="curr-section">2. 에너지와 열</div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">01</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">역학적 에너지 보존</div>
+          <div class="curr-ch-desc">운동 에너지와 퍼텐셜 에너지의 전환 및 보존</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">02</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">열과 에너지</div>
+          <div class="curr-ch-desc">기체가 하는 일, 내부 에너지, 열역학 제1법칙</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">03</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">열효율</div>
+          <div class="curr-ch-desc">열역학 제2법칙, 열기관의 원리와 에너지 효율 계산</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+
+      <div class="curr-unit">Ⅱ. 전기와 자기</div>
+
+      <div class="curr-section">1. 전기</div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">01</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">전기장과 전위차</div>
+          <div class="curr-ch-desc">쿨롱 법칙, 전기장의 세기와 방향, 전위와 전위차의 개념</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">02</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">저항의 연결과 소비 전력</div>
+          <div class="curr-ch-desc">저항의 직렬/병렬 연결, 옴의 법칙, 전력과 전력량</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">03</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">축전기</div>
+          <div class="curr-ch-desc">전하를 저장하는 장치, 축전기의 전기 용량과 연결 원리</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+
+      <div class="curr-section">2. 자기</div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">01</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">물질의 자성</div>
+          <div class="curr-ch-desc">원자 자석, 강자성/상자성/반자성체의 특징</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">02</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">전류의 자기 작용</div>
+          <div class="curr-ch-desc">전류가 흐르는 도선 주위의 자기장 (직선, 원형, 솔레노이드)</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+      <div class="curr-ch locked">
+        <span class="curr-ch-num">03</span>
+        <div class="curr-ch-info">
+          <div class="curr-ch-name">전자기 유도</div>
+          <div class="curr-ch-desc">패러데이 법칙, 렌츠의 법칙, 발전기와 변압기의 원리</div>
+        </div>
+        <span class="curr-badge">준비 중</span>
+      </div>
+
+    </div><!-- /curriculum -->
+
+    <div class="splash-timer">
+      <div class="splash-dot active" id="dot0"></div>
+      <div class="splash-dot" id="dot1"></div>
+      <div class="splash-dot" id="dot2"></div>
+    </div>
+  </div><!-- /splash-home -->
+
+  <!-- VIEW 2: 단원 메뉴 (개념/문제) -->
+  <div id="splash-ch-menu">
+    <button class="back-btn" onclick="showSplashView('home')">← 단원 목록</button>
+    <div style="text-align:center">
+      <div class="chapter-subtitle" id="ch-menu-section"></div>
+      <div class="chapter-main-title" id="ch-menu-name"></div>
+    </div>
+    <div class="ch-menu-btns">
+      <button class="ch-menu-btn ch-menu-btn-concept" id="btn-concept" onclick="openConcept()">
+        <span class="ch-menu-btn-icon">📖</span>
+        <div>
+          <div class="ch-menu-btn-label">개념 보기</div>
+          <div class="ch-menu-btn-sub">핵심 정리 · 공식 · 예시</div>
+        </div>
+      </button>
+      <button class="ch-menu-btn ch-menu-btn-problem" id="btn-problems" onclick="openDifficulty()">
+        <span class="ch-menu-btn-icon">✏️</span>
+        <div>
+          <div class="ch-menu-btn-label">문제 풀기</div>
+          <div class="ch-menu-btn-sub">난이도별 연습 문제</div>
+        </div>
+      </button>
+    </div>
+  </div><!-- /splash-ch-menu -->
+
+  <!-- VIEW 3: 개념 보기 -->
+  <div id="splash-concept">
+    <div class="concept-nav">
+      <button class="back-btn" onclick="showSplashView('ch-menu')" style="margin:0;padding:6px 14px;font-size:.8rem">← 뒤로</button>
+      <span class="concept-nav-title" id="concept-nav-title"></span>
+    </div>
+    <div class="concept-scroll" id="concept-body"></div>
+  </div><!-- /splash-concept -->
+
+  <!-- VIEW 4: 난이도 선택 -->
+  <div id="splash-difficulty">
+    <button class="back-btn" onclick="showSplashView('ch-menu')">← 뒤로</button>
+    <div style="text-align:center">
+      <div class="chapter-subtitle" id="diff-section"></div>
+      <div class="chapter-main-title" id="diff-name"></div>
+    </div>
+    <div class="diff-select-label">난이도를 선택하세요</div>
+    <div class="diff-btns">
+      <button class="diff-btn diff-easy selected" id="dbtn-easy" onclick="selectDiff('easy')">
+        <span class="diff-icon">🌱</span>
+        <span class="diff-name">하</span>
+        <span class="diff-desc">기초 개념</span>
+      </button>
+      <button class="diff-btn diff-medium" id="dbtn-medium" onclick="selectDiff('medium')">
+        <span class="diff-icon">🔥</span>
+        <span class="diff-name">중</span>
+        <span class="diff-desc">발전 문제</span>
+      </button>
+      <button class="diff-btn diff-hard" id="dbtn-hard" onclick="selectDiff('hard')">
+        <span class="diff-icon">⚡</span>
+        <span class="diff-name">상</span>
+        <span class="diff-desc">심화 문제</span>
+      </button>
+    </div>
+    <button class="splash-start" id="splash-start-btn" onclick="startWithDiff()">문제 풀기 시작 →</button>
+  </div><!-- /splash-difficulty -->
+
 </div>
 
 <nav class="nav">
@@ -1251,9 +1653,172 @@ function resetProgress() {
 }
 
 /* ============================================================
+   CHAPTERS DATA
+   ============================================================ */
+const CHAPTERS = {
+  eq_stability: {
+    name: '01 평형과 안정성',
+    section: 'Ⅰ-1 힘과 운동',
+    hasConcept: true,
+    hasProblems: false,
+    concept: `
+      <div class="cv-block">
+        <div class="cv-block-title">1. 물체의 평형 (Equilibrium)</div>
+        <p class="cv-p">물체가 정지해 있거나 등속 직선 운동을 하기 위해서는 두 가지 평형 조건이 <b>모두</b> 만족되어야 합니다.</p>
+        <div class="cv-cond">
+          <div class="cv-cond-item">
+            <span class="cv-tag">선운동 평형</span>
+            <div>물체에 작용하는 모든 외력의 합(알짜힘)이 $0$이어야 합니다.$$\\sum \\vec{F} = 0$$</div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">회전 평형</span>
+            <div>물체에 작용하는 모든 <b>돌림힘(토크, Torque)</b>의 합이 $0$이어야 합니다.$$\\sum \\vec{\\tau} = 0$$</div>
+          </div>
+        </div>
+        <div class="cv-formula-box">
+          <b>돌림힘</b> $\\tau$ = 힘의 크기 $F$ × 회전축까지의 수직 거리 $d$$$\\tau = Fd$$
+        </div>
+      </div>
+      <div class="cv-block">
+        <div class="cv-block-title">2. 무게 중심 (Center of Gravity)</div>
+        <ul class="cv-list">
+          <li>물체 전체에 작용하는 중력의 <b>합력점</b>입니다.</li>
+          <li>무게 중심을 받쳐주면 물체는 회전하지 않고 평형을 유지합니다.</li>
+          <li><b>대칭 물체:</b> 기하학적 중심 = 무게 중심</li>
+          <li><b>불규칙 물체:</b> 질량이 많이 모인 쪽으로 무게 중심이 치우칩니다.</li>
+        </ul>
+      </div>
+      <div class="cv-block">
+        <div class="cv-block-title">3. 물체의 안정성 (Stability)</div>
+        <p class="cv-p">외부 충격에도 넘어지지 않고 원래 상태를 유지하려는 성질입니다.</p>
+        <div class="cv-stab-grid">
+          <div class="cv-stab-card">
+            <div class="cv-stab-icon">⬇️</div>
+            <div class="cv-stab-key">무게 중심 낮을수록</div>
+            <div class="cv-stab-val">더 안정적</div>
+          </div>
+          <div class="cv-stab-card">
+            <div class="cv-stab-icon">⬛</div>
+            <div class="cv-stab-key">바닥면(기저면) 넓을수록</div>
+            <div class="cv-stab-val">더 안정적</div>
+          </div>
+        </div>
+        <div class="cv-warning">
+          <b>⚠️ 넘어지는 기준</b><br>
+          무게 중심에서 수직으로 내린 선이 물체의 바닥면 범위를 <b>벗어나면</b> 물체는 회전하며 넘어집니다.
+        </div>
+      </div>
+
+      <!-- SIM 1: 안정성 -->
+      <div class="cv-sim-toggle" onclick="toggleConceptSim('stability')">
+        <span class="cv-sim-icon">⚡</span>
+        <div class="cv-sim-toggle-info">
+          <div class="cv-sim-title">시뮬레이션: 언제 넘어지나?</div>
+          <div class="cv-sim-sub">슬라이더로 기울기를 조정해 안정성을 확인하세요</div>
+        </div>
+        <span class="cv-sim-arrow" id="arr-stability">▼</span>
+      </div>
+      <div class="cv-sim-body" id="sim-stability">
+        <canvas id="stability-canvas" width="360" height="220" style="width:100%;height:auto;display:block;border-radius:10px;background:#0f172a"></canvas>
+        <div style="margin-top:12px">
+          <label id="tilt-label" style="font-size:.77rem;color:rgba(255,255,255,.5);display:block;margin-bottom:6px">기울기: 0°</label>
+          <input type="range" id="tilt-slider" min="0" max="55" value="0" style="width:100%;accent-color:#60a5fa" oninput="onTiltInput(this.value)">
+          <div style="display:flex;justify-content:space-between;font-size:.68rem;color:rgba(255,255,255,.28);margin-top:3px"><span>0°</span><span>55°</span></div>
+        </div>
+        <div class="sim-status-box" id="sim-status"></div>
+      </div>
+
+      <!-- SIM 2: 돌림힘 계산기 -->
+      <div class="cv-sim-toggle" onclick="toggleConceptSim('torque')">
+        <span class="cv-sim-icon">🔧</span>
+        <div class="cv-sim-toggle-info">
+          <div class="cv-sim-title">돌림힘 계산기</div>
+          <div class="cv-sim-sub">여러 힘의 알짜 돌림힘을 직접 계산해보세요</div>
+        </div>
+        <span class="cv-sim-arrow" id="arr-torque">▼</span>
+      </div>
+      <div class="cv-sim-body" id="sim-torque">
+        <div style="overflow-x:auto">
+          <table class="torque-table">
+            <thead><tr><th>#</th><th>거리 r (m)</th><th>힘 F (N)</th><th>방향</th><th>τ (N·m)</th><th></th></tr></thead>
+            <tbody id="torque-tbody"></tbody>
+          </table>
+        </div>
+        <button class="torque-add-btn" onclick="addTorqueRow()">+ 힘 추가</button>
+        <div class="torque-net-box">
+          <div>
+            <div class="torque-net-label">알짜 돌림힘 (Net Torque)</div>
+            <div id="torque-dir" style="font-size:.78rem;font-weight:600;margin-top:4px">—</div>
+          </div>
+          <div style="text-align:right">
+            <div id="torque-net-val" style="font-size:1.4rem;font-weight:800;color:#60a5fa">0.00</div>
+            <div class="torque-net-label">N·m</div>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:.73rem;color:rgba(255,255,255,.35);line-height:1.7">
+          적용 공식: $\\tau = r \\cdot F$ (수직힘 가정, $\\sin 90° = 1$)<br>
+          반시계 $(+)$ &nbsp;|&nbsp; 시계 $(-)$ &nbsp;|&nbsp; 알짜 돌림힘 = 0 이면 회전 평형
+        </div>
+      </div>
+    `
+  },
+  uniform_accel: {
+    name: '03 등가속도 운동',
+    section: 'Ⅰ-1 힘과 운동',
+    hasConcept: false,
+    hasProblems: true,
+    concept: null
+  }
+};
+
+/* ============================================================
    SPLASH
    ============================================================ */
 const DIFF_LABEL = { easy:'하', medium:'중', hard:'상' };
+let currentChapterId = null;
+
+function showSplashView(view) {
+  ['home','ch-menu','concept','difficulty'].forEach(v => {
+    const el = document.getElementById('splash-' + v);
+    if (el) el.style.display = 'none';
+  });
+  const target = document.getElementById('splash-' + view);
+  if (target) target.style.display = 'flex';
+}
+
+function selectChapter(id) {
+  currentChapterId = id;
+  const ch = CHAPTERS[id];
+  if (!ch) return;
+  document.getElementById('ch-menu-section').textContent = ch.section;
+  document.getElementById('ch-menu-name').textContent    = ch.name;
+  document.getElementById('btn-concept').disabled  = !ch.hasConcept;
+  document.getElementById('btn-problems').disabled = !ch.hasProblems;
+  showSplashView('ch-menu');
+}
+
+function openConcept() {
+  const ch = CHAPTERS[currentChapterId];
+  if (!ch || !ch.concept) return;
+  document.getElementById('concept-nav-title').textContent = ch.name;
+  document.getElementById('concept-body').innerHTML = ch.concept;
+  showSplashView('concept');
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('concept-body'), {
+      delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+      throwOnError: false
+    });
+  }
+}
+
+function openDifficulty() {
+  const ch = CHAPTERS[currentChapterId];
+  if (!ch) return;
+  document.getElementById('diff-section').textContent = ch.section;
+  document.getElementById('diff-name').textContent    = ch.name;
+  selectDiff(selectedDiff);
+  showSplashView('difficulty');
+}
 
 function selectDiff(diff) {
   selectedDiff = diff;
@@ -1280,7 +1845,7 @@ function showEmptyDiff() {
   document.getElementById('prob-difficulty').textContent = '';
   document.getElementById('prob-counter').textContent = '0 / 0';
   document.getElementById('answer-input').value = '';
-  document.getElementById('answer-area') && (document.querySelector('.answer-area').style.visibility = 'hidden');
+  document.querySelector('.answer-area').style.visibility = 'hidden';
 }
 
 function hideSplash() {
@@ -1290,6 +1855,225 @@ function hideSplash() {
 
 function showSplash() {
   document.getElementById('splash').classList.remove('hide');
+  showSplashView('home');
+}
+
+/* ============================================================
+   CONCEPT SIMULATIONS
+   ============================================================ */
+function toggleConceptSim(id) {
+  const body  = document.getElementById('sim-' + id);
+  const arrow = document.getElementById('arr-' + id);
+  if (!body) return;
+  const isOpen = body.classList.toggle('open');
+  if (arrow) arrow.classList.toggle('open', isOpen);
+  if (isOpen && id === 'stability') { setTimeout(initStabilitySim, 40); }
+  if (isOpen && id === 'torque') {
+    initTorqueCalc();
+    if (window.renderMathInElement) {
+      renderMathInElement(body, {
+        delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+        throwOnError: false
+      });
+    }
+  }
+}
+
+/* ── Stability Simulation ── */
+const SIM_W = 70, SIM_H = 130; // block px dimensions on canvas
+let _stabCanvas = null, _stabCtx = null;
+
+function initStabilitySim() {
+  _stabCanvas = document.getElementById('stability-canvas');
+  if (!_stabCanvas) return;
+  _stabCtx = _stabCanvas.getContext('2d');
+  drawStability(0);
+  updateStabilityStatus(0);
+  document.getElementById('tilt-label').textContent = '기울기: 0°';
+  const slider = document.getElementById('tilt-slider');
+  if (slider) slider.value = 0;
+}
+
+function onTiltInput(val) {
+  const angle = parseFloat(val);
+  document.getElementById('tilt-label').textContent = `기울기: ${angle}°`;
+  drawStability(angle);
+  updateStabilityStatus(angle);
+}
+
+function drawStability(angleDeg) {
+  if (!_stabCtx) return;
+  const cv = _stabCanvas;
+  const W = SIM_W, H = SIM_H;
+  const angle = angleDeg * Math.PI / 180;
+  const PIVOT = { x: cv.width / 2 + 10, y: cv.height - 38 };
+  const critDeg = Math.atan2(W / 2, H / 2) * 180 / Math.PI;
+  const isStable  = angleDeg < critDeg - 0.8;
+  const isCrit    = Math.abs(angleDeg - critDeg) <= 1.5;
+
+  _stabCtx.clearRect(0, 0, cv.width, cv.height);
+
+  // bg dots
+  _stabCtx.fillStyle = 'rgba(255,255,255,.04)';
+  for (let x = 20; x < cv.width; x += 20)
+    for (let y = 20; y < cv.height; y += 20)
+      _stabCtx.fillRect(x, y, 1, 1);
+
+  // ground
+  _stabCtx.fillStyle = '#1e293b';
+  _stabCtx.fillRect(0, PIVOT.y, cv.width, cv.height - PIVOT.y);
+  _stabCtx.fillStyle = '#334155';
+  _stabCtx.fillRect(0, PIVOT.y, cv.width, 2);
+
+  // rotate block corners around PIVOT (bottom-right corner)
+  const corners = [[-W,-H],[0,-H],[0,0],[-W,0]];
+  const rot = corners.map(([cx,cy]) => ({
+    x: PIVOT.x + cx * Math.cos(angle) - cy * Math.sin(angle),
+    y: PIVOT.y + cx * Math.sin(angle) + cy * Math.cos(angle)
+  }));
+
+  // base-of-support line
+  const baseColor = isStable ? '#10b981' : isCrit ? '#fbbf24' : '#ef4444';
+  _stabCtx.beginPath();
+  _stabCtx.moveTo(rot[3].x, PIVOT.y + 1.5);
+  _stabCtx.lineTo(PIVOT.x,  PIVOT.y + 1.5);
+  _stabCtx.strokeStyle = baseColor;
+  _stabCtx.lineWidth = 5; _stabCtx.lineCap = 'round';
+  _stabCtx.stroke();  _stabCtx.lineCap = 'butt';
+
+  // block fill + border
+  _stabCtx.beginPath();
+  _stabCtx.moveTo(rot[0].x, rot[0].y);
+  rot.forEach(p => _stabCtx.lineTo(p.x, p.y));
+  _stabCtx.closePath();
+  _stabCtx.fillStyle   = isStable ? 'rgba(96,165,250,.18)' : isCrit ? 'rgba(251,191,36,.18)' : 'rgba(239,68,68,.2)';
+  _stabCtx.strokeStyle = isStable ? '#60a5fa'              : isCrit ? '#fbbf24'               : '#ef4444';
+  _stabCtx.lineWidth = 2.5;
+  _stabCtx.fill(); _stabCtx.stroke();
+
+  // COM position
+  const com = {
+    x: PIVOT.x + (-W/2) * Math.cos(angle) - (-H/2) * Math.sin(angle),
+    y: PIVOT.y + (-W/2) * Math.sin(angle) + (-H/2) * Math.cos(angle)
+  };
+
+  // vertical dashed line from COM
+  _stabCtx.setLineDash([5,4]);
+  _stabCtx.strokeStyle = isStable ? '#fbbf24' : '#ef4444';
+  _stabCtx.lineWidth = 2;
+  _stabCtx.beginPath(); _stabCtx.moveTo(com.x, com.y); _stabCtx.lineTo(com.x, PIVOT.y); _stabCtx.stroke();
+  _stabCtx.setLineDash([]);
+
+  // COM dot
+  _stabCtx.beginPath(); _stabCtx.arc(com.x, com.y, 8, 0, Math.PI*2);
+  _stabCtx.fillStyle = '#fbbf24'; _stabCtx.fill();
+  _stabCtx.strokeStyle = '#0f172a'; _stabCtx.lineWidth = 2; _stabCtx.stroke();
+
+  // projection dot on ground
+  _stabCtx.beginPath(); _stabCtx.arc(com.x, PIVOT.y, 5, 0, Math.PI*2);
+  _stabCtx.fillStyle = baseColor; _stabCtx.fill();
+
+  // pivot dot
+  _stabCtx.beginPath(); _stabCtx.arc(PIVOT.x, PIVOT.y, 4, 0, Math.PI*2);
+  _stabCtx.fillStyle = '#94a3b8'; _stabCtx.fill();
+
+  // labels
+  _stabCtx.font = 'bold 11px sans-serif';
+  _stabCtx.fillStyle = '#fbbf24';
+  _stabCtx.fillText('무게 중심', com.x + 11, com.y + 4);
+
+  _stabCtx.fillStyle = baseColor;
+  const midX = (rot[3].x + PIVOT.x) / 2;
+  _stabCtx.fillText('기저면', midX - 15, PIVOT.y + 17);
+
+  _stabCtx.fillStyle = 'rgba(255,255,255,.22)';
+  _stabCtx.font = '10px sans-serif';
+  _stabCtx.fillText(`임계각 ≈ ${critDeg.toFixed(1)}°`, 8, 15);
+}
+
+function updateStabilityStatus(angleDeg) {
+  const el = document.getElementById('sim-status');
+  if (!el) return;
+  const critDeg = Math.atan2(SIM_W / 2, SIM_H / 2) * 180 / Math.PI;
+  let html;
+  if (angleDeg < critDeg - 0.8) {
+    html = `<span style="color:#10b981;font-weight:800">✅ 안정 (Stable)</span><br>
+            <span style="font-size:.76rem;color:rgba(255,255,255,.5)">수직선이 기저면 안 → 복원력 작용, 원위치로 돌아옴</span>`;
+  } else if (Math.abs(angleDeg - critDeg) <= 1.5) {
+    html = `<span style="color:#fbbf24;font-weight:800">⚠️ 임계 (Critical)</span><br>
+            <span style="font-size:.76rem;color:rgba(255,255,255,.5)">수직선이 기저면 끝단에 걸침 → 균형이 무너지려는 순간</span>`;
+  } else {
+    html = `<span style="color:#ef4444;font-weight:800">❌ 불안정 (Unstable)</span><br>
+            <span style="font-size:.76rem;color:rgba(255,255,255,.5)">수직선이 기저면 밖 → 중력 돌림힘이 발생해 넘어짐</span>`;
+  }
+  el.innerHTML = html;
+}
+
+/* ── Torque Calculator ── */
+let _torqueRowId = 0;
+
+function initTorqueCalc() {
+  const tbody = document.getElementById('torque-tbody');
+  if (!tbody || tbody.rows.length > 0) return;
+  addTorqueRow(0.5, 10, -1); // gravity-like (CW)
+  addTorqueRow(2.0, 5,   1); // push (CCW)
+}
+
+function addTorqueRow(r = 1.0, F = 10, dir = 1) {
+  const tbody = document.getElementById('torque-tbody');
+  if (!tbody) return;
+  _torqueRowId++;
+  const rid = _torqueRowId;
+  const row = tbody.insertRow();
+  row.id = 'trow-' + rid;
+  row.innerHTML = `
+    <td style="color:rgba(255,255,255,.35);font-size:.75rem">${rid}</td>
+    <td><input type="number" value="${r}" step="0.1" min="0" oninput="calcNetTorque()"></td>
+    <td><input type="number" value="${F}" step="1"   min="0" oninput="calcNetTorque()"></td>
+    <td><select onchange="calcNetTorque()">
+      <option value="1"  ${dir===1 ?'selected':''}>↺ 반시계(+)</option>
+      <option value="-1" ${dir===-1?'selected':''}>↻ 시계(−)</option>
+    </select></td>
+    <td class="tau-cell" id="tau-${rid}">—</td>
+    <td><button onclick="removeTorqueRow(${rid})" style="background:rgba(239,68,68,.12);border:none;color:#fca5a5;border-radius:6px;padding:3px 9px;cursor:pointer;font-size:.78rem">×</button></td>`;
+  calcNetTorque();
+}
+
+function removeTorqueRow(rid) {
+  const r = document.getElementById('trow-' + rid);
+  if (r) { r.remove(); calcNetTorque(); }
+}
+
+function calcNetTorque() {
+  const tbody = document.getElementById('torque-tbody');
+  if (!tbody) return;
+  let net = 0;
+  for (const row of tbody.rows) {
+    const inputs = row.querySelectorAll('input[type="number"]');
+    const sel    = row.querySelector('select');
+    if (inputs.length < 2) continue;
+    const r   = parseFloat(inputs[0].value) || 0;
+    const F   = parseFloat(inputs[1].value) || 0;
+    const dir = sel ? parseInt(sel.value) : 1;
+    const tau = r * F * dir;
+    net += tau;
+    const cell = row.querySelector('.tau-cell');
+    if (cell) {
+      cell.textContent = (tau >= 0 ? '+' : '') + tau.toFixed(2) + ' N·m';
+      cell.style.color = tau > 0 ? '#60a5fa' : tau < 0 ? '#fca5a5' : '#94a3b8';
+    }
+  }
+  const valEl = document.getElementById('torque-net-val');
+  const dirEl = document.getElementById('torque-dir');
+  if (valEl) {
+    valEl.textContent = (net >= 0 ? '+' : '') + net.toFixed(2);
+    valEl.style.color = Math.abs(net) < 0.05 ? '#10b981' : net > 0 ? '#60a5fa' : '#ef4444';
+  }
+  if (dirEl) {
+    if (Math.abs(net) < 0.05)  { dirEl.textContent = '⚖️ 회전 평형 (τ = 0)'; dirEl.style.color = '#10b981'; }
+    else if (net > 0) { dirEl.textContent = '↺ 반시계 방향 회전';  dirEl.style.color = '#60a5fa'; }
+    else              { dirEl.textContent = '↻ 시계 방향 회전';    dirEl.style.color = '#ef4444'; }
+  }
 }
 
 // 스플래시 점 애니메이션 (자동 닫힘 없음 — 난이도 선택 후 시작)
