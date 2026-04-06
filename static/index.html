@@ -614,14 +614,24 @@
 <!-- SPLASH -->
 <div id="splash">
 
-  <!-- VIEW 1: 단원 선택 -->
-  <div id="splash-home">
+  <!-- VIEW 0: 인트로 -->
+  <div id="splash-intro" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;flex:1;padding:32px 16px">
     <div class="splash-emoji">👋</div>
     <div style="text-align:center">
       <div class="splash-title">안녕 건우야!</div>
       <div class="splash-sub">물리 공부 파이팅! ⚡</div>
     </div>
-    <div class="diff-select-label">단원을 선택하세요</div>
+    <button class="splash-start" onclick="showSplashView('home')" style="margin-top:8px">공부 시작하기 →</button>
+    <div class="splash-timer">
+      <div class="splash-dot active" id="dot0"></div>
+      <div class="splash-dot" id="dot1"></div>
+      <div class="splash-dot" id="dot2"></div>
+    </div>
+  </div><!-- /splash-intro -->
+
+  <!-- VIEW 1: 단원 선택 -->
+  <div id="splash-home" style="display:none">
+    <div class="diff-select-label" style="padding-top:8px">단원을 선택하세요</div>
 
     <div class="curriculum">
 
@@ -743,11 +753,7 @@
 
     </div><!-- /curriculum -->
 
-    <div class="splash-timer">
-      <div class="splash-dot active" id="dot0"></div>
-      <div class="splash-dot" id="dot1"></div>
-      <div class="splash-dot" id="dot2"></div>
-    </div>
+    <button class="back-btn" onclick="showSplashView('intro')" style="margin:8px 0 16px;align-self:flex-start">← 처음으로</button>
   </div><!-- /splash-home -->
 
   <!-- VIEW 2: 단원 메뉴 (개념/문제) -->
@@ -1778,7 +1784,7 @@ const DIFF_LABEL = { easy:'하', medium:'중', hard:'상' };
 let currentChapterId = null;
 
 function showSplashView(view) {
-  ['home','ch-menu','concept','difficulty'].forEach(v => {
+  ['intro','home','ch-menu','concept','difficulty'].forEach(v => {
     const el = document.getElementById('splash-' + v);
     if (el) el.style.display = 'none';
   });
@@ -1855,7 +1861,7 @@ function hideSplash() {
 
 function showSplash() {
   document.getElementById('splash').classList.remove('hide');
-  showSplashView('home');
+  showSplashView('intro');
 }
 
 /* ============================================================
