@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>막대의 평형 문제 Step-by-Step 해설</title>
+  <style>
+    /* ===== 기본 변수 ===== */
+    :root {
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --yellow-light: #fefce8;
+      --yellow-border: #fde047;
+      --blue-light: #eff6ff;
+      --blue-border: #93c5fd;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --purple-border: #c4b5fd;
+      --pink-light: #fff1f2;
+      --pink-border: #fda4af;
+      --shadow: 0 2px 12px rgba(0,0,0,0.09);
+      --radius: 14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--bg);
+      color: #1f2937;
+      line-height: 1.78;
+    }
+
+    /* ===== 헤더 ===== */
+    .page-header {
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      color: white;
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .page-header h1 { font-size: clamp(1.3rem, 4vw, 1.9rem); font-weight: 700; margin-bottom: 0.7rem; }
+    .page-header .intro { font-size: 1rem; opacity: 0.9; max-width: 600px; margin: 0 auto 0.4rem; }
+    .page-header .note { font-size: 0.83rem; opacity: 0.75; max-width: 600px; margin: 0 auto; }
+
+    /* ===== 레이아웃 ===== */
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+
+    /* ===== 카드 ===== */
+    .problem-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ===== 문제 헤더 ===== */
+    .prob-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .prob-title { font-size: 1.2rem; font-weight: 700; color: var(--primary); flex: 1; min-width: 180px; }
+    .badge {
+      display: inline-block; padding: 0.18rem 0.75rem;
+      border-radius: 999px; font-size: 0.76rem; font-weight: 600;
+    }
+    .badge-mid { background: #fef9c3; color: #92400e; }
+    .badge-mid-high { background: #fed7aa; color: #7c2d12; }
+    .badge-high { background: #fecaca; color: #7f1d1d; }
+
+    /* ===== 태그 ===== */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.25rem; }
+    .tag { background: var(--primary-light); color: var(--primary); padding: 0.17rem 0.65rem; border-radius: 999px; font-size: 0.76rem; font-weight: 500; }
+
+    /* ===== 문제 본문 ===== */
+    .stmt {
+      background: #f8fafc; border-left: 4px solid var(--primary);
+      border-radius: 0 8px 8px 0; padding: 1.1rem 1.4rem;
+      margin-bottom: 1.5rem; font-size: 0.97rem; white-space: pre-line;
+    }
+
+    /* ===== SVG 영역 ===== */
+    .svg-tabs { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 0.65rem; }
+    .svg-tab {
+      padding: 0.38rem 0.85rem; border-radius: 7px; border: 1.5px solid #d1d5db;
+      background: white; color: #374151; font-size: 0.82rem; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .svg-tab:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .svg-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+    .svg-wrap { background: #f8fafc; border: 1.5px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem; }
+    .svg-wrap svg { width: 100%; height: auto; display: block; }
+
+    /* ===== 선택지 ===== */
+    .choices-title { font-weight: 600; color: #374151; margin-bottom: 0.65rem; }
+    .choice-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.55rem 1rem; border-radius: 8px; border: 1.5px solid #e5e7eb;
+      margin-bottom: 0.45rem; cursor: pointer; transition: all 0.14s;
+    }
+    .choice-item:hover { background: var(--primary-light); border-color: #93c5fd; }
+    .choice-item.selected { background: var(--primary-light); border-color: var(--primary); }
+    .choice-item input[type="radio"] { accent-color: var(--primary); width: 1.05rem; height: 1.05rem; flex-shrink: 0; }
+    .choice-item label { cursor: pointer; font-size: 0.95rem; }
+
+    /* ===== 버튼 ===== */
+    .action-btns { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+    .btn {
+      padding: 0.52rem 1.2rem; border-radius: 8px; border: none;
+      font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.14s;
+    }
+    .btn:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #1d4ed8; }
+    .btn-secondary { background: #e5e7eb; color: #374151; }
+    .btn-secondary:hover { background: #d1d5db; }
+    .btn-hint { background: var(--purple-light); color: var(--purple); border: 1.5px solid var(--purple-border); }
+    .btn-hint:hover { background: #ede9fe; }
+
+    /* ===== 피드백 ===== */
+    .feedback { padding: 0.8rem 1.2rem; border-radius: 8px; font-weight: 600; margin-bottom: 0.9rem; display: none; }
+    .feedback.show { display: block; }
+    .feedback.correct { background: var(--green-light); color: var(--green); border: 1.5px solid #86efac; }
+    .feedback.wrong { background: var(--red-light); color: var(--red); border: 1.5px solid #fca5a5; }
+
+    /* ===== 힌트 ===== */
+    .hint-block { background: var(--purple-light); border: 1.5px solid var(--purple-border); border-radius: 8px; padding: 1rem 1.2rem; margin-top: 0.55rem; }
+    .hint-block h4 { color: var(--purple); font-size: 0.88rem; margin-bottom: 0.4rem; }
+    .hint-block p { font-size: 0.9rem; color: #4c1d95; white-space: pre-line; }
+
+    /* ===== 해설 ===== */
+    .exp-toggle {
+      width: 100%; text-align: left; padding: 0.7rem 1.2rem;
+      background: var(--blue-light); border: 1.5px solid var(--blue-border);
+      border-radius: 8px; font-weight: 600; color: #1e40af;
+      cursor: pointer; font-size: 0.93rem; transition: all 0.14s; margin-bottom: 0.4rem;
+    }
+    .exp-toggle:hover { background: #dbeafe; }
+    .exp-content { display: none; background: var(--blue-light); border: 1.5px solid var(--blue-border); border-radius: 8px; padding: 1.4rem; margin-bottom: 1.4rem; }
+    .exp-content.open { display: block; }
+    .exp-step { margin-bottom: 1.1rem; }
+    .exp-step h4 { color: var(--primary); font-size: 0.91rem; font-weight: 700; margin-bottom: 0.35rem; padding-bottom: 0.2rem; border-bottom: 1px solid #bfdbfe; }
+    .exp-step p { font-size: 0.9rem; color: #1e3a5f; margin-bottom: 0.3rem; }
+    .formula {
+      display: block; background: white; border: 1px solid #bfdbfe; border-radius: 6px;
+      padding: 0.4rem 0.9rem; font-family: 'Courier New', Consolas, monospace;
+      font-size: 0.88rem; color: #1e40af; margin: 0.35rem 0; overflow-x: auto;
+    }
+
+    /* ===== 자주 하는 실수 ===== */
+    .mistakes { background: var(--pink-light); border: 1.5px solid var(--pink-border); border-radius: 8px; padding: 1.1rem 1.3rem; margin-bottom: 1.2rem; }
+    .mistakes h3 { color: #9f1239; font-size: 0.91rem; margin-bottom: 0.6rem; }
+    .mistakes ul { padding-left: 1.2rem; }
+    .mistakes li { font-size: 0.88rem; color: #881337; margin-bottom: 0.28rem; }
+
+    /* ===== FAQ ===== */
+    .faq { margin-bottom: 1.2rem; }
+    .faq-item { border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 0.4rem; overflow: hidden; }
+    .faq-q {
+      width: 100%; text-align: left; padding: 0.68rem 1rem;
+      background: #f9fafb; border: none; cursor: pointer; font-size: 0.88rem;
+      font-weight: 600; color: #374151; display: flex; justify-content: space-between; align-items: center;
+    }
+    .faq-q:hover { background: #f3f4f6; }
+    .faq-a { display: none; padding: 0.7rem 1rem; background: white; font-size: 0.86rem; color: #4b5563; border-top: 1px solid #e5e7eb; }
+    .faq-a.open { display: block; }
+    .faq-caret { font-size: 0.8rem; transition: transform 0.2s; }
+    .faq-q.open .faq-caret { transform: rotate(180deg); }
+
+    /* ===== 핵심 포인트 ===== */
+    .key-pts { background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 1.1rem 1.3rem; margin-bottom: 1.2rem; }
+    .key-pts h3 { color: var(--green); font-size: 0.91rem; margin-bottom: 0.55rem; }
+    .key-pts ul { padding-left: 1.2rem; }
+    .key-pts li { font-size: 0.88rem; color: #166534; margin-bottom: 0.25rem; }
+
+    /* ===== 최종 정답 ===== */
+    .answer-box { display: none; background: var(--yellow-light); border: 2px solid var(--yellow-border); border-radius: 10px; padding: 1.1rem 1.4rem; margin-top: 1.2rem; }
+    .answer-box.show { display: block; }
+    .answer-box h3 { color: #92400e; font-size: 0.92rem; margin-bottom: 0.3rem; }
+    .answer-box .final { font-size: 1.15rem; font-weight: 700; color: #78350f; }
+
+    /* ===== 요약 테이블 ===== */
+    .summary-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 2rem; margin-bottom: 1.5rem; }
+    .summary-card h2 { font-size: 1.15rem; font-weight: 700; color: #1e40af; margin-bottom: 1.1rem; }
+    .tbl { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+    .tbl th { background: #1e40af; color: white; padding: 0.6rem 0.7rem; text-align: left; }
+    .tbl td { padding: 0.6rem 0.7rem; border-bottom: 1px solid #e5e7eb; vertical-align: top; }
+    .tbl tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ===== 학습 코멘트 ===== */
+    .study-comment {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white; border-radius: var(--radius); padding: 1.6rem 2rem;
+      text-align: center; font-size: 0.93rem; line-height: 1.85;
+      margin-bottom: 2rem;
+    }
+
+    /* ===== 섹션 제목 ===== */
+    .section-label { font-size: 0.82rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; margin-top: 1.4rem; }
+
+    /* ===== 모바일 ===== */
+    @media (max-width: 600px) {
+      .problem-card { padding: 1.1rem; }
+      .btn { padding: 0.45rem 0.8rem; font-size: 0.8rem; }
+      .tbl th, .tbl td { padding: 0.45rem 0.4rem; font-size: 0.75rem; }
+      .page-header { padding: 1.8rem 1rem 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== 페이지 헤더 ===== -->
+<header class="page-header">
+  <h1>막대의 평형 문제 Step-by-Step 해설</h1>
+  <p class="intro">먼저 스스로 풀어보고, 그다음 해설과 그림을 단계별로 확인해 보세요.</p>
+  <p class="note">이 페이지는 작용점, 무게중심, 수직항력, 장력, 토크 평형을 시각적으로 이해하도록 설계되었습니다.</p>
+</header>
+
+<!-- ===== 문제 영역 ===== -->
+<main class="container" id="problems-container"></main>
+
+<!-- ===== 요약 + 코멘트 ===== -->
+<section class="container">
+  <div id="summary-container"></div>
+</section>
+
+<script>
+/* ==========================================================
+   SVG 헬퍼 함수
+   ========================================================== */
+
+/**
+ * 화살표 선 그리기 (다각형 화살촉)
+ * @param {number} x1,y1  시작점
+ * @param {number} x2,y2  끝점(화살촉)
+ * @param {string} color  CSS 색상
+ * @param {string} label  라벨 텍스트
+ * @param {string} side   라벨 위치 ('right'|'left'|'top'|'none')
+ * @param {number} sw     선 두께
+ */
+function svgArrow(x1, y1, x2, y2, color, label = '', side = 'right', sw = 2.5) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  if (len < 1) return '';
+  const ux = dx / len, uy = dy / len;
+  const px = -uy, py = ux; // 수직 방향
+
+  // 화살촉 삼각형
+  const tipX = x2, tipY = y2;
+  const bX = x2 - ux * 11, bY = y2 - uy * 11;
+  const pts = `${f(tipX)},${f(tipY)} ${f(bX+px*5)},${f(bY+py*5)} ${f(bX-px*5)},${f(bY-py*5)}`;
+  const shX = x2 - ux * 9, shY = y2 - uy * 9; // 샤프트 끝
+
+  let s = `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(shX)}" y2="${f(shY)}" stroke="${color}" stroke-width="${sw}"/>`;
+  s += `<polygon points="${pts}" fill="${color}"/>`;
+
+  if (label && side !== 'none') {
+    let lx, ly, anchor;
+    if (side === 'right')  { lx = x2 + 7;  ly = y2 + 4;  anchor = 'start'; }
+    if (side === 'left')   { lx = x2 - 7;  ly = y2 + 4;  anchor = 'end'; }
+    if (side === 'top')    { lx = x2;      ly = y2 - 8;  anchor = 'middle'; }
+    if (side === 'bottom') { lx = x2;      ly = y2 + 16; anchor = 'middle'; }
+    s += `<text x="${f(lx)}" y="${f(ly)}" font-size="13" font-weight="bold" fill="${color}" text-anchor="${anchor}" font-family="-apple-system,sans-serif">${label}</text>`;
+  }
+  return s;
+}
+
+/** 숫자를 소수점 1자리로 반올림 */
+function f(n) { return Math.round(n * 10) / 10; }
+
+/** SVG 텍스트 */
+function svgTxt(x, y, txt, color = '#374151', size = 12, anchor = 'middle', weight = 'normal') {
+  return `<text x="${f(x)}" y="${f(y)}" font-size="${size}" fill="${color}" text-anchor="${anchor}" font-weight="${weight}" font-family="-apple-system,sans-serif">${txt}</text>`;
+}
+
+/** 점선 */
+function dashedLine(x1, y1, x2, y2, color = '#9ca3af', dash = '5,4') {
+  return `<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="${dash}"/>`;
+}
+
+/** 작용점 원 */
+function dot(x, y, color = '#1f2937', r = 4) {
+  return `<circle cx="${f(x)}" cy="${f(y)}" r="${r}" fill="${color}"/>`;
+}
+
+/** 수평 거리 표시선 */
+function dimH(x1, x2, y, label, color = '#9ca3af') {
+  const mid = (x1 + x2) / 2;
+  let s = `<line x1="${f(x1)}" y1="${f(y-4)}" x2="${f(x1)}" y2="${f(y+4)}" stroke="${color}" stroke-width="1.5"/>`;
+  s += `<line x1="${f(x1)}" y1="${f(y)}" x2="${f(x2)}" y2="${f(y)}" stroke="${color}" stroke-width="1.5"/>`;
+  s += `<line x1="${f(x2)}" y1="${f(y-4)}" x2="${f(x2)}" y2="${f(y+4)}" stroke="${color}" stroke-width="1.5"/>`;
+  s += svgTxt(mid, y - 7, label, color, 11);
+  return s;
+}
+
+/** 천장 (해칭) */
+function ceiling(x1, w, y) {
+  let s = `<rect x="${f(x1)}" y="${f(y-20)}" width="${f(w)}" height="20" fill="#d1d5db"/>`;
+  s += `<line x1="${f(x1)}" y1="${f(y)}" x2="${f(x1+w)}" y2="${f(y)}" stroke="#9ca3af" stroke-width="1.5"/>`;
+  for (let i = x1; i < x1 + w; i += 14)
+    s += `<line x1="${f(i)}" y1="${f(y-20)}" x2="${f(i+10)}" y2="${f(y)}" stroke="#9ca3af" stroke-width="1"/>`;
+  return s;
+}
+
+/** 바닥 (해칭) */
+function ground(x1, w, y) {
+  let s = `<rect x="${f(x1)}" y="${f(y)}" width="${f(w)}" height="20" fill="#d1d5db"/>`;
+  s += `<line x1="${f(x1)}" y1="${f(y)}" x2="${f(x1+w)}" y2="${f(y)}" stroke="#9ca3af" stroke-width="1.5"/>`;
+  for (let i = x1; i < x1 + w; i += 14)
+    s += `<line x1="${f(i)}" y1="${f(y)}" x2="${f(i-10)}" y2="${f(y+20)}" stroke="#9ca3af" stroke-width="1"/>`;
+  return s;
+}
+
+/** 삼각형 받침대 */
+function support(x, y, wHalf = 18, h = 24) {
+  let s = `<polygon points="${f(x)},${f(y)} ${f(x-wHalf)},${f(y+h)} ${f(x+wHalf)},${f(y+h)}" fill="#6b7280" stroke="#374151" stroke-width="1.5"/>`;
+  s += `<line x1="${f(x-wHalf-5)}" y1="${f(y+h)}" x2="${f(x+wHalf+5)}" y2="${f(y+h)}" stroke="#374151" stroke-width="2"/>`;
+  return s;
+}
+
+/** 토크 호(반원) + 화살표 */
+function torqueArc(cx, cy, r, clockwise, color, label = '') {
+  // SVG에서 y↓이므로: sweep=1이 시계방향
+  const x1 = cx - r, x2 = cx + r;
+  const sf = clockwise ? 1 : 0;
+  // 반원 경로
+  const d = `M ${f(x1)},${f(cy)} A ${r},${r} 0 0,${sf} ${f(x2)},${f(cy)}`;
+  // 화살촉 위치: 끝점에서 접선 방향
+  const tipX = x2, tipY = cy;
+  const tangentDx = clockwise ? 0 : 0;
+  const tangentDy = clockwise ? -1 : 1; // 반원 끝에서의 접선
+  // 접선: CW면 끝점(오른쪽)에서 아래를 향하는 방향
+  // (SVG에서 CW 반원의 오른쪽 끝점의 접선은 아래 방향)
+  const adx = clockwise ? 1 : -1, ady = 0; // 실제 접선 방향 (x방향)
+  // 화살촉 삼각형 (끝점 기준)
+  const pts = `${f(tipX)},${f(tipY)} ${f(tipX-adx*10+ady*5)},${f(tipY-ady*10-adx*5)} ${f(tipX-adx*10-ady*5)},${f(tipY-ady*10+adx*5)}`;
+
+  let s = `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.5"/>`;
+  // 호 끝에서 간단한 직선 화살표
+  const arrowEndX = clockwise ? cx + r + 6 : cx - r - 6;
+  const arrowEndY = clockwise ? cy - 6 : cy - 6;
+  s += svgArrow(cx + (clockwise?r:(-r)), cy, clockwise? cx+r+0.1: cx-r-0.1, cy + (clockwise?6:-6), color, '', 'none', 2);
+
+  if (label) {
+    const ly = clockwise ? cy + r + 16 : cy - r - 8;
+    s += svgTxt(cx, ly, label, color, 11, 'middle', 'bold');
+  }
+  return s;
+}
+
+/** SVG 래핑 */
+function wrapSVG(content, vw = 640, vh = 300) {
+  return `<svg viewBox="0 0 ${vw} ${vh}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="자유물체도">${content}</svg>`;
+}
+
+/* ==========================================================
+   문제 1 SVG 생성기 — 매달린 막대와 장력비
+   좌표계: d=55px, 막대 x=[70,565], barY=160
+   ========================================================== */
+function svg1(mode) {
+  const d = 55; // 1d = 55px
+  const L0 = 70; // 왼쪽 끝 x
+  const barY = 160;
+  const barH = 9; // 막대 두께
+
+  // 주요 x 좌표
+  const xP = L0 + 2*d;  // 실 p: x=2d → 180
+  const xM = L0 + 3*d;  // 물체 M: x=3d → 235
+  const xC = L0 + 4.5*d; // 막대 중심: x=4.5d → 317.5
+  const xQ = L0 + 7*d;  // 실 q: x=7d → 455
+  const xR = L0 + 9*d;  // 오른쪽 끝: x=9d → 565
+  const ceilY = 42;
+
+  // 색상
+  const BLUE = '#2563eb', RED = '#dc2626', TEAL = '#0d9488';
+  const ORANGE = '#ea580c', GREEN2 = '#16a34a', GRAY = '#9ca3af';
+  const DARK = '#374151';
+
+  let s = '';
+
+  // === 공통 요소: 천장, 막대, 실, 물체 M ===
+  s += ceiling(L0, xR - L0, ceilY);
+  // 막대
+  s += `<rect x="${L0}" y="${barY - barH/2}" width="${xR-L0}" height="${barH}" fill="${DARK}" rx="3"/>`;
+  // 막대 양 끝 표시
+  s += dot(L0, barY, DARK, 4);
+  s += dot(xR, barY, DARK, 4);
+  // 실 p
+  s += `<line x1="${f(xP)}" y1="${ceilY}" x2="${f(xP)}" y2="${barY - barH/2}" stroke="#555" stroke-width="2"/>`;
+  // 실 q
+  s += `<line x1="${f(xQ)}" y1="${ceilY}" x2="${f(xQ)}" y2="${barY - barH/2}" stroke="#555" stroke-width="2"/>`;
+  // 물체 M (막대 아래 매달린 박스)
+  const mBoxY = barY + 20;
+  s += `<line x1="${f(xM)}" y1="${barY + barH/2}" x2="${f(xM)}" y2="${mBoxY}" stroke="#555" stroke-width="1.5"/>`;
+  s += `<rect x="${f(xM-22)}" y="${mBoxY}" width="44" height="28" fill="#fecaca" stroke="${RED}" stroke-width="1.5" rx="4"/>`;
+  s += svgTxt(xM, mBoxY + 18, 'M', RED, 14, 'middle', 'bold');
+
+  // 접촉점 표시
+  s += dot(xP, barY, '#1d4ed8', 5);
+  s += dot(xQ, barY, '#1d4ed8', 5);
+  s += dot(xM, barY, RED, 5);
+
+  // === 모드별 추가 요소 ===
+
+  if (mode === 0) {
+    // ── 구조 보기: 거리 라벨 ──
+    const dimY = barY + 80;
+    s += dimH(L0, xP, dimY, '2d', GRAY);
+    s += dimH(xP, xM, dimY + 20, 'd', GRAY);
+    s += dimH(xM, xQ, dimY, '4d', GRAY);
+    s += dimH(xQ, xR, dimY + 20, '2d', GRAY);
+    // 점선 수직선 (위치 표시)
+    s += dashedLine(xP, barY, xP, dimY + 5, GRAY);
+    s += dashedLine(xM, barY + 30, xM, dimY + 25, GRAY);
+    s += dashedLine(xQ, barY, xQ, dimY + 5, GRAY);
+    s += dashedLine(xR, barY, xR, dimY + 5, GRAY);
+    // 전체 길이
+    s += dimH(L0, xR, dimY + 40, '전체 길이 9d', '#6b7280');
+    // 위치 라벨
+    s += svgTxt(L0, barY + 15, '0', GRAY, 11);
+    s += svgTxt(xP, barY + 15, '2d', '#1d4ed8', 11, 'middle', 'bold');
+    s += svgTxt(xM, barY + 56, '3d', RED, 11, 'middle', 'bold');
+    s += svgTxt(xC, barY + 15, '4.5d\n(중심)', GRAY, 10);
+    s += svgTxt(xQ, barY + 15, '7d', '#1d4ed8', 11, 'middle', 'bold');
+    s += svgTxt(xR, barY + 15, '9d', GRAY, 11);
+    // 실 라벨
+    s += svgTxt(xP - 14, (ceilY + barY)/2, 'p', '#374151', 13, 'middle', 'bold');
+    s += svgTxt(xQ + 14, (ceilY + barY)/2, 'q', '#374151', 13, 'middle', 'bold');
+    // 무게중심 표시
+    s += `<line x1="${f(xC)}" y1="${barY-barH/2-2}" x2="${f(xC)}" y2="${barY+barH/2+2}" stroke="#f59e0b" stroke-width="2.5"/>`;
+    s += svgTxt(xC, barY - 14, '▲ 무게중심', '#f59e0b', 10, 'middle');
+  }
+
+  if (mode === 1) {
+    // ── 힘 보기 ──
+    // 위로: 장력 T_p, T_q (청록)
+    s += svgArrow(xP, barY - barH/2, xP, barY - 90, TEAL, 'T_p', 'left');
+    s += svgArrow(xQ, barY - barH/2, xQ, barY - 90, TEAL, 'T_q', 'right');
+    // 아래로: 막대 무게 mg (빨강)
+    s += svgArrow(xC, barY + barH/2, xC, barY + 85, RED, 'mg', 'right');
+    // 아래로: 물체 무게 Mg (빨강, 더 긴 화살표 → 더 큰 힘)
+    s += svgArrow(xM, barY + barH/2, xM, barY + 95, RED, 'Mg', 'left');
+    // 접촉점 재표시
+    s += dot(xP, barY, TEAL, 5);
+    s += dot(xQ, barY, TEAL, 5);
+    s += dot(xC, barY, RED, 5);
+    // 설명 박스
+    s += `<rect x="400" y="220" width="230" height="62" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" rx="6"/>`;
+    s += svgTxt(515, 236, '이 문제의 힘 구조', '#166534', 11, 'middle', 'bold');
+    s += svgTxt(515, 251, '수직항력 없음 (매달린 구조)', '#dc2626', 10, 'middle');
+    s += svgTxt(515, 265, '마찰력 없음 (실에만 접촉)', '#dc2626', 10, 'middle');
+    s += svgTxt(515, 279, '접촉력은 장력(T_p, T_q)만 존재', '#166534', 10, 'middle');
+  }
+
+  if (mode === 2) {
+    // ── 토크 보기 ──
+    // 기준점: 왼쪽 끝 (L0, barY)
+    const pivot = L0;
+    s += dot(pivot, barY, ORANGE, 7);
+    s += svgTxt(pivot, barY + 18, '⭕ 기준점', ORANGE, 10, 'middle', 'bold');
+    // 힘 화살표 (작게)
+    s += svgArrow(xP, barY-barH/2, xP, barY-65, TEAL, 'T_p', 'left', 2);
+    s += svgArrow(xQ, barY-barH/2, xQ, barY-65, TEAL, 'T_q', 'right', 2);
+    s += svgArrow(xC, barY+barH/2, xC, barY+60, RED, 'mg', 'right', 2);
+    s += svgArrow(xM, barY+barH/2, xM, barY+70, RED, 'Mg', 'left', 2);
+    // 수평 거리 표시 (지렛대 팔)
+    s += dashedLine(pivot, barY + 30, xP, barY + 30, '#1d4ed8');
+    s += svgTxt((pivot+xP)/2, barY + 42, '2d', TEAL, 11, 'middle');
+    s += dashedLine(pivot, barY + 50, xM, barY + 50, RED);
+    s += svgTxt((pivot+xM)/2, barY + 62, '3d', RED, 11, 'middle');
+    s += dashedLine(pivot, barY + 70, xC, barY + 70, RED);
+    s += svgTxt((pivot+xC)/2, barY + 82, '4.5d', RED, 11, 'middle');
+    s += dashedLine(pivot, barY + 90, xQ, barY + 90, TEAL);
+    s += svgTxt((pivot+xQ)/2, barY + 102, '7d', TEAL, 11, 'middle');
+    // 토크 호
+    s += torqueArc(xP, barY - 40, 28, false, TEAL, 'CCW (T_p)');
+    s += torqueArc(xQ, barY - 40, 28, false, TEAL, 'CCW (T_q)');
+    s += torqueArc(xC, barY + 40, 28, true, RED, 'CW (mg)');
+    s += torqueArc(xM, barY + 40, 28, true, RED, 'CW (Mg)');
+    // 평형식
+    s += `<rect x="10" y="6" width="280" height="32" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="4"/>`;
+    s += svgTxt(150, 19, '토크 평형: T_p·2d + T_q·7d = mg·4.5d + Mg·3d', '#1e40af', 10, 'middle');
+    s += svgTxt(150, 31, '(기준점: 왼쪽 끝 → T가 없어서 계산이 단순해짐)', '#1e40af', 9.5, 'middle');
+  }
+
+  if (mode === 3) {
+    // ── 실수 포인트 ──
+    // 힘 화살표 (작게)
+    s += svgArrow(xP, barY-barH/2, xP, barY-55, TEAL, '', 'none', 2);
+    s += svgArrow(xQ, barY-barH/2, xQ, barY-55, TEAL, '', 'none', 2);
+    s += svgArrow(xC, barY+barH/2, xC, barY+55, RED, '', 'none', 2);
+    // 실수 1: 막대 중심을 4d로 착각
+    const xWrong = L0 + 4*d; // 잘못된 위치 = 4d = 290
+    s += dashedLine(xWrong, barY-barH/2 - 5, xWrong, barY - 45, '#dc2626', '3,3');
+    s += `<circle cx="${f(xWrong)}" cy="${barY-50}" r="12" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>`;
+    s += svgTxt(xWrong, barY - 47, '✕', RED, 13, 'middle', 'bold');
+    s += svgTxt(xWrong, barY - 70, '잘못된 중심 = 4d', RED, 10, 'middle');
+    // 올바른 중심
+    s += `<circle cx="${f(xC)}" cy="${barY-8}" r="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>`;
+    s += svgTxt(xC, barY - 5, '✓', GREEN2, 13, 'middle', 'bold');
+    s += svgTxt(xC, barY - 30, '올바른 중심 = 4.5d', GREEN2, 10, 'middle', 'bold');
+    // 실수 2: 물체 위치 강조
+    s += `<rect x="${f(xM-28)}" y="${barY+18}" width="56" height="35" fill="none" stroke="${ORANGE}" stroke-width="2" rx="4" stroke-dasharray="4,3"/>`;
+    s += svgTxt(xM, barY + 65, '⚠ 물체 위치 = 3d (놓치기 쉬움)', ORANGE, 10, 'middle', 'bold');
+    // 수직항력/마찰력 없음 표시
+    s += `<rect x="10" y="6" width="280" height="32" fill="#fff1f2" stroke="#fda4af" stroke-width="1" rx="4"/>`;
+    s += svgTxt(150, 19, '자주 하는 실수', '#9f1239', 11, 'middle', 'bold');
+    s += svgTxt(150, 31, '중심을 4.5d 대신 4d로 착각 / 물체 위치 3d를 놓침', '#881337', 9.5, 'middle');
+  }
+
+  return wrapSVG(s, 640, 300);
+}
+
+/* ==========================================================
+   문제 2 SVG 생성기 — 같은 받침힘을 받는 막대
+   좌표계: l=50px, 막대 x=[60,560], barY=155
+   ========================================================== */
+function svg2(mode) {
+  const l = 50;
+  const L0 = 60;
+  const barY = 155;
+  const barH = 9;
+
+  const xP = L0 + 3*l;  // 받침대 p: x=3l → 210
+  const xC = L0 + 5*l;  // 막대 중심: x=5l → 310
+  const xQ = L0 + 6*l;  // 받침대 q: x=6l → 360
+  const xR = L0 + 10*l; // 오른쪽 끝: x=10l → 560
+  // 물체 m은 x=3l = xP 위에 있음
+
+  const BLUE = '#2563eb', RED = '#dc2626', TEAL = '#0d9488';
+  const ORANGE = '#ea580c', GREEN2 = '#16a34a', GRAY = '#9ca3af', DARK = '#374151';
+
+  let s = '';
+
+  // 공통: 막대
+  s += `<rect x="${L0}" y="${barY - barH/2}" width="${xR-L0}" height="${barH}" fill="${DARK}" rx="3"/>`;
+  s += dot(L0, barY, DARK, 4);
+  s += dot(xR, barY, DARK, 4);
+
+  // 받침대 p, q (삼각형)
+  s += support(xP, barY + barH/2);
+  s += support(xQ, barY + barH/2);
+
+  // 물체 m (받침대 p 위에 놓인 박스)
+  const mTop = barY - barH/2 - 28;
+  s += `<rect x="${f(xP-22)}" y="${mTop}" width="44" height="26" fill="#fecaca" stroke="${RED}" stroke-width="1.5" rx="4"/>`;
+  s += svgTxt(xP, mTop + 16, 'm', RED, 14, 'middle', 'bold');
+
+  // 접촉점
+  s += dot(xP, barY, '#1d4ed8', 5);
+  s += dot(xQ, barY, '#1d4ed8', 5);
+  s += dot(xP, barY, RED, 3); // 물체 작용점
+
+  if (mode === 0) {
+    // ── 구조 보기 ──
+    const dimY = barY + 70;
+    s += dimH(L0, xP, dimY, '3l', GRAY);
+    s += dimH(xP, xQ, dimY + 20, '3l', GRAY);
+    s += dimH(xQ, xR, dimY, '4l', GRAY);
+    s += dashedLine(xP, barY, xP, dimY + 5, GRAY);
+    s += dashedLine(xQ, barY, xQ, dimY + 5, GRAY);
+    s += dashedLine(xR, barY, xR, dimY + 5, GRAY);
+    s += dimH(L0, xR, dimY + 38, '전체 길이 10l', '#6b7280');
+    // 위치 라벨
+    s += svgTxt(L0, barY + 14, '0', GRAY, 11);
+    s += svgTxt(xP, barY + 14, '3l', '#1d4ed8', 11, 'middle', 'bold');
+    s += svgTxt(xC, barY + 14, '5l(중심)', GRAY, 10, 'middle');
+    s += svgTxt(xQ, barY + 14, '6l', '#1d4ed8', 11, 'middle', 'bold');
+    s += svgTxt(xR, barY + 14, '10l', GRAY, 11);
+    // 받침대 라벨
+    s += svgTxt(xP - 14, barY + 38, 'p', DARK, 13, 'middle', 'bold');
+    s += svgTxt(xQ + 14, barY + 38, 'q', DARK, 13, 'middle', 'bold');
+    // 무게중심
+    s += `<line x1="${f(xC)}" y1="${barY-barH/2-2}" x2="${f(xC)}" y2="${barY+barH/2+2}" stroke="#f59e0b" stroke-width="2.5"/>`;
+    s += svgTxt(xC, barY - 14, '▲ 막대 무게중심', '#f59e0b', 10, 'middle');
+    // 조건 표시
+    s += `<rect x="400" y="8" width="230" height="22" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1" rx="4"/>`;
+    s += svgTxt(515, 22, '조건: N_p = N_q (받침힘이 같다)', '#7c3aed', 10, 'middle', 'bold');
+  }
+
+  if (mode === 1) {
+    // ── 힘 보기 ──
+    // 위로: 수직항력 N_p, N_q (파랑)
+    s += svgArrow(xP, barY - barH/2, xP, barY - 85, BLUE, 'N_p', 'left');
+    s += svgArrow(xQ, barY - barH/2, xQ, barY - 85, BLUE, 'N_q', 'right');
+    // 아래로: 물체 mg (빨강)
+    s += svgArrow(xP, barY + barH/2, xP, barY + 80, RED, 'mg', 'left');
+    // 아래로: 막대 무게 Mg (빨강)
+    s += svgArrow(xC, barY + barH/2, xC, barY + 80, RED, 'Mg', 'right');
+    // 접촉점
+    s += dot(xP, barY, BLUE, 5);
+    s += dot(xQ, barY, BLUE, 5);
+    s += dot(xC, barY, RED, 5);
+    // 수직항력 라벨 (마찰 없음)
+    s += `<rect x="8" y="228" width="280" height="60" fill="#f0fdf4" stroke="#86efac" stroke-width="1" rx="5"/>`;
+    s += svgTxt(148, 244, '받침대 힘 = 수직항력 (위쪽만)', '#166534', 10, 'middle', 'bold');
+    s += svgTxt(148, 258, '마찰력 없음 → 수평 힘 없음', '#dc2626', 10, 'middle');
+    s += svgTxt(148, 272, '수직항력은 항상 접촉면에 수직', '#166534', 10, 'middle');
+    s += svgTxt(148, 284, '조건: N_p = N_q = N', '#7c3aed', 10, 'middle', 'bold');
+  }
+
+  if (mode === 2) {
+    // ── 토크 보기 ──
+    const pivot = L0;
+    s += dot(pivot, barY, ORANGE, 7);
+    s += svgTxt(pivot, barY + 18, '⭕ 기준점', ORANGE, 10, 'middle', 'bold');
+    // 힘 화살표 (작게)
+    s += svgArrow(xP, barY-barH/2, xP, barY-60, BLUE, 'N', 'left', 2);
+    s += svgArrow(xQ, barY-barH/2, xQ, barY-60, BLUE, 'N', 'right', 2);
+    s += svgArrow(xP, barY+barH/2, xP, barY+55, RED, 'mg', 'left', 2);
+    s += svgArrow(xC, barY+barH/2, xC, barY+55, RED, 'Mg', 'right', 2);
+    // 거리 표시
+    s += dashedLine(pivot, barY+30, xP, barY+30, '#1d4ed8');
+    s += svgTxt((pivot+xP)/2, barY+43, '3l', BLUE, 11, 'middle');
+    s += dashedLine(pivot, barY+50, xQ, barY+50, '#1d4ed8');
+    s += svgTxt((pivot+xQ)/2, barY+63, '6l', BLUE, 11, 'middle');
+    s += dashedLine(pivot, barY+70, xC, barY+70, RED);
+    s += svgTxt((pivot+xC)/2, barY+83, '5l', RED, 11, 'middle');
+    s += dashedLine(pivot, barY+88, xP, barY+88, RED);
+    s += svgTxt((pivot+xP)/2, barY+101, '3l', RED, 11, 'middle');
+    // 토크 호
+    s += torqueArc(xP, barY - 40, 26, false, BLUE, 'CCW (N_p)');
+    s += torqueArc(xQ, barY - 40, 26, false, BLUE, 'CCW (N_q)');
+    s += torqueArc(xC, barY + 38, 26, true, RED, 'CW (Mg)');
+    s += torqueArc(xP, barY + 38, 22, true, RED, 'CW (mg)');
+    // 식
+    s += `<rect x="8" y="6" width="370" height="22" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="4"/>`;
+    s += svgTxt(193, 20, 'N·3l + N·6l = Mg·5l + mg·3l  →  9Nl = 5Mgl + 3mgl', '#1e40af', 9.5, 'middle');
+  }
+
+  if (mode === 3) {
+    // ── 실수 포인트 ──
+    s += svgArrow(xP, barY-barH/2, xP, barY-60, BLUE, '', 'none', 2);
+    s += svgArrow(xQ, barY-barH/2, xQ, barY-60, BLUE, '', 'none', 2);
+    s += svgArrow(xP, barY+barH/2, xP, barY+55, RED, '', 'none', 2);
+    s += svgArrow(xC, barY+barH/2, xC, barY+55, RED, '', 'none', 2);
+    // 실수 1: 물체 위치를 막연히 가운데쯤으로 착각
+    const xWrong2 = xC;
+    s += dashedLine(xWrong2, barY - barH/2 - 5, xWrong2, barY - 40, RED, '3,3');
+    s += `<circle cx="${f(xWrong2)}" cy="${barY-45}" r="11" fill="#fecaca" stroke="${RED}" stroke-width="1.5"/>`;
+    s += svgTxt(xWrong2, barY-42, '✕', RED, 12, 'middle', 'bold');
+    s += svgTxt(xWrong2, barY-62, '물체를 가운데(5l)로 착각', RED, 10, 'middle');
+    // 올바른 위치
+    s += `<circle cx="${f(xP)}" cy="${barY - barH/2 - 20}" r="11" fill="#dcfce7" stroke="${GREEN2}" stroke-width="2"/>`;
+    s += svgTxt(xP, barY - barH/2 - 17, '✓', GREEN2, 12, 'middle', 'bold');
+    s += svgTxt(xP, barY - barH/2 - 38, '물체 위치 = 3l ✓', GREEN2, 10, 'middle', 'bold');
+    // 실수 2: 막대 중심
+    s += `<circle cx="${f(xC)}" cy="${barY + 8}" r="11" fill="#dcfce7" stroke="${GREEN2}" stroke-width="2"/>`;
+    s += svgTxt(xC, barY + 11, '✓', GREEN2, 12, 'middle', 'bold');
+    s += svgTxt(xC, barY + 28, '막대 중심 = 5l ✓', GREEN2, 10, 'middle', 'bold');
+    s += `<rect x="8" y="228" width="300" height="42" fill="#fff1f2" stroke="#fda4af" stroke-width="1" rx="5"/>`;
+    s += svgTxt(158, 244, '자주 하는 실수', '#9f1239', 11, 'middle', 'bold');
+    s += svgTxt(158, 258, '물체 위치(3l)를 막연히 가운데로 착각', '#881337', 9.5, 'middle');
+    s += svgTxt(158, 270, 'N_p = N_q 조건을 식에 바로 대입 안 함', '#881337', 9.5, 'middle');
+  }
+
+  return wrapSVG(s, 640, 300);
+}
+
+/* ==========================================================
+   문제 3 SVG 생성기 — 연결된 두 막대와 장력 전달
+   막대 A: x=[50,350], barAY=215, L=100px
+   막대 B: x=[250,350], barBY=135
+   ========================================================== */
+function svg3(mode) {
+  const LL = 100; // 1L = 100px
+  const LA0 = 50; // A 왼쪽 끝 x
+  const barAY = 215;
+  const barBY = 135;
+  const barH = 8;
+
+  // A 위치
+  const xA_supp = LA0 + LL;     // x=L → 150 (받침대)
+  const xA_cent = LA0 + 1.5*LL; // x=1.5L → 200 (A 중심)
+  const xA_conn = LA0 + 2*LL;   // x=2L → 250 (B-A 연결점)
+  const xA_R    = LA0 + 3*LL;   // x=3L → 350 (A 오른쪽 끝)
+
+  // B 위치 (B는 A 위에 놓임, x=2L~3L 범위)
+  const xB_L = xA_conn; // B 왼쪽 끝 (A의 x=2L 지점 위)
+  const xB_C = (xB_L + xA_R) / 2; // B 중심
+  const xB_R = xA_R;   // B 오른쪽 끝 (A의 x=3L 위)
+
+  const floorY = 270;
+  const BLUE = '#2563eb', RED = '#dc2626', TEAL = '#0d9488';
+  const ORANGE = '#ea580c', GREEN2 = '#16a34a', GRAY = '#9ca3af', DARK = '#374151';
+
+  let s = '';
+
+  // ── 모드 0,3,4: 막대 A 공통 구조 ──
+  function drawBarA(showB = true) {
+    let t = '';
+    // 바닥
+    t += ground(LA0 - 10, xA_R - LA0 + 20, floorY);
+    // 받침대
+    t += support(xA_supp, barAY + barH/2);
+    // 막대 A
+    t += `<rect x="${LA0}" y="${barAY - barH/2}" width="${xA_R - LA0}" height="${barH}" fill="${DARK}" rx="3"/>`;
+    t += svgTxt(LA0 + (xA_R - LA0)/2, barAY - 20, '막대 A  (질량 3m, 길이 3L)', DARK, 11, 'middle');
+    t += dot(LA0, barAY, DARK, 4);
+    t += dot(xA_R, barAY, DARK, 4);
+    // 실 p: A 왼쪽 끝에서 바닥으로 내려감
+    t += `<line x1="${LA0}" y1="${barAY + barH/2}" x2="${LA0}" y2="${floorY}" stroke="${TEAL}" stroke-width="2"/>`;
+    t += svgTxt(LA0 - 18, (barAY + floorY)/2, 'p', TEAL, 13, 'middle', 'bold');
+    if (showB) {
+      // 막대 B
+      t += `<rect x="${xB_L}" y="${barBY - barH/2}" width="${xB_R - xB_L}" height="${barH}" fill="#1d4ed8" rx="3"/>`;
+      t += svgTxt(xB_C, barBY - 20, '막대 B  (질량 2m, 길이 L)', '#1d4ed8', 11, 'middle');
+      // B의 왼쪽 끝 → A 위에 놓임 (수직 연결)
+      t += `<line x1="${xA_conn}" y1="${barAY - barH/2}" x2="${xA_conn}" y2="${barBY + barH/2}" stroke="#555" stroke-width="2"/>`;
+      t += dot(xA_conn, barAY, '#555', 4);
+      t += dot(xA_conn, barBY, '#555', 4);
+      // B의 오른쪽 끝 → A의 오른쪽 끝 사이 실 (도르래 없이 단순화)
+      t += `<line x1="${xA_R}" y1="${barBY + barH/2}" x2="${xA_R}" y2="${barAY - barH/2}" stroke="${TEAL}" stroke-width="2" stroke-dasharray="6,4"/>`;
+      t += svgTxt(xA_R + 14, (barAY + barBY)/2, '실', TEAL, 10, 'start');
+    }
+    return t;
+  }
+
+  if (mode === 0) {
+    // ── 전체 구조 ──
+    s += drawBarA(true);
+    // 거리 라벨
+    const dimY = barAY + 50;
+    s += dimH(LA0, xA_supp, dimY, 'L', GRAY);
+    s += dimH(xA_supp, xA_cent, dimY + 18, '0.5L', GRAY);
+    s += dimH(xA_cent, xA_conn, dimY + 18, '0.5L', GRAY);
+    s += dimH(xA_conn, xA_R, dimY, 'L', GRAY);
+    s += dashedLine(xA_supp, barAY, xA_supp, dimY + 5, GRAY);
+    s += dashedLine(xA_conn, barAY, xA_conn, dimY + 5, GRAY);
+    // 위치 라벨
+    s += svgTxt(LA0, barAY + 14, '0', GRAY, 10);
+    s += svgTxt(xA_supp, barAY + 14, 'L', '#1d4ed8', 10, 'middle', 'bold');
+    s += svgTxt(xA_cent, barAY + 14, '1.5L', GRAY, 10, 'middle');
+    s += svgTxt(xA_conn, barAY + 14, '2L', '#555', 10, 'middle', 'bold');
+    s += svgTxt(xA_R, barAY + 14, '3L', GRAY, 10);
+    // 설명
+    s += `<rect x="375" y="90" width="255" height="90" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1" rx="5"/>`;
+    s += svgTxt(502, 107, '구조 설명', '#7c3aed', 11, 'middle', 'bold');
+    s += svgTxt(502, 123, '실 p: A 왼쪽 끝을 바닥에 고정', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 137, 'B의 왼쪽 끝이 A(x=2L) 위에 놓임', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 151, 'A의 오른쪽 끝과 B의 오른쪽 끝이', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 165, '실로 연결됨 (도르래 경유)', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 175, '마찰력 없음', RED, 9, 'middle');
+  }
+
+  if (mode === 1) {
+    // ── 막대 B 분리도 ──
+    // B만 중앙에 크게 보여주기
+    const bY = 140, bL = 130, bR = 510;
+    s += `<rect x="${bL}" y="${bY - barH/2}" width="${bR-bL}" height="${barH}" fill="#1d4ed8" rx="3"/>`;
+    s += svgTxt((bL+bR)/2, bY - 25, '막대 B 분리도 (질량 2m, 길이 L)', '#1d4ed8', 12, 'middle', 'bold');
+    s += dot(bL, bY, DARK, 4);
+    s += dot(bR, bY, DARK, 4);
+    // 이 위치에서 힘들
+    s += svgTxt(bL, bY + 20, '왼쪽 끝\n(A위에 놓임)', GRAY, 10, 'middle');
+    s += svgTxt(bR, bY + 20, '오른쪽 끝\n(A 오른쪽과 실)', GRAY, 10, 'middle');
+    s += svgTxt((bL+bR)/2, bY + 20, '중심', GRAY, 10, 'middle');
+    // 위로: N (왼쪽에서 A가 B를 받침)
+    s += svgArrow(bL, bY - barH/2, bL, bY - 80, BLUE, 'N', 'left');
+    // 위로: S (오른쪽 실 장력)
+    s += svgArrow(bR, bY - barH/2, bR, bY - 80, TEAL, 'S', 'right');
+    // 아래로: 2mg (B의 무게, 중심에서)
+    s += svgArrow((bL+bR)/2, bY + barH/2, (bL+bR)/2, bY + 80, RED, '2mg', 'right');
+    // 마찰 없음 표시
+    s += `<rect x="170" y="235" width="300" height="45" fill="#f0fdf4" stroke="#86efac" stroke-width="1" rx="5"/>`;
+    s += svgTxt(320, 252, '마찰력 없음 → 수직 방향 힘만', '#166534', 10, 'middle', 'bold');
+    s += svgTxt(320, 265, 'N (위) + S (위) = 2mg (아래)', '#166534', 11, 'middle', 'bold');
+    s += svgTxt(320, 278, 'B 왼쪽 끝 기준 토크: S·L = 2mg·(L/2)  →  S = mg', '#1e40af', 10, 'middle');
+  }
+
+  if (mode === 2) {
+    // ── 막대 B 힘 계산 ──
+    const bY = 130, bL = 110, bR = 530;
+    const bMid = (bL + bR) / 2;
+    s += `<rect x="${bL}" y="${bY - barH/2}" width="${bR-bL}" height="${barH}" fill="#1d4ed8" rx="3"/>`;
+    s += svgTxt(bMid, 30, '막대 B 자유물체도 — 계산 결과', '#1d4ed8', 12, 'middle', 'bold');
+    s += dot(bL, bY, DARK, 4);
+    s += dot(bR, bY, DARK, 4);
+    // 힘 화살표 + 계산값
+    s += svgArrow(bL, bY - barH/2, bL, bY - 85, BLUE, 'N = mg', 'left');
+    s += svgArrow(bR, bY - barH/2, bR, bY - 85, TEAL, 'S = mg', 'right');
+    s += svgArrow(bMid, bY + barH/2, bMid, bY + 85, RED, '2mg', 'right');
+    // 계산 과정 박스
+    s += `<rect x="60" y="228" width="520" height="65" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="6"/>`;
+    s += svgTxt(320, 245, '풀이 과정', '#1e40af', 11, 'middle', 'bold');
+    s += svgTxt(320, 260, '토크 (B 왼쪽 끝 기준): S·L = 2mg·(L/2)  →  S = mg', '#1e40af', 10, 'middle');
+    s += svgTxt(320, 274, '힘 평형: N + S = 2mg  →  N + mg = 2mg  →  N = mg', '#1e40af', 10, 'middle');
+    s += svgTxt(320, 288, '결과: N = mg, S = mg  →  이 값을 막대 A에 전달!', '#16a34a', 10, 'middle', 'bold');
+    // 토크 호
+    s += dot(bL, bY, ORANGE, 7);
+    s += svgTxt(bL, bY + 20, '⭕', ORANGE, 12, 'middle');
+  }
+
+  if (mode === 3) {
+    // ── 막대 A 힘 보기 (B에서 전달된 힘 포함) ──
+    s += drawBarA(false);
+    // 힘 화살표
+    // T: 아래 (x=0, 실 p가 A를 아래로 당김)
+    s += svgArrow(LA0, barAY + barH/2, LA0, barAY + 65, TEAL, 'T', 'left');
+    // F: 위 (x=L, 받침대)
+    s += svgArrow(xA_supp, barAY - barH/2, xA_supp, barAY - 80, BLUE, 'F', 'right');
+    // 3mg: 아래 (x=1.5L, A 자체 무게)
+    s += svgArrow(xA_cent, barAY + barH/2, xA_cent, barAY + 70, RED, '3mg', 'right');
+    // N=mg: 아래 (x=2L, B의 왼쪽 끝이 A를 누름)
+    s += svgArrow(xA_conn, barAY + barH/2, xA_conn, barAY + 70, RED, 'N=mg', 'right');
+    // S=mg: 위 (x=3L, 실을 통해 위로 당김)
+    s += svgArrow(xA_R, barAY - barH/2, xA_R, barAY - 80, TEAL, 'S=mg', 'right');
+    // 접촉점
+    s += dot(xA_supp, barAY, BLUE, 5);
+    s += dot(xA_cent, barAY, RED, 5);
+    s += dot(xA_conn, barAY, RED, 5);
+    s += dot(xA_R, barAY, TEAL, 5);
+    // 주석
+    s += `<rect x="375" y="8" width="255" height="80" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1" rx="5"/>`;
+    s += svgTxt(502, 25, 'B→A 힘 전달', '#7c3aed', 11, 'middle', 'bold');
+    s += svgTxt(502, 42, 'x=2L: N=mg 아래 (B가 A를 누름)', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 57, 'x=3L: S=mg 위 (실이 A를 당김)', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 72, 'x=0: T 아래 (실 p가 A를 당김)', '#4c1d95', 10, 'middle');
+    s += svgTxt(502, 85, '마찰력 없음', RED, 9, 'middle');
+  }
+
+  if (mode === 4) {
+    // ── 막대 A 토크 보기 ──
+    s += drawBarA(false);
+    // 기준점: A 왼쪽 끝
+    s += dot(LA0, barAY, ORANGE, 7);
+    s += svgTxt(LA0, barAY + 20, '⭕ 기준', ORANGE, 10, 'middle', 'bold');
+    // 힘 화살표 (작게)
+    s += svgArrow(LA0, barAY + barH/2, LA0, barAY + 48, TEAL, 'T\n(토크=0)', 'left', 2);
+    s += svgArrow(xA_supp, barAY - barH/2, xA_supp, barAY - 60, BLUE, 'F', 'right', 2);
+    s += svgArrow(xA_cent, barAY + barH/2, xA_cent, barAY + 55, RED, '3mg', 'right', 2);
+    s += svgArrow(xA_conn, barAY + barH/2, xA_conn, barAY + 55, RED, 'N=mg', 'right', 2);
+    s += svgArrow(xA_R, barAY - barH/2, xA_R, barAY - 60, TEAL, 'S=mg', 'right', 2);
+    // 거리 표시
+    const dY = barAY + 65;
+    s += dashedLine(LA0, dY, xA_supp, dY, BLUE);
+    s += svgTxt((LA0+xA_supp)/2, dY - 7, 'L', BLUE, 10, 'middle');
+    s += dashedLine(LA0, dY + 18, xA_cent, dY + 18, RED);
+    s += svgTxt((LA0+xA_cent)/2, dY + 11, '1.5L', RED, 10, 'middle');
+    s += dashedLine(LA0, dY + 36, xA_conn, dY + 36, RED);
+    s += svgTxt((LA0+xA_conn)/2, dY + 29, '2L', RED, 10, 'middle');
+    s += dashedLine(LA0, dY + 54, xA_R, dY + 54, TEAL);
+    s += svgTxt((LA0+xA_R)/2, dY + 47, '3L', TEAL, 10, 'middle');
+    // 토크 호
+    s += torqueArc(xA_supp, barAY - 35, 25, false, BLUE, 'CCW(F)');
+    s += torqueArc(xA_cent, barAY + 38, 25, true, RED, 'CW(3mg)');
+    s += torqueArc(xA_conn, barAY + 38, 22, true, RED, 'CW(N)');
+    s += torqueArc(xA_R, barAY - 35, 25, false, TEAL, 'CCW(S)');
+    // 식
+    s += `<rect x="375" y="8" width="255" height="58" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s += svgTxt(502, 24, 'A 토크 평형 (x=0 기준)', '#1e40af', 10, 'middle', 'bold');
+    s += svgTxt(502, 38, 'F·L + S·3L = 3mg·1.5L + N·2L', '#1e40af', 9.5, 'middle');
+    s += svgTxt(502, 52, '→ F = 7mg/2,  T = mg/2,  F/T = 7', '#16a34a', 10, 'middle', 'bold');
+  }
+
+  if (mode === 5) {
+    // ── 실수 포인트 ──
+    s += drawBarA(false);
+    // 힘 화살표
+    s += svgArrow(LA0, barAY + barH/2, LA0, barAY + 48, TEAL, '', 'none', 2);
+    s += svgArrow(xA_supp, barAY - barH/2, xA_supp, barAY - 55, BLUE, '', 'none', 2);
+    s += svgArrow(xA_cent, barAY + barH/2, xA_cent, barAY + 50, RED, '', 'none', 2);
+    // 실수: N=mg (x=2L) 빠뜨림
+    s += `<circle cx="${f(xA_conn)}" cy="${barAY + 50}" r="22" fill="#fecaca" stroke="${RED}" stroke-width="2"/>`;
+    s += svgTxt(xA_conn, barAY + 54, '!', RED, 18, 'middle', 'bold');
+    s += svgTxt(xA_conn, barAY + 82, 'N=mg 빠뜨리기 쉬움', RED, 9.5, 'middle', 'bold');
+    // 실수: S=mg (x=3L) 빠뜨림
+    s += `<circle cx="${f(xA_R)}" cy="${barAY - 55}" r="22" fill="#fecaca" stroke="${RED}" stroke-width="2"/>`;
+    s += svgTxt(xA_R, barAY - 51, '!', RED, 18, 'middle', 'bold');
+    s += svgTxt(xA_R, barAY - 25, 'S=mg 빠뜨리기 쉬움', RED, 9.5, 'middle', 'bold');
+    // 올바른 순서 안내
+    s += `<rect x="375" y="8" width="255" height="90" fill="#fff1f2" stroke="#fda4af" stroke-width="1" rx="5"/>`;
+    s += svgTxt(502, 26, '자주 하는 실수', '#9f1239', 11, 'middle', 'bold');
+    s += svgTxt(502, 42, 'B 분리 없이 A만 분석 시작', '#881337', 9.5, 'middle');
+    s += svgTxt(502, 56, 'x=2L의 N=mg를 빠뜨림', '#881337', 9.5, 'middle');
+    s += svgTxt(502, 70, 'x=3L의 S=mg를 빠뜨림', '#881337', 9.5, 'middle');
+    s += svgTxt(502, 84, 'F만 구하고 T 계산 안 함', '#881337', 9.5, 'middle');
+    s += svgTxt(502, 96, '마찰력을 임의로 추가', '#881337', 9.5, 'middle');
+  }
+
+  return wrapSVG(s, 640, 310);
+}
+
+/* ==========================================================
+   문제 데이터
+   ========================================================== */
+const problems = [
+  {
+    id: 1,
+    title: '1번 · 매달린 막대와 장력비',
+    difficulty: '중상',
+    diffClass: 'badge-mid-high',
+    tags: ['매달린 막대', '장력비', '무게중심', '토크 평형', '자유물체도'],
+    statement: `그림과 같이 질량이 m이고 길이가 9d인 막대가 실 p, q에 매달려 수평으로 정지해 있다.
+막대에는 질량이 M인 물체가 매달려 정지해 있으며,
+실이 막대를 당기는 힘의 크기는 p가 q의 3배이다.
+M은?
+(단, 막대의 밀도는 균일하고, 막대의 두께와 폭, 실의 질량은 무시한다.)`,
+    choices: ['2m', '3m', '4m', '5m', '6m'],
+    answer: 3, // 0-indexed → '5m' = 4번 선지
+    svgModes: ['구조 보기', '힘 보기', '토크 보기', '실수 포인트'],
+    svgFn: svg1,
+    hints: [
+      {
+        title: '힌트 1: 좌표와 작용점 확인',
+        body: '막대 왼쪽 끝을 x=0으로 잡아보세요.\n• 실 p의 작용점: x = 2d\n• 물체 M이 매달린 위치: x = 3d\n• 막대 무게중심 (균일한 막대 → 정가운데): x = 9d/2 = 4.5d\n• 실 q의 작용점: x = 7d\n이 네 위치를 먼저 그림에 표시하세요.'
+      },
+      {
+        title: '힌트 2: 힘의 평형식 세우기',
+        body: '막대에 작용하는 힘은 두 가지 방향이에요.\n• 위로: T_p (실 p 장력), T_q (실 q 장력)\n• 아래로: mg (막대 무게), Mg (물체 무게)\n\n수직 힘 평형식:\nT_p + T_q = (m + M)g\n\n조건 T_p = 3T_q를 대입하면:\n4T_q = (m + M)g  →  T_q = (m+M)g/4,  T_p = 3(m+M)g/4'
+      },
+      {
+        title: '힌트 3: 토크 평형식 세우기',
+        body: '기준점을 막대 왼쪽 끝(x=0)으로 잡으면 편해요.\n→ 왜냐하면 이 점에서는 어떤 힘도 미지수로 작용하지 않아서입니다.\n\n반시계(CCW) = 시계(CW):\nT_p·2d + T_q·7d = mg·4.5d + Mg·3d\n\nT_p = 3(m+M)g/4, T_q = (m+M)g/4 를 대입해서 M을 구하세요.'
+      }
+    ],
+    explanation: [
+      {
+        title: '1단계 | 문제 상황 해석',
+        body: '실 p, q에 <b>매달린</b> 구조입니다. 바닥이나 벽에 닿지 않으므로 <b>수직항력이 없습니다</b>. 막대에 작용하는 힘은 오직 실의 장력(T_p, T_q)과 중력(mg, Mg)뿐입니다. <b>마찰력도 없습니다</b> — 실은 접촉면이 아니라 장력으로 힘을 전달합니다.'
+      },
+      {
+        title: '2단계 | 좌표와 작용점 정리',
+        body: '막대 왼쪽 끝을 x=0으로 설정합니다.',
+        formulas: [
+          '실 p 작용점:     x = 2d',
+          '물체 M 위치:     x = 3d',
+          '막대 무게중심:   x = 9d/2 = 4.5d  ← 균일한 막대이므로 정가운데!',
+          '실 q 작용점:     x = 7d'
+        ]
+      },
+      {
+        title: '3단계 | 힘의 평형식',
+        body: '수직 방향 힘의 합 = 0',
+        formulas: ['T_p + T_q = (m + M)g']
+      },
+      {
+        title: '4단계 | 조건 T_p = 3T_q 대입',
+        formulas: [
+          '3T_q + T_q = (m + M)g',
+          '4T_q = (m + M)g',
+          'T_q = (m + M)g / 4',
+          'T_p = 3(m + M)g / 4'
+        ]
+      },
+      {
+        title: '5단계 | 토크 기준점 선택 이유',
+        body: '<b>왼쪽 끝(x=0)을 기준점으로 선택합니다.</b>\n이 점에는 알려지지 않은 외력이 없으므로 토크 방정식에 미지수가 두 개(T_p, T_q)가 이미 힘 평형에서 표현된 상태입니다. 즉, 왼쪽 끝에서 T는 작용하지 않으므로(이 문제 구조에서는 왼쪽 끝에 작용하는 힘이 없음) 기준점에서 팔의 길이를 쉽게 계산할 수 있습니다.'
+      },
+      {
+        title: '6단계 | 토크 평형식',
+        body: '반시계 방향(CCW) 토크 = 시계 방향(CW) 토크',
+        formulas: ['T_p · 2d + T_q · 7d = mg · 4.5d + Mg · 3d']
+      },
+      {
+        title: '7단계 | 계산 과정',
+        formulas: [
+          '[3(m+M)g/4] · 2d  +  [(m+M)g/4] · 7d  =  mg · 4.5d + Mg · 3d',
+          '6(m+M)g/4  +  7(m+M)g/4  =  4.5mg + 3Mg',
+          '13(m+M)g / 4  =  9mg/2 + 3Mg',
+          '13(m+M) = 18m + 12M   (양변 × 4/g)',
+          '13m + 13M = 18m + 12M',
+          'M = 5m  ✓'
+        ]
+      }
+    ],
+    mistakes: [
+      '막대 중심을 4d로 착각 → 반드시 9d/2 = 4.5d',
+      'T_p = 3T_q 조건을 반대로 읽어 T_q = 3T_p로 씀',
+      '물체 M의 위치(x=3d)를 놓쳐 토크 항에서 빠뜨림',
+      '기준점에서 거리(지렛대 팔)를 잘못 계산함',
+      '수직항력이 있다고 생각해 식에 포함시킴',
+      '마찰력을 임의로 추가해 식을 복잡하게 만듦'
+    ],
+    faq: [
+      {
+        q: '왜 이 문제에는 수직항력이 없나요?',
+        a: '수직항력은 두 물체가 <b>직접 접촉</b>할 때만 발생합니다. 이 막대는 바닥이나 벽에 닿지 않고 실에만 매달려 있으므로, 바닥으로부터의 수직항력이 생길 수 없습니다. 힘은 오직 실의 장력(위쪽)과 중력(아래쪽)뿐입니다.'
+      },
+      {
+        q: '왜 마찰력을 그리지 않나요?',
+        a: '마찰력은 두 물체가 <b>접촉면을 따라 미끄러지려 할 때</b> 발생합니다. 실에는 접촉면이 없고 장력만 작용합니다. 문제에서도 마찰을 무시한다고 명시하고 있으며, 구조 자체가 마찰력이 작용할 수 없는 형태입니다.'
+      },
+      {
+        q: '왜 막대의 중심이 4.5d인가요?',
+        a: '문제에서 "막대의 밀도는 균일하다"고 했습니다. 균일한 막대의 무게중심은 막대 길이의 정가운데에 위치합니다. 길이 9d이므로 무게중심은 x = 9d/2 = 4.5d입니다. 4d가 아닙니다!'
+      }
+    ],
+    keyPoints: [
+      '균일한 막대의 무게중심 = 막대 정중앙 (9d이면 4.5d)',
+      'T_p = 3T_q 조건을 먼저 힘 평형에 대입해 T_p, T_q를 구함',
+      '왼쪽 끝을 기준으로 토크를 잡으면 모든 위치의 팔을 쉽게 계산 가능',
+      '수직항력 없음: 매달린 구조는 장력만 존재',
+      '마찰력 없음: 실 연결이므로 접촉 마찰 불필요'
+    ],
+    finalAnswer: 'M = 5m   →   정답: ④ 5m'
+  },
+
+  {
+    id: 2,
+    title: '2번 · 같은 받침힘을 받는 막대',
+    difficulty: '중',
+    diffClass: 'badge-mid',
+    tags: ['받침힘', '같은 반력', '질량중심', '토크 평형', '자유물체도'],
+    statement: `그림과 같이 길이가 10l인 막대가 받침대 p, q 위에 수평을 이루며 정지해 있다.
+막대 위에는 질량이 m인 물체가 놓여 있고,
+막대 왼쪽 끝에서 물체의 무게중심까지 수평 거리는 3l이며,
+p, q가 막대에 작용하는 힘의 크기는 같다.
+막대의 질량은?
+(단, 막대의 밀도는 균일하고, 막대의 두께와 폭은 무시한다.)`,
+    choices: ['m', '2m', '3m', '4m', '5m'],
+    answer: 2, // 0-indexed → '3m' = 3번 선지
+    svgModes: ['구조 보기', '힘 보기', '토크 보기', '실수 포인트'],
+    svgFn: svg2,
+    hints: [
+      {
+        title: '힌트 1: 좌표와 작용점 확인',
+        body: '막대 왼쪽 끝을 x=0으로 잡아보세요.\n• 받침대 p 위치: x = 3l\n• 물체 m 위치:   x = 3l  (받침대 p와 같은 위치!)\n• 막대 무게중심: x = 10l/2 = 5l\n• 받침대 q 위치: x = 6l\n각 받침힘을 N이라 하면 N_p = N_q = N 입니다.'
+      },
+      {
+        title: '힌트 2: 힘의 평형식 세우기',
+        body: '위로 작용하는 힘: N_p + N_q = 2N\n아래로 작용하는 힘: (막대질량 M)g + mg\n\n힘 평형:\n2N = (M + m)g\nN = (M + m)g / 2'
+      },
+      {
+        title: '힌트 3: 토크 평형식 세우기',
+        body: '기준점을 x=0(왼쪽 끝)으로 잡으세요.\n\nCCW 토크 = N·3l + N·6l = 9Nl\nCW 토크  = Mg·5l + mg·3l\n\n토크 평형:\n9Nl = 5Mgl + 3mgl\n\nN = (M+m)g/2 를 대입하고 M을 구하세요.'
+      }
+    ],
+    explanation: [
+      {
+        title: '1단계 | 문제 상황 해석',
+        body: '막대가 두 받침대(p, q) 위에 놓여 있습니다. 받침대는 막대에 <b>수직항력(위쪽 힘)</b>을 가합니다. 문제에서 마찰은 무시하므로, 수평 방향의 힘은 없습니다. 받침대는 수직항력만 줍니다.'
+      },
+      {
+        title: '2단계 | 좌표와 작용점 정리',
+        body: '막대의 질량을 M이라 놓겠습니다. 왼쪽 끝을 x=0으로 설정합니다.',
+        formulas: [
+          '받침대 p:   x = 3l',
+          '물체 m:     x = 3l  (p와 같은 위치)',
+          '막대 중심:  x = 5l  (균일한 막대)',
+          '받침대 q:   x = 6l'
+        ]
+      },
+      {
+        title: '3단계 | 힘의 평형식',
+        body: '조건: N_p = N_q = N',
+        formulas: [
+          'N_p + N_q = (M + m)g',
+          '2N = (M + m)g',
+          'N = (M + m)g / 2'
+        ]
+      },
+      {
+        title: '4단계 | 토크 기준점 선택 이유',
+        body: '<b>왼쪽 끝(x=0)을 기준점으로 선택합니다.</b>\n왼쪽 끝에서는 외력이 없으므로 모든 힘의 팔(작용점까지의 거리)을 쉽게 측정할 수 있습니다.'
+      },
+      {
+        title: '5단계 | 토크 평형식',
+        formulas: ['N·3l + N·6l = Mg·5l + mg·3l']
+      },
+      {
+        title: '6단계 | 계산 과정',
+        formulas: [
+          '9Nl = 5Mgl + 3mgl',
+          '9 · (M+m)g/2 · l = 5Mgl + 3mgl',
+          '9(M+m)/2 = 5M + 3m',
+          '9M + 9m = 10M + 6m   (양변 × 2)',
+          'M = 3m  ✓'
+        ]
+      }
+    ],
+    mistakes: [
+      '물체 m의 위치가 x=3l (받침대 p와 같은 위치)라는 점을 놓침',
+      '물체가 p 위에 있어서 토크 계산에서 사라진다고 착각 (mg는 여전히 x=3l에서 토크를 생성함)',
+      '막대 중심을 x=5l로 잡지 않고 x=4l이나 x=3l로 잘못 설정',
+      'N_p = N_q 조건을 식에 즉시 반영하지 않음',
+      '마찰력이 있다고 가정해 수평 힘을 추가함',
+      '수직항력 작용점을 막대 중앙으로 막연히 그림'
+    ],
+    faq: [
+      {
+        q: '왜 물체가 p 위치에 있어도 토크 계산에서 사라지지 않나요?',
+        a: '물체 m은 x=3l 지점에 무게 mg를 <b>아래쪽으로</b> 작용합니다. 기준점(x=0)에서 이 힘까지의 팔의 길이는 3l이므로 토크는 mg·3l입니다. 물체가 받침대 p 바로 위에 있다는 사실이 토크를 없애지는 않습니다.'
+      },
+      {
+        q: '왜 막대의 중심은 5l인가요?',
+        a: '"막대의 밀도는 균일하다"는 조건으로부터, 균일한 막대의 무게중심은 막대의 정가운데에 위치합니다. 길이 10l이므로 무게중심은 x = 10l/2 = 5l입니다.'
+      },
+      {
+        q: '왜 마찰력은 고려하지 않나요?',
+        a: '문제에서 "마찰은 무시한다"고 명시하고 있습니다. 또한 받침대는 막대 아래에서 수직으로 막대를 받치므로, 마찰이 있더라도 막대가 수평 방향으로 미끄러지려는 경향이 없으면 수평 힘(마찰)이 생기지 않습니다.'
+      }
+    ],
+    keyPoints: [
+      'N_p = N_q = N 조건을 힘 평형에 먼저 반영해 N = (M+m)g/2 를 구함',
+      '막대 중심 = 길이/2 = 5l (균일한 막대)',
+      '물체 위치 x=3l은 받침대 p 위치와 같지만, 토크 계산에서 mg·3l은 반드시 포함',
+      '마찰 무시 → 수평 방향 힘 없음 → 수직항력과 중력만 고려',
+      '왼쪽 끝 기준 토크: 9Nl = 5Mgl + 3mgl'
+    ],
+    finalAnswer: '막대의 질량 M = 3m   →   정답: ③ 3m'
+  },
+
+  {
+    id: 3,
+    title: '3번 · 연결된 두 막대와 장력 전달',
+    difficulty: '상',
+    diffClass: 'badge-high',
+    tags: ['연결된 막대', '장력 전달', '토크 평형', '자유물체도', '단계 분리 해석'],
+    statement: `그림과 같이 받침대 위에 놓인 길이가 3L인 막대 A와 막대 B가 실로 연결되어 수평을 이루며 정지해 있다.
+A의 왼쪽 끝은 실 p로 수평면과 연결되어 있다.
+A, B의 질량은 각각 3m, 2m이다.
+받침대는 크기가 F인 힘으로 A를 떠받치고 있고,
+p가 A를 당기는 힘의 크기는 T이다.
+F/T는?
+(단, 막대의 밀도는 각각 균일하며, 막대의 두께와 폭, 실의 질량, 모든 마찰은 무시한다.)`,
+    choices: ['7', '15/2', '8', '17/2', '9'],
+    answer: 0, // 0-indexed → '7' = 1번 선지
+    svgModes: ['전체 구조', 'B 분리도', 'B 힘 계산', 'A 힘 전달', 'A 토크', '실수 포인트'],
+    svgFn: svg3,
+    hints: [
+      {
+        title: '힌트 1: 막대 A에서 필요한 힘 파악',
+        body: 'A에는 5개의 힘이 작용합니다:\n• x=0:   실 p가 A를 아래로 당김 (T)\n• x=L:   받침대가 A를 위로 밀어올림 (F)\n• x=1.5L: A 자체의 무게 아래로 (3mg)\n• x=2L:  ??? 아래로\n• x=3L:  ??? 위로\n\n???로 표시된 두 힘은 막대 B와의 연결에서 옵니다.\n→ 막대 B를 먼저 분리해서 풀어야 합니다.'
+      },
+      {
+        title: '힌트 2: 막대 B 분리 분석',
+        body: '막대 B를 독립적으로 봅니다.\nB의 왼쪽 끝은 A 위에 놓여 있으므로 A로부터 위로 N을 받습니다.\nB의 오른쪽 끝은 실을 통해 위로 S를 받습니다.\nB 중심에서 아래로 2mg.\n\nB의 토크 평형 (B 왼쪽 끝 기준):\nS × L_B = 2mg × (L_B/2)\n→ S = mg\n\nB의 힘 평형: N + S = 2mg → N = mg'
+      },
+      {
+        title: '힌트 3: A에 전달된 힘으로 토크 평형',
+        body: 'A의 토크 평형 (x=0 기준, T는 기준점에 작용해 팔=0 → 토크 없음):\nF·L + S·3L = 3mg·1.5L + N·2L\n\nS=mg, N=mg 대입:\nF·L + mg·3L = 4.5mgL + 2mgL\nF = 3.5mg = 7mg/2\n\nA의 힘 평형:\nF + S = T + 3mg + N\n7mg/2 + mg = T + 4mg\nT = mg/2\n\nF/T = (7mg/2)/(mg/2) = 7'
+      }
+    ],
+    explanation: [
+      {
+        title: '1단계 | 핵심 전략: 막대 B를 먼저 분리한다',
+        body: '이 문제는 두 막대가 연결되어 있어서 A만 보면 미지수가 너무 많습니다. <b>먼저 막대 B를 독립적으로 분리해서 B 양 끝의 힘을 구한 뒤, 그 결과를 A에 전달하는 방식</b>으로 풀어야 합니다.'
+      },
+      {
+        title: '2단계 | 막대 B 분석 — 작용하는 힘',
+        body: 'B의 왼쪽 끝에는 A로부터 위로 N이 작용하고, 오른쪽 끝에는 실을 통해 위로 S가 작용합니다. B의 무게 2mg는 B의 중심에서 아래로 작용합니다. 마찰력은 없습니다.',
+        formulas: ['힘 종류: N↑ (왼쪽 끝), S↑ (오른쪽 끝), 2mg↓ (중심)']
+      },
+      {
+        title: '3단계 | 막대 B의 토크 평형',
+        body: 'B의 왼쪽 끝을 기준점으로 선택합니다 (N의 토크 = 0).',
+        formulas: [
+          'S × L_B = 2mg × (L_B / 2)',
+          'S = mg'
+        ]
+      },
+      {
+        title: '4단계 | 막대 B의 힘 평형',
+        formulas: [
+          'N + S = 2mg',
+          'N + mg = 2mg',
+          'N = mg'
+        ]
+      },
+      {
+        title: '5단계 | 막대 A에 작용하는 힘',
+        body: 'B에서 구한 결과를 A에 적용합니다.',
+        formulas: [
+          'x = 0:    실 p → A를 아래로 T  (장력)',
+          'x = L:    받침대 → A를 위로 F  (수직항력)',
+          'x = 1.5L: A 자체 무게 → 아래로 3mg',
+          'x = 2L:   B의 왼쪽 끝이 A를 아래로 N = mg 누름',
+          'x = 3L:   실이 A를 위로 S = mg 당김'
+        ]
+      },
+      {
+        title: '6단계 | 막대 A의 토크 평형 (x=0 기준)',
+        body: '기준점 x=0에서 T는 팔이 0이므로 토크 기여 없음 → 계산에서 제거됩니다.',
+        formulas: [
+          'F·L + S·3L = 3mg·1.5L + N·2L',
+          'F·L + mg·3L = 4.5mgL + mg·2L',
+          'F·L = 4.5mgL + 2mgL - 3mgL = 3.5mgL',
+          'F = 3.5mg = 7mg/2'
+        ]
+      },
+      {
+        title: '7단계 | 막대 A의 힘 평형으로 T 계산',
+        formulas: [
+          'F + S = T + 3mg + N',
+          '7mg/2 + mg = T + 3mg + mg',
+          '9mg/2 = T + 4mg',
+          'T = 9mg/2 - 4mg = mg/2'
+        ]
+      },
+      {
+        title: '8단계 | 최종 계산',
+        formulas: [
+          'F/T = (7mg/2) / (mg/2) = 7  ✓'
+        ]
+      }
+    ],
+    mistakes: [
+      '막대 B를 먼저 분리하지 않고 A만 분석하려다 미지수가 너무 많아짐',
+      'B 양 끝의 힘 N과 S가 같다고 근거 없이 가정함',
+      'A에서 x=2L 위치의 아래로 향하는 힘 N=mg를 빠뜨림',
+      'A에서 x=3L 위치의 위로 향하는 힘 S=mg를 빠뜨림',
+      'F/T를 구하는 문제인데 F만 계산하고 T 계산을 잊음',
+      '마찰력을 있다고 가정해 수평 힘을 추가해 식이 복잡해짐',
+      '장력과 수직항력을 같은 종류로 혼동함'
+    ],
+    faq: [
+      {
+        q: '왜 막대 B를 먼저 봐야 하나요?',
+        a: '막대 A에는 x=2L과 x=3L 위치에서 B와 연결된 미지의 힘(N, S)이 작용합니다. 이 힘들을 모르면 A의 토크 방정식을 풀 수 없습니다. B는 A보다 단순한 계로, B만 따로 분석하면 N과 S를 먼저 구할 수 있고, 그 값을 A에 대입하면 됩니다.'
+      },
+      {
+        q: '왜 B의 양 끝 힘이 처음부터 같다고 둘 수 없나요?',
+        a: 'B가 균일한 막대이더라도, 양 끝 힘은 무게중심 위치와 힘 작용 위치에 따라 달라집니다. B의 토크 평형을 실제로 계산해야만 N=mg, S=mg라는 결과가 나옵니다. 문제의 특성상 우연히 같아졌을 뿐입니다.'
+      },
+      {
+        q: '왜 A에는 x=2L에서 아래 힘이 생기나요?',
+        a: 'B의 왼쪽 끝이 A의 x=2L 지점 위에 놓여 있습니다. B는 A를 아래로 누르는 힘(N)을 줍니다. 이것은 작용-반작용의 결과입니다: A가 B를 위로 N만큼 받쳐주면, B는 A를 아래로 N만큼 누릅니다.'
+      }
+    ],
+    keyPoints: [
+      '연결된 복잡한 계는 단순한 쪽(B)을 먼저 분리해서 분석',
+      'B 분석 결과: N = mg (B 왼쪽 끝 힘), S = mg (B 오른쪽 끝 힘)',
+      'A 토크 기준점 x=0: T의 팔이 0 → T는 토크 방정식에서 사라짐',
+      'F = 7mg/2, T = mg/2, F/T = 7',
+      '모든 마찰력 없음 → 수평 힘 없음, 수직 힘과 장력만 고려'
+    ],
+    finalAnswer: 'F/T = 7   →   정답: ① 7'
+  }
+];
+
+/* ==========================================================
+   상태 관리 (문제별 인터랙션 상태)
+   ========================================================== */
+const state = {};
+problems.forEach(p => {
+  state[p.id] = {
+    selected: null,   // 선택한 선지 인덱스
+    hintsShown: 0,    // 현재 보여진 힌트 수
+    checked: false,   // 정답 확인 여부
+    correct: null,    // 맞았는지 여부
+    svgMode: 0,       // 현재 SVG 모드
+    expOpen: false    // 해설 아코디언 열림 여부
+  };
+});
+
+/* ==========================================================
+   UI 빌더 함수
+   ========================================================== */
+
+/** 선택지 HTML 생성 */
+function buildChoices(p) {
+  return p.choices.map((c, i) => `
+    <label class="choice-item" id="choice-${p.id}-${i}">
+      <input type="radio" name="q${p.id}" value="${i}"
+        onchange="selectChoice(${p.id}, ${i})">
+      <span>${i+1}) ${c}</span>
+    </label>`).join('');
+}
+
+/** 힌트 섹션 HTML 생성 */
+function buildHints(p) {
+  return p.hints.map((h, i) => `
+    <div class="hint-block" id="hint-${p.id}-${i}" style="display:none">
+      <h4>${h.title}</h4>
+      <p>${h.body}</p>
+    </div>`).join('');
+}
+
+/** 해설 스텝 HTML 생성 */
+function buildExplanation(p) {
+  return p.explanation.map(step => {
+    let html = `<div class="exp-step"><h4>${step.title}</h4>`;
+    if (step.body) html += `<p>${step.body}</p>`;
+    if (step.formulas) step.formulas.forEach(f => { html += `<code class="formula">${f}</code>`; });
+    html += `</div>`;
+    return html;
+  }).join('');
+}
+
+/** FAQ HTML 생성 */
+function buildFAQ(p) {
+  return p.faq.map((item, i) => `
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(${p.id}, ${i})" id="faq-q-${p.id}-${i}">
+        <span>Q. ${item.q}</span>
+        <span class="faq-caret">▼</span>
+      </button>
+      <div class="faq-a" id="faq-a-${p.id}-${i}">
+        ${item.a}
+      </div>
+    </div>`).join('');
+}
+
+/* ==========================================================
+   문제 카드 렌더 함수
+   ========================================================== */
+function renderProblem(p) {
+  const svgTabsHtml = p.svgModes.map((label, i) =>
+    `<button class="svg-tab${i===0?' active':''}" onclick="switchSvgMode(${p.id}, ${i})"
+      id="svgtab-${p.id}-${i}">${label}</button>`
+  ).join('');
+
+  return `
+<article class="problem-card" id="problem-card-${p.id}">
+  <!-- 헤더 -->
+  <div class="prob-header">
+    <h2 class="prob-title">${p.title}</h2>
+    <span class="badge ${p.diffClass}">${p.difficulty}</span>
+  </div>
+
+  <!-- 핵심 개념 태그 -->
+  <div class="tags">
+    ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+  </div>
+
+  <!-- 문제 원문 -->
+  <div class="stmt">${p.statement}</div>
+
+  <!-- SVG 탭 -->
+  <div class="section-label">그림 보기</div>
+  <div class="svg-tabs">${svgTabsHtml}</div>
+  <div class="svg-wrap" id="svg-${p.id}">
+    ${p.svgFn(0)}
+  </div>
+
+  <!-- 선택지 -->
+  <div class="section-label">풀어보기</div>
+  <p class="choices-title">정답을 선택하세요:</p>
+  <div id="choices-${p.id}">
+    ${buildChoices(p)}
+  </div>
+
+  <!-- 액션 버튼 -->
+  <div class="action-btns">
+    <button class="btn btn-primary" onclick="checkAnswer(${p.id})">정답 확인</button>
+    <button class="btn btn-secondary" onclick="resetProblem(${p.id})">다시 풀기</button>
+    <button class="btn btn-hint" id="hint-btn-${p.id}" onclick="showNextHint(${p.id})">힌트 1 보기</button>
+  </div>
+
+  <!-- 피드백 -->
+  <div class="feedback" id="feedback-${p.id}"></div>
+
+  <!-- 힌트들 -->
+  <div class="section-label" id="hint-label-${p.id}" style="display:none">단계별 힌트</div>
+  <div id="hints-${p.id}">
+    ${buildHints(p)}
+  </div>
+
+  <!-- 해설 아코디언 -->
+  <div class="section-label">단계별 해설</div>
+  <button class="exp-toggle" onclick="toggleExplanation(${p.id})">
+    📖 해설 보기 / 접기
+  </button>
+  <div class="exp-content" id="exp-${p.id}">
+    ${buildExplanation(p)}
+  </div>
+
+  <!-- 자주 하는 실수 -->
+  <div class="section-label">자주 하는 실수</div>
+  <div class="mistakes">
+    <h3>⚠ 이런 실수를 조심하세요!</h3>
+    <ul>${p.mistakes.map(m => `<li>${m}</li>`).join('')}</ul>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section-label">학생이 많이 헷갈리는 질문</div>
+  <div class="faq">${buildFAQ(p)}</div>
+
+  <!-- 핵심 포인트 -->
+  <div class="section-label">핵심 포인트 요약</div>
+  <div class="key-pts">
+    <h3>✅ 이것만 기억하세요</h3>
+    <ul>${p.keyPoints.map(k => `<li>${k}</li>`).join('')}</ul>
+  </div>
+
+  <!-- 최종 정답 (초기에는 숨김) -->
+  <div class="answer-box" id="answer-box-${p.id}">
+    <h3>최종 정답</h3>
+    <div class="final">${p.finalAnswer}</div>
+  </div>
+</article>`;
+}
+
+/* ==========================================================
+   요약 테이블 렌더 함수
+   ========================================================== */
+function renderSummary() {
+  const rows = [
+    { n:'1', find:'장력비와 무게중심', forces:'장력(T_p, T_q), 무게(mg, Mg)', friction:'마찰력 없음', pivot:'왼쪽 끝', ans:'M = 5m' },
+    { n:'2', find:'같은 받침힘 조건', forces:'수직항력(N_p, N_q), 무게(mg, Mg)', friction:'마찰 무시', pivot:'왼쪽 끝', ans:'막대 질량 = 3m' },
+    { n:'3', find:'B를 먼저 분리 분석', forces:'장력(T, S), 수직항력(F, N), 무게(3mg, 2mg)', friction:'마찰 무시', pivot:'막대별 한쪽 끝', ans:'F/T = 7' }
+  ];
+  return `
+<div class="summary-card">
+  <h2>📊 전체 문제 요약</h2>
+  <div style="overflow-x:auto">
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>번호</th><th>먼저 찾아야 하는 것</th><th>작용하는 대표 힘</th>
+        <th>마찰력</th><th>추천 토크 기준점</th><th>최종 정답</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows.map(r => `<tr>
+        <td><b>${r.n}번</b></td>
+        <td>${r.find}</td>
+        <td>${r.forces}</td>
+        <td>${r.friction}</td>
+        <td>${r.pivot}</td>
+        <td><b>${r.ans}</b></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="study-comment">
+  막대 평형 문제는 <b>작용점 위치, 무게중심, 힘의 방향, 토크 기준점</b>을 정확히 잡는 것이 핵심입니다.<br>
+  특히 없는 힘(예: 마찰력 없음, 수직항력 없음)도 명확히 구분할 줄 알아야 합니다.<br>
+  연결된 복잡한 계는 <b>단순한 부분부터 분리해서 순서대로</b> 풀어나가는 것이 정석입니다.
+</div>`;
+}
+
+/* ==========================================================
+   이벤트 핸들러
+   ========================================================== */
+
+/** 선지 선택 */
+function selectChoice(pid, idx) {
+  state[pid].selected = idx;
+  // 선택된 스타일 적용
+  for (let i = 0; i < problems.find(p=>p.id===pid).choices.length; i++) {
+    const el = document.getElementById(`choice-${pid}-${i}`);
+    if (el) el.classList.toggle('selected', i === idx);
+  }
+}
+
+/** 정답 확인 */
+function checkAnswer(pid) {
+  const s = state[pid];
+  const p = problems.find(pp => pp.id === pid);
+  const fb = document.getElementById(`feedback-${pid}`);
+  const ansBox = document.getElementById(`answer-box-${pid}`);
+
+  if (s.selected === null) {
+    fb.textContent = '먼저 선지를 선택해 주세요.';
+    fb.className = 'feedback wrong show';
+    return;
+  }
+
+  s.checked = true;
+  s.correct = (s.selected === p.answer);
+
+  if (s.correct) {
+    fb.textContent = '정답입니다! 이제 해설을 보면서 왜 맞는지 확인해 보세요.';
+    fb.className = 'feedback correct show';
+    // 정답 박스 공개
+    if (ansBox) ansBox.classList.add('show');
+  } else {
+    fb.textContent = '아직 정답이 아닙니다. 힌트부터 보고 작용점과 힘의 방향을 다시 확인해 보세요.';
+    fb.className = 'feedback wrong show';
+  }
+}
+
+/** 다시 풀기 */
+function resetProblem(pid) {
+  const s = state[pid];
+  const p = problems.find(pp => pp.id === pid);
+
+  s.selected = null;
+  s.hintsShown = 0;
+  s.checked = false;
+  s.correct = null;
+
+  // 선택지 라디오 초기화
+  document.querySelectorAll(`input[name="q${pid}"]`).forEach(r => r.checked = false);
+  for (let i = 0; i < p.choices.length; i++) {
+    const el = document.getElementById(`choice-${pid}-${i}`);
+    if (el) el.classList.remove('selected');
+  }
+
+  // 피드백 숨김
+  const fb = document.getElementById(`feedback-${pid}`);
+  if (fb) { fb.className = 'feedback'; fb.textContent = ''; }
+
+  // 힌트 숨김
+  for (let i = 0; i < p.hints.length; i++) {
+    const hEl = document.getElementById(`hint-${pid}-${i}`);
+    if (hEl) hEl.style.display = 'none';
+  }
+  const hintLabel = document.getElementById(`hint-label-${pid}`);
+  if (hintLabel) hintLabel.style.display = 'none';
+
+  // 힌트 버튼 초기화
+  const hBtn = document.getElementById(`hint-btn-${pid}`);
+  if (hBtn) { hBtn.textContent = '힌트 1 보기'; hBtn.style.display = ''; }
+
+  // 정답 박스 숨김
+  const ansBox = document.getElementById(`answer-box-${pid}`);
+  if (ansBox) ansBox.classList.remove('show');
+}
+
+/** 힌트 단계적 공개 */
+function showNextHint(pid) {
+  const s = state[pid];
+  const p = problems.find(pp => pp.id === pid);
+  const hintLabel = document.getElementById(`hint-label-${pid}`);
+
+  if (s.hintsShown < p.hints.length) {
+    // 힌트 섹션 라벨 보이기
+    if (hintLabel) hintLabel.style.display = '';
+    // 현재 힌트 공개
+    const hEl = document.getElementById(`hint-${pid}-${s.hintsShown}`);
+    if (hEl) hEl.style.display = 'block';
+    s.hintsShown++;
+  }
+
+  // 버튼 업데이트
+  const hBtn = document.getElementById(`hint-btn-${pid}`);
+  if (s.hintsShown >= p.hints.length) {
+    if (hBtn) hBtn.style.display = 'none';
+  } else {
+    if (hBtn) hBtn.textContent = `힌트 ${s.hintsShown + 1} 보기`;
+  }
+}
+
+/** 해설 아코디언 토글 */
+function toggleExplanation(pid) {
+  const s = state[pid];
+  s.expOpen = !s.expOpen;
+  const el = document.getElementById(`exp-${pid}`);
+  if (el) el.classList.toggle('open', s.expOpen);
+}
+
+/** FAQ 토글 */
+function toggleFaq(pid, idx) {
+  const btn = document.getElementById(`faq-q-${pid}-${idx}`);
+  const ans = document.getElementById(`faq-a-${pid}-${idx}`);
+  if (!ans) return;
+  const isOpen = ans.classList.contains('open');
+  ans.classList.toggle('open', !isOpen);
+  if (btn) btn.classList.toggle('open', !isOpen);
+}
+
+/** SVG 모드 전환 */
+function switchSvgMode(pid, mode) {
+  const p = problems.find(pp => pp.id === pid);
+  state[pid].svgMode = mode;
+
+  // 탭 활성화 업데이트
+  for (let i = 0; i < p.svgModes.length; i++) {
+    const tab = document.getElementById(`svgtab-${pid}-${i}`);
+    if (tab) tab.classList.toggle('active', i === mode);
+  }
+
+  // SVG 업데이트
+  const svgWrap = document.getElementById(`svg-${pid}`);
+  if (svgWrap) svgWrap.innerHTML = p.svgFn(mode);
+}
+
+/* ==========================================================
+   초기화
+   ========================================================== */
+function init() {
+  const container = document.getElementById('problems-container');
+  problems.forEach(p => {
+    container.innerHTML += renderProblem(p);
+  });
+
+  const summaryContainer = document.getElementById('summary-container');
+  summaryContainer.innerHTML = renderSummary();
+}
+
+init();
+</script>
+</body>
+</html>

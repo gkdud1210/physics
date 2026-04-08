@@ -752,7 +752,7 @@
   <div id="splash-intro" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;flex:1;padding:32px 16px">
     <div class="splash-emoji">👋</div>
     <div style="text-align:center">
-      <div class="splash-title">안녕 건우야!</div>
+      <div class="splash-title">안녕 건우!</div>
       <div class="splash-sub">물리 공부 파이팅! ⚡</div>
     </div>
     <button class="splash-start" onclick="showSplashView('home')" style="margin-top:8px">공부 시작하기 →</button>
@@ -796,13 +796,13 @@
         </div>
         <span class="curr-badge avail">학습 가능 →</span>
       </div>
-      <div class="curr-ch locked">
-        <span class="curr-ch-num">04</span>
+      <div class="curr-ch concept-ch" onclick="selectChapter('newton_third')">
+        <span class="curr-ch-num concept">04</span>
         <div class="curr-ch-info">
           <div class="curr-ch-name">작용 반작용과 운동량 보존</div>
           <div class="curr-ch-desc">뉴턴 제3법칙, 충돌 시 운동량 보존 법칙</div>
         </div>
-        <span class="curr-badge">준비 중</span>
+        <span class="curr-badge avail">학습 가능 →</span>
       </div>
 
       <div class="curr-section">2. 에너지와 열</div>
@@ -2244,6 +2244,143 @@ const CHAPTERS = {
     hasConcept: false,
     hasProblems: true,
     concept: null
+  },
+  newton_third: {
+    name: '04 작용 반작용',
+    section: 'Ⅰ-1 힘과 운동',
+    hasConcept: true,
+    hasProblems: true,
+    concept: `
+      <div class="cv-block">
+        <div class="cv-block-title">1. 뉴턴 운동 제3법칙 (작용·반작용)</div>
+        <p class="cv-p">물체 A가 물체 B에 힘을 가하면, B도 A에 <b>크기가 같고 방향이 반대</b>인 힘을 가합니다. 이 두 힘을 <b>작용력</b>과 <b>반작용력</b>이라고 합니다.</p>
+        <div class="cv-formula-box">
+          <b>작용·반작용 법칙</b>$$\\vec{F}_{AB} = -\\vec{F}_{BA}$$
+          <div style="font-size:.8rem;margin-top:6px;color:rgba(255,255,255,.55)">크기: $|F_{AB}| = |F_{BA}|$ &nbsp;·&nbsp; 방향: 서로 반대 &nbsp;·&nbsp; 같은 종류의 힘</div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 두 스케이터가 서로 밀기</div>
+          <svg viewBox="0 0 340 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 바닥 -->
+            <rect x="10" y="100" width="320" height="5" fill="#334155" rx="2"/>
+            <!-- 스케이터 A (왼쪽) -->
+            <circle cx="90" cy="60" r="14" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2"/>
+            <text x="90" y="65" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">A</text>
+            <line x1="90" y1="74" x2="90" y2="100" stroke="#60a5fa" stroke-width="2"/>
+            <!-- 스케이터 B (오른쪽) -->
+            <circle cx="250" cy="60" r="14" fill="#1e3a5f" stroke="#f59e0b" stroke-width="2"/>
+            <text x="250" y="65" font-size="10" fill="#fde68a" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">B</text>
+            <line x1="250" y1="74" x2="250" y2="100" stroke="#f59e0b" stroke-width="2"/>
+            <!-- A가 B에 가하는 힘 (오른쪽 화살표) -->
+            <line x1="104" y1="55" x2="188" y2="55" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="188,55 178,50 178,60" fill="#10b981"/>
+            <text x="146" y="46" font-size="9" fill="#10b981" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">F (작용)</text>
+            <!-- B가 A에 가하는 힘 (왼쪽 화살표) -->
+            <line x1="236" y1="65" x2="152" y2="65" stroke="#ef4444" stroke-width="2.5"/>
+            <polygon points="152,65 162,60 162,70" fill="#ef4444"/>
+            <text x="194" y="78" font-size="9" fill="#ef4444" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">F (반작용)</text>
+            <!-- 크기 같음 표시 -->
+            <rect x="90" y="110" width="160" height="16" fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="3"/>
+            <text x="170" y="121" font-size="8.5" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">크기 동일 · 방향 반대 · 서로 다른 물체에 작용</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">2. 작용·반작용 vs 힘의 평형</div>
+        <p class="cv-p">두 개념을 <b>혼동하지 않는 것</b>이 핵심입니다.</p>
+        <div class="cv-cond">
+          <div class="cv-cond-item">
+            <span class="cv-tag">작용·반작용</span>
+            <div><b>서로 다른 두 물체</b>에 작용합니다. 힘의 종류가 같고(예: 둘 다 접촉력), 크기가 같으며 방향이 반대입니다. 물체 각각의 운동에 영향을 줍니다.</div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">힘의 평형</span>
+            <div><b>같은 물체</b>에 작용하는 두 힘이 크기가 같고 방향이 반대일 때 합력이 0이 됩니다. 물체가 정지 또는 등속 운동합니다.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">비교 · 책이 탁자 위에 놓인 경우</div>
+          <svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 탁자 -->
+            <rect x="60" y="110" width="220" height="8" fill="#475569" rx="2"/>
+            <!-- 책 -->
+            <rect x="120" y="74" width="100" height="36" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="3"/>
+            <text x="170" y="96" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">책 (m)</text>
+            <!-- 중력 W (아래) -->
+            <line x1="155" y1="110" x2="155" y2="140" stroke="#ef4444" stroke-width="2.5"/>
+            <polygon points="155,140 150,130 160,130" fill="#ef4444"/>
+            <text x="108" y="135" font-size="9" fill="#ef4444" font-weight="bold" font-family="-apple-system,sans-serif">W=mg ↓</text>
+            <!-- 수직항력 N (위) -->
+            <line x1="185" y1="74" x2="185" y2="44" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="185,44 180,54 190,54" fill="#10b981"/>
+            <text x="196" y="56" font-size="9" fill="#10b981" font-weight="bold" font-family="-apple-system,sans-serif">N ↑</text>
+            <!-- 평형 표시 -->
+            <rect x="60" y="8" width="220" height="24" fill="rgba(96,165,250,.08)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="4"/>
+            <text x="170" y="23" font-size="9" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">W와 N → 같은 물체(책)에 작용 → 힘의 평형</text>
+            <!-- 작용반작용 -->
+            <line x1="170" y1="110" x2="170" y2="148" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="240" y="130" font-size="9" fill="#f59e0b" font-family="-apple-system,sans-serif">탁자가 받는 힘</text>
+            <text x="240" y="142" font-size="9" fill="#f59e0b" font-family="-apple-system,sans-serif">= 작용·반작용 쌍</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">3. 실생활 예시</div>
+        <div class="cv-cond">
+          <div class="cv-cond-item">
+            <span class="cv-tag">로켓 추진</span>
+            <div>로켓이 기체를 뒤로 분사(작용) → 기체가 로켓을 앞으로 미는 반작용으로 로켓이 가속</div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">수영</span>
+            <div>손발로 물을 뒤로 밀면(작용) → 물이 몸을 앞으로 미는 반작용으로 전진</div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">충돌</span>
+            <div>두 물체가 충돌할 때 주고받는 힘은 항상 크기가 같습니다. 가속도는 질량에 따라 달라집니다. ($a = F/m$)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">4. 운동량 보존 법칙</div>
+        <p class="cv-p">외력이 없는 계에서 충돌 전후의 <b>전체 운동량</b>은 보존됩니다.</p>
+        <div class="cv-formula-box">
+          <b>운동량 보존</b>$$m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2'$$
+          <div style="font-size:.8rem;margin-top:6px;color:rgba(255,255,255,.55)">$v$ : 충돌 전 속도 &nbsp;·&nbsp; $v'$ : 충돌 후 속도</div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 완전 비탄성 충돌 (두 물체가 붙음)</div>
+          <svg viewBox="0 0 340 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 충돌 전 -->
+            <text x="85" y="14" font-size="9" fill="rgba(255,255,255,.4)" text-anchor="middle" font-family="-apple-system,sans-serif">충돌 전</text>
+            <rect x="20" y="22" width="50" height="32" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="3"/>
+            <text x="45" y="42" font-size="9.5" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">2 kg</text>
+            <line x1="70" y1="38" x2="98" y2="38" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="98,38 88,33 88,43" fill="#10b981"/>
+            <text x="84" y="28" font-size="8.5" fill="#10b981" text-anchor="middle" font-family="-apple-system,sans-serif">6 m/s</text>
+            <rect x="110" y="22" width="50" height="32" fill="#1e3a5f" stroke="#f59e0b" stroke-width="1.5" rx="3"/>
+            <text x="135" y="42" font-size="9.5" fill="#fde68a" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">2 kg</text>
+            <text x="135" y="68" font-size="8.5" fill="rgba(255,255,255,.3)" text-anchor="middle" font-family="-apple-system,sans-serif">정지</text>
+            <!-- 화살표 구분 -->
+            <text x="185" y="42" font-size="14" fill="#94a3b8" text-anchor="middle" font-family="-apple-system,sans-serif">→</text>
+            <!-- 충돌 후 -->
+            <text x="270" y="14" font-size="9" fill="rgba(255,255,255,.4)" text-anchor="middle" font-family="-apple-system,sans-serif">충돌 후 (합체)</text>
+            <rect x="220" y="22" width="100" height="32" fill="#1e3a5f" stroke="#a78bfa" stroke-width="1.5" rx="3"/>
+            <text x="270" y="42" font-size="9.5" fill="#c4b5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">4 kg</text>
+            <line x1="320" y1="38" x2="338" y2="38" stroke="#f59e0b" stroke-width="2.5"/>
+            <polygon points="338,38 328,33 328,43" fill="#f59e0b"/>
+            <text x="329" y="28" font-size="8.5" fill="#f59e0b" text-anchor="middle" font-family="-apple-system,sans-serif">3 m/s</text>
+            <!-- 계산식 -->
+            <rect x="10" y="72" width="320" height="32" fill="rgba(96,165,250,.08)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="4"/>
+            <text x="170" y="85" font-size="9" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">운동량: 2×6 + 2×0 = 12 kg·m/s</text>
+            <text x="170" y="99" font-size="9.5" fill="#60a5fa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">∴ v' = 12 / 4 = 3 m/s (보존됨)</text>
+          </svg>
+        </div>
+      </div>
+    `
   }
 };
 
@@ -2289,7 +2426,7 @@ function openConcept() {
 
 function openDifficulty() {
   // 전용 문제 목록 뷰를 사용하는 챕터
-  if (currentChapterId === 'eq_stability' || currentChapterId === 'newton_second') {
+  if (currentChapterId === 'eq_stability' || currentChapterId === 'newton_second' || currentChapterId === 'newton_third') {
     const ch = CHAPTERS[currentChapterId];
     const subEl = document.getElementById('eq-list-sub');
     if (subEl) subEl.textContent = ch.section + ' · ' + ch.name;
@@ -3069,8 +3206,16 @@ let currentEqIdx = 0;
 const eqState    = EQ_PROBLEMS.map(() => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
 
 /* ── 범용 접근자: 현재 챕터에 따라 올바른 문제/상태 배열을 반환 ── */
-function getProblems()     { return currentChapterId === 'newton_second' ? NEWTON_PROBLEMS : EQ_PROBLEMS; }
-function getProblemState() { return currentChapterId === 'newton_second' ? newtonState     : eqState; }
+function getProblems()     {
+  if (currentChapterId === 'newton_second') return NEWTON_PROBLEMS;
+  if (currentChapterId === 'newton_third')  return NEWTON_THIRD_PROBLEMS;
+  return EQ_PROBLEMS;
+}
+function getProblemState() {
+  if (currentChapterId === 'newton_second') return newtonState;
+  if (currentChapterId === 'newton_third')  return newtonThirdState;
+  return eqState;
+}
 
 /* ── 문제 목록 렌더 ── */
 function renderEqList() {
@@ -3363,6 +3508,188 @@ function _svgN3(mode){
   }
   return _wsvg(s,640,280);
 }
+
+/* ── SVG 생성기 (작용반작용 문제 1: 두 물체가 서로 밀기) ── */
+function _svgNT1(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',YELLOW='#f59e0b',GRAY='#9ca3af',PURPLE='#8b5cf6';
+  const bY=130, bH=44;
+  const xA=80, wA=80, xB=240, wB=80;
+  let s='';
+  // 바닥
+  s+=`<rect x="10" y="${bY+bH}" width="620" height="8" fill="#334155" rx="2"/>`;
+  for(let i=10;i<630;i+=22) s+=`<line x1="${i}" y1="${bY+bH+8}" x2="${i+14}" y2="${bY+bH+20}" stroke="#475569" stroke-width="1"/>`;
+  // 물체 A
+  s+=`<rect x="${xA}" y="${bY}" width="${wA}" height="${bH}" fill="#1d4ed8" stroke="#93c5fd" stroke-width="2" rx="4"/>`;
+  s+=_txt(xA+wA/2, bY+bH/2+5, 'A  3 kg', BLUE, 11, 'middle', 'bold');
+  // 물체 B
+  s+=`<rect x="${xB}" y="${bY}" width="${wB}" height="${bH}" fill="#92400e" stroke="#fde68a" stroke-width="2" rx="4"/>`;
+  s+=_txt(xB+wB/2, bY+bH/2+5, 'B  5 kg', YELLOW, 11, 'middle', 'bold');
+  if(mode===0){ // 구조 보기
+    s+=_txt(320, bY+bH+32, 'A가 B를 오른쪽으로 밀고 있다 (마찰 없는 수평면)', GRAY, 9.5, 'middle');
+  }
+  if(mode===1){ // 작용·반작용
+    // A→B 작용력 (오른쪽)
+    s+=_arrow(xB, bY+bH/2-8, xB+90, bY+bH/2-8, GREEN, 'F (A→B)', 'top', 3);
+    // B→A 반작용력 (왼쪽)
+    s+=_arrow(xA+wA, bY+bH/2+8, xA+wA-90, bY+bH/2+8, RED, 'F (B→A)', 'top', 3);
+    s+=`<rect x="80" y="220" width="480" height="44" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.25)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 238, '작용력(A→B) 과 반작용력(B→A) 의 크기는 항상 같다', GREEN, 10, 'middle', 'bold');
+    s+=_txt(320, 256, '→  |F_{AB}| = |F_{BA}|', GREEN, 10, 'middle');
+  }
+  if(mode===2){ // 각 물체의 가속도
+    s+=`<rect x="60" y="215" width="520" height="56" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 232, 'A의 가속도: a_A = F/3  ,  B의 가속도: a_B = F/5', BLUE, 10, 'middle', 'bold');
+    s+=_txt(320, 249, 'F가 같아도 질량이 달라 가속도 크기는 서로 다릅니다', GRAY, 10, 'middle');
+    s+=_txt(320, 264, 'a_A > a_B  (질량 작은 쪽이 가속도 큼)', '#16a34a', 10, 'middle', 'bold');
+  }
+  if(mode===3){ // 실수 포인트
+    s+=`<rect x="60" y="210" width="520" height="62" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320, 227, '⚠️ 자주 틀리는 포인트', '#78350f', 11, 'middle', 'bold');
+    s+=_txt(320, 245, '작용·반작용 힘의 크기는 질량에 관계없이 항상 같습니다', '#78350f', 10, 'middle');
+    s+=_txt(320, 262, '가속도는 각 물체의 질량에 따라 달라집니다 (a = F/m)', '#78350f', 10, 'middle');
+  }
+  return _wsvg(s, 640, 290);
+}
+
+/* ── SVG 생성기 (작용반작용 문제 2: 로켓 추진) ── */
+function _svgNT2(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',YELLOW='#f59e0b',GRAY='#9ca3af',ORANGE='#ea580c';
+  let s='';
+  // 로켓 몸체
+  s+=`<polygon points="200,40 240,40 250,80 190,80" fill="#334155" stroke="#60a5fa" stroke-width="2"/>`;
+  s+=`<polygon points="200,40 220,20 240,40" fill="#60a5fa"/>`;
+  s+=_txt(220, 65, '로켓', '#93c5fd', 11, 'middle', 'bold');
+  // 질량 표시
+  s+=_txt(220, 110, 'M = 500 kg', GRAY, 10, 'middle');
+  if(mode===0){ // 구조 보기
+    s+=_txt(320, 155, '로켓이 질량 1 kg의 기체를 아래로 50 m/s로 분사한다', GRAY, 9.5, 'middle');
+    s+=_txt(320, 172, '(1초당 2 kg 분사, 로켓 질량 변화 무시)', GRAY, 9, 'middle');
+    // 분사 화살표
+    s+=_arrow(220, 80, 220, 150, RED, '분사 가스', 'left', 3);
+    s+=_txt(260, 130, 'v = 50 m/s ↓', RED, 9, 'start');
+  }
+  if(mode===1){ // 작용·반작용 표시
+    s+=_arrow(220, 80, 220, 145, RED, '가스에 작용 (↓)', 'left', 3);
+    s+=_arrow(220, 40, 220, 0, GREEN, '반작용 → 로켓 추진 (↑)', 'left', 3);
+    s+=`<rect x="60" y="165" width="520" height="44" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.25)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 183, '로켓이 기체를 아래로 밀면(작용)', GREEN, 10, 'middle', 'bold');
+    s+=_txt(320, 200, '기체가 로켓을 위로 민다(반작용) → 로켓 상승', GREEN, 10, 'middle');
+  }
+  if(mode===2){ // 추진력 계산
+    s+=`<rect x="60" y="130" width="520" height="60" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 150, '1초에 2 kg의 기체를 50 m/s로 분사', BLUE, 10, 'middle', 'bold');
+    s+=_txt(320, 167, '추진력 F = Δp/Δt = (2 × 50) / 1 = 100 N', '#1e40af', 11, 'middle', 'bold');
+    s+=_txt(320, 183, '로켓의 가속도 a = F/M = 100 / 500 = 0.2 m/s²', '#16a34a', 11, 'middle', 'bold');
+  }
+  if(mode===3){ // 실수 포인트
+    s+=`<rect x="60" y="128" width="520" height="60" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320, 146, '⚠️ 실수 포인트', '#78350f', 11, 'middle', 'bold');
+    s+=_txt(320, 163, '분사 기체 힘 = 로켓이 받는 힘 (크기 같음)', '#78350f', 10, 'middle');
+    s+=_txt(320, 179, '로켓 가속도는 로켓 질량으로 나눔 (a = F/M_rocket)', '#78350f', 10, 'middle');
+  }
+  return _wsvg(s, 640, 230);
+}
+
+/* ── SVG 생성기 (작용반작용 문제 3: 충돌 운동량 보존) ── */
+function _svgNT3(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',YELLOW='#f59e0b',GRAY='#9ca3af',PURPLE='#8b5cf6';
+  const bY=120, bH=40;
+  let s='';
+  // 바닥
+  s+=`<rect x="10" y="${bY+bH}" width="620" height="8" fill="#334155" rx="2"/>`;
+  for(let i=10;i<630;i+=22) s+=`<line x1="${i}" y1="${bY+bH+8}" x2="${i+14}" y2="${bY+bH+20}" stroke="#475569" stroke-width="1"/>`;
+  // A (왼쪽, 4 kg, 5 m/s 오른쪽)
+  const xA=60, wA=80, xB=260, wB=100;
+  s+=`<rect x="${xA}" y="${bY}" width="${wA}" height="${bH}" fill="#1d4ed8" stroke="#93c5fd" stroke-width="2" rx="4"/>`;
+  s+=_txt(xA+wA/2, bY+bH/2+5, 'A 4 kg', BLUE, 11, 'middle', 'bold');
+  // B (오른쪽, 6 kg, 정지)
+  s+=`<rect x="${xB}" y="${bY}" width="${wB}" height="${bH}" fill="#92400e" stroke="#fde68a" stroke-width="2" rx="4"/>`;
+  s+=_txt(xB+wB/2, bY+bH/2+5, 'B 6 kg', YELLOW, 11, 'middle', 'bold');
+  if(mode===0){ // 충돌 전
+    s+=_arrow(xA+wA, bY+bH/2, xA+wA+70, bY+bH/2, GREEN, '5 m/s', 'top', 3);
+    s+=_txt(xB+wB/2, bY+bH+30, '정지', GRAY, 10, 'middle');
+    s+=_txt(320, bY+bH+48, '충돌 전 상황 (마찰 없는 수평면)', GRAY, 9, 'middle');
+  }
+  if(mode===1){ // 운동량 계산
+    s+=`<rect x="60" y="200" width="520" height="60" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 218, '충돌 전 운동량: p = 4×5 + 6×0 = 20 kg·m/s', BLUE, 10.5, 'middle', 'bold');
+    s+=_txt(320, 235, '충돌 후 운동량 합 = 20 kg·m/s (보존)', '#16a34a', 10.5, 'middle', 'bold');
+    s+=_txt(320, 252, '합체 시: v\' = 20 / (4+6) = 2 m/s →', '#1e40af', 11, 'middle', 'bold');
+  }
+  if(mode===2){ // 충돌 후 (합체)
+    s+=`<rect x="160" y="${bY}" width="200" height="${bH}" fill="#312e81" stroke="#a78bfa" stroke-width="2" rx="4"/>`;
+    s+=_txt(260, bY+bH/2+5, 'A+B  10 kg', PURPLE, 11, 'middle', 'bold');
+    s+=_arrow(360, bY+bH/2, 430, bY+bH/2, GREEN, '2 m/s', 'top', 3);
+    s+=`<rect x="60" y="200" width="520" height="44" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.25)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 218, '운동량 보존: 4×5 = 10×v\'', GREEN, 10, 'middle', 'bold');
+    s+=_txt(320, 234, '∴ v\' = 2 m/s (오른쪽)', GREEN, 11, 'middle', 'bold');
+  }
+  if(mode===3){ // 실수 포인트
+    s+=`<rect x="60" y="196" width="520" height="62" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320, 213, '⚠️ 자주 틀리는 포인트', '#78350f', 11, 'middle', 'bold');
+    s+=_txt(320, 230, '운동량 = 질량 × 속도 (벡터, 방향이 중요)', '#78350f', 10, 'middle');
+    s+=_txt(320, 247, '운동 에너지는 보존 안 됨 (비탄성 충돌 시)', '#78350f', 10, 'middle');
+    s+=_txt(320, 258, '운동량만 항상 보존됨 (외력 없을 때)', '#78350f', 10, 'middle');
+  }
+  return _wsvg(s, 640, 280);
+}
+
+/* ── 작용반작용 문제 데이터 ── */
+const NEWTON_THIRD_PROBLEMS = [
+  {
+    id: 1,
+    title: '1번 · 두 물체가 서로 미는 힘',
+    badgeText: '중', badgeClass: 'eq-badge-mid',
+    tags: ['작용·반작용','뉴턴 제3법칙','힘의 크기'],
+    stmt: `마찰이 없는 수평면에서 정지해 있는 물체 A(3 kg)와 B(5 kg)가 서로 접촉해 있다.
+A가 B를 오른쪽으로 미는 힘의 크기가 10 N일 때, B가 A를 미는 힘의 크기는?`,
+    choices: ['2 N','6 N','8 N','10 N','18 N'],
+    answer: 3,
+    svgModes: ['구조 보기','작용·반작용','각 물체의 가속도','실수 포인트'],
+    svgFn: _svgNT1,
+    hints: [
+      { t:'힌트 1: 뉴턴 제3법칙', b:'A가 B에 가하는 힘(작용)과 B가 A에 가하는 힘(반작용)은\n크기가 같고 방향이 반대입니다.' },
+      { t:'힌트 2: 질량은 무관', b:'작용·반작용의 크기는 두 물체의 질량과 무관합니다.\n따라서 B가 A를 미는 힘 = 10 N' }
+    ],
+    answer_text: 'B가 A를 미는 힘 = 10 N → ④'
+  },
+  {
+    id: 2,
+    title: '2번 · 로켓 추진력과 가속도',
+    badgeText: '중상', badgeClass: 'eq-badge-midh',
+    tags: ['로켓 추진','운동량 변화율','작용·반작용','가속도'],
+    stmt: `질량 500 kg인 로켓이 1초에 2 kg의 연소 기체를 50 m/s의 속도로 아래로 분사한다.
+이때 로켓에 작용하는 추진력(N)과 로켓의 가속도(m/s²)는? (로켓 질량 변화 무시)`,
+    choices: ['추진력 50 N, 가속도 0.1 m/s²','추진력 100 N, 가속도 0.2 m/s²','추진력 100 N, 가속도 0.1 m/s²','추진력 200 N, 가속도 0.4 m/s²','추진력 50 N, 가속도 0.2 m/s²'],
+    answer: 1,
+    svgModes: ['구조 보기','작용·반작용','추진력 계산','실수 포인트'],
+    svgFn: _svgNT2,
+    hints: [
+      { t:'힌트 1: 추진력 = 운동량 변화율', b:'1초에 2 kg 기체를 50 m/s로 분사\n추진력 F = Δp/Δt = (2 × 50) / 1 = 100 N' },
+      { t:'힌트 2: 로켓 가속도', b:'a = F / M = 100 / 500 = 0.2 m/s²\n(작용·반작용: 기체에 작용한 힘 = 로켓이 받는 추진력)' }
+    ],
+    answer_text: '추진력 100 N, 가속도 0.2 m/s² → ②'
+  },
+  {
+    id: 3,
+    title: '3번 · 충돌 후 속도 (운동량 보존)',
+    badgeText: '상', badgeClass: 'eq-badge-high',
+    tags: ['운동량 보존','충돌','합체','뉴턴 제3법칙'],
+    stmt: `마찰 없는 수평면에서 4 kg인 물체 A가 5 m/s로 오른쪽으로 움직이다가
+정지해 있는 6 kg인 물체 B와 충돌하여 합체되었다. 합체 후 속도는? (단위: m/s)`,
+    choices: ['1 m/s','1.5 m/s','2 m/s','2.5 m/s','3 m/s'],
+    answer: 2,
+    svgModes: ['충돌 전','운동량 계산','충돌 후 (합체)','실수 포인트'],
+    svgFn: _svgNT3,
+    hints: [
+      { t:'힌트 1: 운동량 보존', b:'충돌 전 전체 운동량 = 4×5 + 6×0 = 20 kg·m/s\n충돌 후 전체 운동량 = 20 kg·m/s (보존)' },
+      { t:'힌트 2: 합체 후 속도', b:'합체 후 질량 = 4 + 6 = 10 kg\nv\' = 20 / 10 = 2 m/s (오른쪽)' }
+    ],
+    answer_text: '합체 후 속도 = 2 m/s → ③'
+  }
+];
+
+const newtonThirdState = NEWTON_THIRD_PROBLEMS.map(() => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
 
 /* ── 뉴턴 법칙 문제 데이터 ── */
 const NEWTON_PROBLEMS = [
