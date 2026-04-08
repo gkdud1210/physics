@@ -601,6 +601,140 @@
     padding: 8px 16px; cursor: pointer; transition: background .2s;
   }
   .back-btn:hover { background: rgba(255,255,255,.18); }
+
+  /* ── 막대의 평형 문제 뷰 ─────────────────────────── */
+  /* ── 목록 뷰 & 상세 뷰 공통 구조 (splash-concept 패턴과 동일) ── */
+  #splash-eq-list, #splash-eq-detail {
+    display: none; flex-direction: column;
+    width: 100%; height: 100vh; overflow: hidden;
+  }
+  .eq-nav {
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+    padding: 13px 16px; flex-wrap: wrap;
+    background: rgba(0,0,0,.25); border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .eq-nav-title { color: #fff; font-weight: 700; font-size: .9rem; flex: 1; }
+  .eq-nav-sub   { color: rgba(255,255,255,.5); font-size: .78rem; }
+  .eq-nav-btns  { display: flex; gap: 6px; }
+  .eq-nav-btn {
+    background: rgba(255,255,255,.12); border: none; border-radius: 8px;
+    color: rgba(255,255,255,.8); font-size: .8rem; font-weight: 600;
+    padding: 5px 12px; cursor: pointer; transition: background .2s;
+  }
+  .eq-nav-btn:hover:not(:disabled) { background: rgba(255,255,255,.22); }
+  .eq-nav-btn:disabled { opacity: .3; cursor: default; }
+  /* 목록 스크롤 영역 */
+  .eq-list-scroll {
+    flex: 1; overflow-y: auto; padding: 16px 14px 48px;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent;
+  }
+  /* 문제 선택 카드 */
+  .eq-pick-card {
+    background: #fff; border-radius: 14px; padding: 18px 20px;
+    margin-bottom: 12px; cursor: pointer;
+    display: flex; align-items: center; gap: 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.18);
+    transition: transform .15s, box-shadow .15s;
+    border: 2px solid transparent;
+  }
+  .eq-pick-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.22); border-color: #2563eb; }
+  .eq-pick-num {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 1.1rem;
+  }
+  .eq-pick-info { flex: 1; }
+  .eq-pick-title { font-weight: 700; color: #1f2937; font-size: .95rem; margin-bottom: 4px; }
+  .eq-pick-tags  { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+  .eq-pick-arrow { font-size: 1.2rem; color: #94a3b8; flex-shrink: 0; }
+  /* 상세 스크롤 영역 */
+  .eq-detail-scroll {
+    flex: 1; overflow-y: auto; padding: 0 0 48px;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.15) transparent;
+    background: #f0f4f8;
+  }
+  /* 상세 내용 카드 */
+  .eq-detail-card {
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    overflow: hidden; margin: 14px 12px;
+  }
+  .eq-detail-header {
+    padding: 14px 18px 10px; border-bottom: 1px solid #e5e7eb;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  }
+  .eq-title { font-size: 1rem; font-weight: 700; color: #1d4ed8; flex: 1; min-width: 140px; }
+  .eq-badge { padding: 3px 12px; border-radius: 999px; font-size: .73rem; font-weight: 600; }
+  .eq-badge-mid  { background: #fef9c3; color: #92400e; }
+  .eq-badge-midh { background: #fed7aa; color: #7c2d12; }
+  .eq-badge-high { background: #fecaca; color: #7f1d1d; }
+  /* 태그 */
+  .eq-tags { display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 18px 4px; }
+  .eq-tag  { background: #dbeafe; color: #1d4ed8; padding: 2px 10px; border-radius: 999px; font-size: .72rem; font-weight: 500; }
+  /* 문제 원문 */
+  .eq-stmt {
+    margin: 10px 18px; padding: 11px 14px;
+    background: #f8fafc; border-left: 4px solid #2563eb;
+    border-radius: 0 8px 8px 0; font-size: .9rem; color: #1f2937;
+    white-space: pre-line; line-height: 1.7;
+  }
+  /* SVG 탭 */
+  .eq-svg-tabs { display: flex; flex-wrap: wrap; gap: 5px; padding: 4px 18px 8px; }
+  .eq-svg-tab {
+    padding: 4px 11px; border-radius: 7px; border: 1.5px solid #d1d5db;
+    background: white; color: #374151; font-size: .77rem; cursor: pointer; transition: all .14s;
+  }
+  .eq-svg-tab:hover  { background: #dbeafe; border-color: #2563eb; color: #1d4ed8; }
+  .eq-svg-tab.active { background: #2563eb; border-color: #2563eb; color: white; }
+  .eq-svg-wrap {
+    margin: 0 18px 12px; background: #f8fafc;
+    border: 1.5px solid #e5e7eb; border-radius: 10px; overflow: hidden;
+  }
+  .eq-svg-wrap svg { width: 100%; height: auto; display: block; }
+  /* 선택지 */
+  .eq-choices { padding: 0 18px 8px; }
+  .eq-choice {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; border-radius: 8px; border: 1.5px solid #e5e7eb;
+    margin-bottom: 6px; cursor: pointer; transition: all .14s;
+    font-size: .88rem; color: #374151;
+  }
+  .eq-choice:hover    { background: #dbeafe; border-color: #93c5fd; }
+  .eq-choice.selected { background: #dbeafe; border-color: #2563eb; }
+  .eq-choice input[type="radio"] { accent-color: #2563eb; flex-shrink: 0; }
+  /* 버튼 */
+  .eq-btns { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 18px 10px; }
+  .eq-btn {
+    padding: 7px 14px; border-radius: 8px; border: none;
+    font-size: .82rem; font-weight: 600; cursor: pointer; transition: all .14s;
+  }
+  .eq-btn-primary { background: #2563eb; color: white; }
+  .eq-btn-primary:hover { background: #1d4ed8; }
+  .eq-btn-reset { background: #e5e7eb; color: #374151; }
+  .eq-btn-reset:hover { background: #d1d5db; }
+  .eq-btn-hint { background: #f5f3ff; color: #7c3aed; border: 1.5px solid #c4b5fd; }
+  .eq-btn-hint:hover { background: #ede9fe; }
+  /* 피드백 */
+  .eq-feedback { margin: 0 18px 8px; padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: .86rem; display: none; }
+  .eq-feedback.show { display: block; }
+  .eq-feedback.ok { background: #dcfce7; color: #166534; border: 1.5px solid #86efac; }
+  .eq-feedback.ng { background: #fee2e2; color: #dc2626; border: 1.5px solid #fca5a5; }
+  /* 힌트 */
+  .eq-hint-block { margin: 4px 18px 0; padding: 10px 14px; background: #f5f3ff; border: 1.5px solid #c4b5fd; border-radius: 8px; }
+  .eq-hint-block h4 { color: #7c3aed; font-size: .82rem; margin-bottom: 4px; }
+  .eq-hint-block p  { font-size: .84rem; color: #4c1d95; white-space: pre-line; }
+  /* 정답 박스 */
+  .eq-ans-box { margin: 8px 18px 0; padding: 10px 14px; background: #fefce8; border: 2px solid #fde047; border-radius: 8px; font-weight: 700; color: #78350f; font-size: .9rem; }
+  /* 다음 문제 버튼 */
+  .eq-next-wrap { padding: 10px 18px 16px; }
+  .eq-next-big {
+    width: 100%; padding: 11px; border-radius: 10px; border: none;
+    background: linear-gradient(90deg, #1d4ed8, #3b82f6); color: white;
+    font-size: .92rem; font-weight: 700; cursor: pointer; transition: opacity .15s;
+  }
+  .eq-next-big:hover { opacity: .88; }
+
   .chapter-subtitle {
     font-size: .8rem; color: rgba(255,255,255,.45); margin-bottom: 6px;
   }
@@ -644,15 +778,15 @@
           <div class="curr-ch-name">평형과 안정성</div>
           <div class="curr-ch-desc">돌림힘의 평형, 물체의 무게 중심, 구조물의 안정성</div>
         </div>
-        <span class="curr-badge concept">개념 보기 →</span>
+        <span class="curr-badge avail">학습 가능 →</span>
       </div>
-      <div class="curr-ch locked">
-        <span class="curr-ch-num">02</span>
+      <div class="curr-ch concept-ch" onclick="selectChapter('newton_second')">
+        <span class="curr-ch-num concept">02</span>
         <div class="curr-ch-info">
           <div class="curr-ch-name">가속도 법칙</div>
           <div class="curr-ch-desc">뉴턴 운동 제2법칙, 등가속도 직선 운동의 원인</div>
         </div>
-        <span class="curr-badge">준비 중</span>
+        <span class="curr-badge avail">학습 가능 →</span>
       </div>
       <div class="curr-ch active-ch" onclick="selectChapter('uniform_accel')">
         <span class="curr-ch-num avail">03</span>
@@ -817,6 +951,33 @@
     </div>
     <button class="splash-start" id="splash-start-btn" onclick="startWithDiff()">문제 풀기 시작 →</button>
   </div><!-- /splash-difficulty -->
+
+  <!-- VIEW 5A: 막대의 평형 — 문제 목록 선택 -->
+  <div id="splash-eq-list">
+    <div class="eq-nav">
+      <button class="back-btn" style="margin:0;padding:5px 12px;font-size:.8rem"
+        onclick="showSplashView('ch-menu')">← 뒤로</button>
+      <div>
+        <div class="eq-nav-sub" id="eq-list-sub">Ⅰ-1 힘과 운동</div>
+        <div class="eq-nav-title">문제 선택</div>
+      </div>
+    </div>
+    <div class="eq-list-scroll" id="eq-list-body"></div>
+  </div><!-- /splash-eq-list -->
+
+  <!-- VIEW 5B: 막대의 평형 — 문제 상세 (스크롤 가능) -->
+  <div id="splash-eq-detail">
+    <div class="eq-nav">
+      <button class="back-btn" style="margin:0;padding:5px 12px;font-size:.8rem"
+        onclick="showSplashView('eq-list')">← 목록</button>
+      <div class="eq-nav-title" id="eq-detail-counter">문제 1 / 3</div>
+      <div class="eq-nav-btns">
+        <button class="eq-nav-btn" id="eq-prev" onclick="openEqDetail(currentEqIdx-1)">← 이전</button>
+        <button class="eq-nav-btn" id="eq-next" onclick="openEqDetail(currentEqIdx+1)">다음 →</button>
+      </div>
+    </div>
+    <div class="eq-detail-scroll" id="eq-detail-body"></div>
+  </div><!-- /splash-eq-detail -->
 
 </div>
 
@@ -1666,7 +1827,7 @@ const CHAPTERS = {
     name: '01 평형과 안정성',
     section: 'Ⅰ-1 힘과 운동',
     hasConcept: true,
-    hasProblems: false,
+    hasProblems: true,
     concept: `
       <div class="cv-block">
         <div class="cv-block-title">1. 물체의 평형 (Equilibrium)</div>
@@ -1684,6 +1845,49 @@ const CHAPTERS = {
         <div class="cv-formula-box">
           <b>돌림힘</b> $\\tau$ = 힘의 크기 $F$ × 회전축까지의 수직 거리 $d$$$\\tau = Fd$$
         </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:6px;letter-spacing:.3px">예시 · 시소에서의 토크 평형</div>
+          <svg viewBox="0 0 340 155" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 받침대 -->
+            <polygon points="170,104 157,122 183,122" fill="#64748b"/>
+            <rect x="150" y="122" width="40" height="5" fill="#475569" rx="2"/>
+            <!-- 시소 막대 -->
+            <rect x="32" y="96" width="276" height="8" fill="#334155" rx="3"/>
+            <!-- 왼쪽: 30N, 2m -->
+            <circle cx="70" cy="70" r="11" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5"/>
+            <line x1="70" y1="81" x2="70" y2="96" stroke="#fbbf24" stroke-width="2.5"/>
+            <line x1="70" y1="104" x2="70" y2="130" stroke="#f87171" stroke-width="2"/>
+            <polygon points="70,135 66,127 74,127" fill="#f87171"/>
+            <text x="79" y="130" font-size="10" fill="#f87171" font-weight="bold" font-family="-apple-system,sans-serif">30 N</text>
+            <!-- 거리 d₁ -->
+            <line x1="70" y1="146" x2="170" y2="146" stroke="#60a5fa" stroke-width="1.2"/>
+            <line x1="70" y1="142" x2="70" y2="150" stroke="#60a5fa" stroke-width="1.2"/>
+            <line x1="170" y1="142" x2="170" y2="150" stroke="#60a5fa" stroke-width="1.2"/>
+            <text x="120" y="144" font-size="9" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">2 m</text>
+            <!-- 토크₁ 박스 -->
+            <rect x="12" y="8" width="116" height="36" fill="rgba(96,165,250,.1)" stroke="rgba(96,165,250,.25)" stroke-width="1" rx="6"/>
+            <text x="70" y="23" font-size="9" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">&#964;&#8321; = 30 × 2</text>
+            <text x="70" y="37" font-size="11" fill="#60a5fa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">= 60 N·m &#x21BB;</text>
+            <!-- 오른쪽: 20N, 3m -->
+            <circle cx="290" cy="70" r="11" fill="#34d399" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="290" y1="81" x2="290" y2="96" stroke="#34d399" stroke-width="2.5"/>
+            <line x1="290" y1="104" x2="290" y2="130" stroke="#f87171" stroke-width="2"/>
+            <polygon points="290,135 286,127 294,127" fill="#f87171"/>
+            <text x="248" y="130" font-size="10" fill="#f87171" font-weight="bold" font-family="-apple-system,sans-serif">20 N</text>
+            <!-- 거리 d₂ -->
+            <line x1="170" y1="146" x2="290" y2="146" stroke="#fbbf24" stroke-width="1.2"/>
+            <line x1="170" y1="142" x2="170" y2="150" stroke="#fbbf24" stroke-width="1.2"/>
+            <line x1="290" y1="142" x2="290" y2="150" stroke="#fbbf24" stroke-width="1.2"/>
+            <text x="230" y="144" font-size="9" fill="#fde68a" text-anchor="middle" font-family="-apple-system,sans-serif">3 m</text>
+            <!-- 토크₂ 박스 -->
+            <rect x="212" y="8" width="116" height="36" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.25)" stroke-width="1" rx="6"/>
+            <text x="270" y="23" font-size="9" fill="#fde68a" text-anchor="middle" font-family="-apple-system,sans-serif">&#964;&#8322; = 20 × 3</text>
+            <text x="270" y="37" font-size="11" fill="#fbbf24" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">= 60 N·m &#x21BA;</text>
+            <!-- 가운데: 평형 -->
+            <text x="170" y="22" font-size="17" fill="#10b981" text-anchor="middle">&#x2696;</text>
+            <text x="170" y="37" font-size="8.5" fill="#34d399" text-anchor="middle" font-family="-apple-system,sans-serif">&#964;&#8321; = &#964;&#8322; &#x2192; 회전 평형!</text>
+          </svg>
+        </div>
       </div>
       <div class="cv-block">
         <div class="cv-block-title">2. 무게 중심 (Center of Gravity)</div>
@@ -1693,6 +1897,47 @@ const CHAPTERS = {
           <li><b>대칭 물체:</b> 기하학적 중심 = 무게 중심</li>
           <li><b>불규칙 물체:</b> 질량이 많이 모인 쪽으로 무게 중심이 치우칩니다.</li>
         </ul>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 8px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 끝에 추가 질량이 있으면 무게중심이 이동한다</div>
+          <svg viewBox="0 0 340 128" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- ── 왼쪽: 균일 막대 ── -->
+            <text x="78" y="13" font-size="9" fill="rgba(255,255,255,.45)" text-anchor="middle" font-family="-apple-system,sans-serif">균일한 막대</text>
+            <!-- 막대 -->
+            <rect x="14" y="22" width="128" height="10" fill="#334155" stroke="#475569" stroke-width="1" rx="3"/>
+            <!-- 무게중심 = 중심 (x=78) -->
+            <line x1="78" y1="16" x2="78" y2="48" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="4,3"/>
+            <circle cx="78" cy="27" r="5" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="78" y="13" font-size="8" fill="#fbbf24" text-anchor="middle" font-family="-apple-system,sans-serif"></text>
+            <!-- 받침 삼각형 -->
+            <polygon points="78,33 70,46 86,46" fill="#10b981"/>
+            <text x="78" y="57" font-size="8.5" fill="#34d399" text-anchor="middle" font-family="-apple-system,sans-serif">무게중심 = 중심 (L/2)</text>
+            <!-- 라벨 -->
+            <text x="14" y="72" font-size="8" fill="#64748b" font-family="-apple-system,sans-serif">0</text>
+            <text x="142" y="72" font-size="8" fill="#64748b" text-anchor="end" font-family="-apple-system,sans-serif">L</text>
+            <!-- ── 구분선 ── -->
+            <line x1="166" y1="10" x2="166" y2="118" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+            <!-- ── 오른쪽: 끝에 무거운 추 ── -->
+            <text x="253" y="13" font-size="9" fill="rgba(255,255,255,.45)" text-anchor="middle" font-family="-apple-system,sans-serif">오른쪽 끝에 추가 질량 m</text>
+            <!-- 막대 -->
+            <rect x="180" y="22" width="128" height="10" fill="#334155" stroke="#475569" stroke-width="1" rx="3"/>
+            <!-- 추 (mass m) at right end -->
+            <circle cx="316" cy="27" r="14" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.5"/>
+            <text x="316" y="31" font-size="10" fill="white" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">m</text>
+            <!-- 막대 질량 레이블 -->
+            <text x="244" y="19" font-size="8" fill="#94a3b8" text-anchor="middle" font-family="-apple-system,sans-serif">질량 m</text>
+            <!-- 무게중심 = 3L/4 (x=180+0.75*128=276) -->
+            <line x1="276" y1="10" x2="276" y2="50" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="4,3"/>
+            <circle cx="276" cy="27" r="5" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5"/>
+            <!-- 받침 삼각형 (shifted right) -->
+            <polygon points="276,33 268,46 284,46" fill="#10b981"/>
+            <text x="276" y="57" font-size="8.5" fill="#34d399" text-anchor="middle" font-family="-apple-system,sans-serif">무게중심 이동 → 3L/4</text>
+            <!-- 공식 -->
+            <rect x="178" y="64" width="154" height="52" fill="rgba(251,191,36,.07)" stroke="rgba(251,191,36,.2)" stroke-width="1" rx="6"/>
+            <text x="255" y="78" font-size="8.5" fill="#fde68a" text-anchor="middle" font-family="-apple-system,sans-serif">x&#8337; = (m·L/2 + m·L) / 2m</text>
+            <text x="255" y="92" font-size="9" fill="#fbbf24" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">= 3L/4  (오른쪽으로 이동!)</text>
+            <text x="255" y="107" font-size="8" fill="rgba(255,255,255,.35)" text-anchor="middle" font-family="-apple-system,sans-serif">무거운 쪽 끝에 가까워짐</text>
+          </svg>
+        </div>
       </div>
       <div class="cv-block">
         <div class="cv-block-title">3. 물체의 안정성 (Stability)</div>
@@ -1708,6 +1953,60 @@ const CHAPTERS = {
             <div class="cv-stab-key">바닥면(기저면) 넓을수록</div>
             <div class="cv-stab-val">더 안정적</div>
           </div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 8px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 무게중심 수직선이 기저면 안에 있으면 안정</div>
+          <svg viewBox="0 0 340 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 바닥 -->
+            <line x1="5" y1="128" x2="335" y2="128" stroke="#475569" stroke-width="2"/>
+            <!-- ── 왼쪽: 안정 (넓고 낮은 물체, 기울어짐) ── -->
+            <!-- 기울어진 사각형: 넓은 기저면, 낮은 무게중심 -->
+            <!-- 꼭짓점: BL(15,128) BR(105,128) TR(115,78) TL(25,78) -->
+            <polygon points="15,128 105,128 115,78 25,78" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2" rx="0"/>
+            <!-- 무게중심 (65, 103) -->
+            <circle cx="65" cy="103" r="7" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+            <text x="80" y="100" font-size="8.5" fill="#fbbf24" font-family="-apple-system,sans-serif">CG</text>
+            <!-- 수직 점선 (CG → 바닥) x=65 -->
+            <line x1="65" y1="103" x2="65" y2="128" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
+            <!-- 기저면 강조: x=15~105 -->
+            <line x1="15" y1="136" x2="105" y2="136" stroke="#10b981" stroke-width="2.5"/>
+            <line x1="15" y1="132" x2="15" y2="140" stroke="#10b981" stroke-width="2"/>
+            <line x1="105" y1="132" x2="105" y2="140" stroke="#10b981" stroke-width="2"/>
+            <!-- 수직선이 기저면 안에 착지: 초록 점 -->
+            <circle cx="65" cy="128" r="6" fill="#10b981"/>
+            <text x="65" y="131.5" font-size="8" fill="white" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">&#x2713;</text>
+            <!-- 레이블 -->
+            <text x="60" y="152" font-size="9.5" fill="#34d399" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">안정 &#x2713;</text>
+            <text x="60" y="162" font-size="8" fill="rgba(255,255,255,.4)" text-anchor="middle" font-family="-apple-system,sans-serif">수직선이 기저면 안</text>
+            <!-- 제목 -->
+            <text x="60" y="66" font-size="9" fill="#60a5fa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">넓은 기저면 · 낮은 CG</text>
+            <!-- ── 구분선 ── -->
+            <line x1="170" y1="60" x2="170" y2="145" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+            <!-- ── 오른쪽: 불안정 (좁고 높은 물체, 기울어짐) ── -->
+            <!-- 기울어진 사각형: 좁은 기저면, 높은 무게중심 -->
+            <!-- 꼭짓점: BL(205,128) BR(240,128) TR(280,22) TL(245,22) -->
+            <polygon points="205,128 240,128 280,22 245,22" fill="#3b1a1a" stroke="#ef4444" stroke-width="2"/>
+            <!-- 무게중심 (242, 75) -->
+            <circle cx="242" cy="75" r="7" fill="#fbbf24" stroke="#f59e0b" stroke-width="2"/>
+            <text x="256" y="72" font-size="8.5" fill="#fbbf24" font-family="-apple-system,sans-serif">CG</text>
+            <!-- 수직 점선 (CG → 바닥) x=242 -->
+            <line x1="242" y1="75" x2="242" y2="128" stroke="#ef4444" stroke-width="2" stroke-dasharray="5,3"/>
+            <!-- 기저면 강조: x=205~240 -->
+            <line x1="205" y1="136" x2="240" y2="136" stroke="#ef4444" stroke-width="2.5"/>
+            <line x1="205" y1="132" x2="205" y2="140" stroke="#ef4444" stroke-width="2"/>
+            <line x1="240" y1="132" x2="240" y2="140" stroke="#ef4444" stroke-width="2"/>
+            <!-- 기저면 밖 화살표 -->
+            <line x1="240" y1="136" x2="245" y2="136" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- 수직선이 기저면 밖에 착지: 빨간 X -->
+            <circle cx="242" cy="128" r="6" fill="#ef4444"/>
+            <text x="242" y="131.5" font-size="8" fill="white" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">&#x2717;</text>
+            <text x="257" y="126" font-size="8" fill="#f87171" font-family="-apple-system,sans-serif">&#x2190; 기저면 밖!</text>
+            <!-- 레이블 -->
+            <text x="243" y="152" font-size="9.5" fill="#f87171" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">불안정 &#x2717;</text>
+            <text x="243" y="162" font-size="8" fill="rgba(255,255,255,.4)" text-anchor="middle" font-family="-apple-system,sans-serif">수직선이 기저면 밖</text>
+            <!-- 제목 -->
+            <text x="243" y="13" font-size="9" fill="#ef4444" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">좁은 기저면 · 높은 CG</text>
+          </svg>
         </div>
         <div class="cv-warning">
           <b>⚠️ 넘어지는 기준</b><br>
@@ -1768,6 +2067,177 @@ const CHAPTERS = {
       </div>
     `
   },
+  newton_second: {
+    name: '02 가속도 법칙',
+    section: 'Ⅰ-1 힘과 운동',
+    hasConcept: true,
+    hasProblems: true,
+    concept: `
+      <div class="cv-block">
+        <div class="cv-block-title">1. 뉴턴 운동 제2법칙 (F = ma)</div>
+        <p class="cv-p">물체에 <b>알짜힘</b>이 작용하면 힘의 방향으로 가속도가 발생합니다. 가속도의 크기는 알짜힘에 비례하고 질량에 반비례합니다.</p>
+        <div class="cv-formula-box">
+          <b>알짜힘 = 질량 × 가속도</b>$$\\sum \\vec{F} = m\\vec{a}$$
+          <div style="font-size:.8rem;margin-top:6px;color:rgba(255,255,255,.55)">$F$ : 알짜힘 (N) &nbsp;·&nbsp; $m$ : 질량 (kg) &nbsp;·&nbsp; $a$ : 가속도 (m/s²)</div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">비례 관계 · F가 커지면 a도 커지고, m이 커지면 a는 작아진다</div>
+          <svg viewBox="0 0 340 148" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 케이스 A: 기준 (F=6N, m=2kg, a=3) -->
+            <text x="56" y="13" font-size="9" fill="rgba(255,255,255,.45)" text-anchor="middle" font-family="-apple-system,sans-serif">기준</text>
+            <rect x="26" y="40" width="60" height="34" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="4"/>
+            <text x="56" y="62" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">2 kg</text>
+            <line x1="86" y1="57" x2="116" y2="57" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="116,57 108,53 108,61" fill="#10b981"/>
+            <text x="101" y="50" font-size="8.5" fill="#10b981" text-anchor="middle" font-family="-apple-system,sans-serif">6 N</text>
+            <line x1="56" y1="74" x2="56" y2="90" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="56" y1="90" x2="86" y2="90" stroke="#f59e0b" stroke-width="2.5"/>
+            <polygon points="86,90 78,86 78,94" fill="#f59e0b"/>
+            <text x="65" y="103" font-size="9" fill="#f59e0b" text-anchor="middle" font-family="-apple-system,sans-serif">a = 3 m/s²</text>
+            <!-- 케이스 B: F 2배 (F=12N, m=2kg, a=6) -->
+            <text x="173" y="13" font-size="9" fill="rgba(255,255,255,.45)" text-anchor="middle" font-family="-apple-system,sans-serif">F 2배 → a 2배</text>
+            <rect x="143" y="40" width="60" height="34" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="4"/>
+            <text x="173" y="62" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">2 kg</text>
+            <line x1="203" y1="57" x2="248" y2="57" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="248,57 240,53 240,61" fill="#10b981"/>
+            <text x="224" y="50" font-size="8.5" fill="#10b981" text-anchor="middle" font-family="-apple-system,sans-serif">12 N</text>
+            <line x1="173" y1="74" x2="173" y2="90" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="173" y1="90" x2="233" y2="90" stroke="#ef4444" stroke-width="2.5"/>
+            <polygon points="233,90 225,86 225,94" fill="#ef4444"/>
+            <text x="195" y="103" font-size="9" fill="#ef4444" text-anchor="middle" font-family="-apple-system,sans-serif">a = 6 m/s²</text>
+            <!-- 케이스 C: m 2배 (F=6N, m=4kg, a=1.5) -->
+            <text x="290" y="13" font-size="9" fill="rgba(255,255,255,.45)" text-anchor="middle" font-family="-apple-system,sans-serif">m 2배 → a 반</text>
+            <rect x="260" y="33" width="60" height="48" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="4"/>
+            <text x="290" y="62" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">4 kg</text>
+            <line x1="320" y1="57" x2="338" y2="57" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="338,57 330,53 330,61" fill="#10b981"/>
+            <text x="329" y="50" font-size="8.5" fill="#10b981" text-anchor="middle" font-family="-apple-system,sans-serif">6 N</text>
+            <line x1="290" y1="81" x2="290" y2="90" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <line x1="290" y1="90" x2="305" y2="90" stroke="#94a3b8" stroke-width="2.5"/>
+            <polygon points="305,90 297,86 297,94" fill="#94a3b8"/>
+            <text x="290" y="103" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="-apple-system,sans-serif">a = 1.5 m/s²</text>
+            <!-- 범례 -->
+            <line x1="14" y1="120" x2="30" y2="120" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="30,120 23,117 23,123" fill="#10b981"/>
+            <text x="35" y="123" font-size="8.5" fill="#10b981" font-family="-apple-system,sans-serif">알짜힘 F</text>
+            <line x1="100" y1="120" x2="116" y2="120" stroke="#f59e0b" stroke-width="2.5"/>
+            <polygon points="116,120 109,117 109,123" fill="#f59e0b"/>
+            <text x="121" y="123" font-size="8.5" fill="#f59e0b" font-family="-apple-system,sans-serif">가속도 a (길이 ∝ 크기)</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">2. 알짜힘 (합력) 계산</div>
+        <p class="cv-p">여러 힘이 동시에 작용할 때는 <b>벡터 합</b>인 알짜힘 $\\sum F$를 먼저 구한 뒤 $F=ma$를 적용합니다.</p>
+        <div class="cv-cond">
+          <div class="cv-cond-item">
+            <span class="cv-tag">같은 방향</span>
+            <div>힘들을 더한다. $\\sum F = F_1 + F_2$</div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">반대 방향</span>
+            <div>힘들을 뺀다. $\\sum F = F_1 - F_2$ (큰 쪽 방향이 알짜힘 방향)</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 마찰력이 있는 수평 운동</div>
+          <svg viewBox="0 0 340 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 바닥 -->
+            <rect x="10" y="88" width="320" height="6" fill="#334155" rx="2"/>
+            <line x1="10" y1="88" x2="330" y2="88" stroke="#475569" stroke-width="1"/>
+            <!-- 물체 -->
+            <rect x="120" y="52" width="70" height="36" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="4"/>
+            <text x="155" y="74" font-size="10" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">5 kg</text>
+            <!-- 추진력 F (오른쪽) -->
+            <line x1="190" y1="70" x2="248" y2="70" stroke="#10b981" stroke-width="3"/>
+            <polygon points="248,70 238,65 238,75" fill="#10b981"/>
+            <text x="218" y="62" font-size="10" fill="#10b981" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">F = 25 N</text>
+            <!-- 마찰력 f (왼쪽) -->
+            <line x1="120" y1="70" x2="78" y2="70" stroke="#ef4444" stroke-width="3"/>
+            <polygon points="78,70 88,65 88,75" fill="#ef4444"/>
+            <text x="100" y="62" font-size="10" fill="#ef4444" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">f = 10 N</text>
+            <!-- 마찰력 아이콘 -->
+            <text x="155" y="100" font-size="8.5" fill="#64748b" text-anchor="middle" font-family="-apple-system,sans-serif">마찰력 ← → 추진력</text>
+            <!-- 알짜힘 계산 박스 -->
+            <rect x="10" y="8" width="320" height="36" fill="rgba(96,165,250,.08)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="6"/>
+            <text x="170" y="23" font-size="10" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">&#x3A3;F = 25 - 10 = 15 N (오른쪽)</text>
+            <text x="170" y="38" font-size="11" fill="#60a5fa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">a = &#x3A3;F / m = 15 / 5 = 3 m/s² →</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">3. 무게와 질량</div>
+        <div class="cv-cond">
+          <div class="cv-cond-item">
+            <span class="cv-tag">질량 m</span>
+            <div>물질의 양. 장소가 바뀌어도 변하지 않습니다. 단위: <b>kg</b></div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">무게 W</span>
+            <div>지구 중력이 당기는 힘. $W = mg$. 장소(중력)에 따라 달라집니다. 단위: <b>N</b></div>
+          </div>
+        </div>
+        <div class="cv-formula-box">
+          지구 표면: $g \\approx 9.8\\ m/s^2 \\approx 10\\ m/s^2$$$W = mg$$
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">4. 겉보기 무게 (가속하는 계)</div>
+        <p class="cv-p">가속하는 엘리베이터 안에서 체중계가 가리키는 값은 실제 무게와 다릅니다.</p>
+        <div class="cv-cond">
+          <div class="cv-cond-item">
+            <span class="cv-tag">위로 가속 ↑</span>
+            <div>$N - mg = ma$ &nbsp;→&nbsp; $N = m(g+a)$ &nbsp;→&nbsp; <b>더 무겁게 느낌</b></div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">아래로 가속 ↓</span>
+            <div>$mg - N = ma$ &nbsp;→&nbsp; $N = m(g-a)$ &nbsp;→&nbsp; <b>더 가볍게 느낌</b></div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">자유낙하</span>
+            <div>$a = g$ &nbsp;→&nbsp; $N = 0$ &nbsp;→&nbsp; <b>무중력 상태</b></div>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 엘리베이터 위로 가속 시 겉보기 무게</div>
+          <svg viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 엘리베이터 박스 -->
+            <rect x="90" y="20" width="160" height="120" fill="rgba(30,58,95,.5)" stroke="#475569" stroke-width="2" rx="6"/>
+            <!-- 가속도 화살표 (위) -->
+            <line x1="250" y1="80" x2="310" y2="80" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-dasharray="4,3"/>
+            <line x1="280" y1="50" x2="280" y2="20" stroke="#fbbf24" stroke-width="2.5"/>
+            <polygon points="280,18 275,28 285,28" fill="#fbbf24"/>
+            <text x="307" y="23" font-size="9" fill="#fbbf24" text-anchor="middle" font-family="-apple-system,sans-serif">a ↑</text>
+            <!-- 사람 -->
+            <circle cx="170" cy="58" r="12" fill="#60a5fa" stroke="#93c5fd" stroke-width="1.5"/>
+            <line x1="170" y1="70" x2="170" y2="100" stroke="#60a5fa" stroke-width="2.5"/>
+            <line x1="155" y1="85" x2="185" y2="85" stroke="#60a5fa" stroke-width="2"/>
+            <line x1="170" y1="100" x2="158" y2="120" stroke="#60a5fa" stroke-width="2"/>
+            <line x1="170" y1="100" x2="182" y2="120" stroke="#60a5fa" stroke-width="2"/>
+            <!-- 체중계 -->
+            <rect x="148" y="120" width="44" height="18" fill="#334155" stroke="#64748b" stroke-width="1.5" rx="3"/>
+            <text x="170" y="133" font-size="9" fill="#fbbf24" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">N</text>
+            <!-- N 화살표 (위) -->
+            <line x1="170" y1="119" x2="170" y2="95" stroke="#10b981" stroke-width="2.5"/>
+            <polygon points="170,93 166,103 174,103" fill="#10b981"/>
+            <text x="184" y="108" font-size="9" fill="#10b981" font-family="-apple-system,sans-serif">N ↑</text>
+            <!-- mg 화살표 (아래) -->
+            <line x1="155" y1="78" x2="155" y2="110" stroke="#ef4444" stroke-width="2.5"/>
+            <polygon points="155,112 151,102 159,102" fill="#ef4444"/>
+            <text x="138" y="100" font-size="9" fill="#ef4444" text-anchor="end" font-family="-apple-system,sans-serif">mg ↓</text>
+            <!-- 계산 박스 -->
+            <rect x="10" y="10" width="72" height="52" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.2)" stroke-width="1" rx="6"/>
+            <text x="46" y="26" font-size="8.5" fill="#34d399" text-anchor="middle" font-family="-apple-system,sans-serif">N - mg = ma</text>
+            <text x="46" y="40" font-size="8.5" fill="#34d399" text-anchor="middle" font-family="-apple-system,sans-serif">N = m(g+a)</text>
+            <text x="46" y="55" font-size="8.5" fill="#6ee7b7" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">N > mg !</text>
+          </svg>
+        </div>
+      </div>
+    `
+  },
   uniform_accel: {
     name: '03 등가속도 운동',
     section: 'Ⅰ-1 힘과 운동',
@@ -1784,7 +2254,7 @@ const DIFF_LABEL = { easy:'하', medium:'중', hard:'상' };
 let currentChapterId = null;
 
 function showSplashView(view) {
-  ['intro','home','ch-menu','concept','difficulty'].forEach(v => {
+  ['intro','home','ch-menu','concept','difficulty','eq-list','eq-detail'].forEach(v => {
     const el = document.getElementById('splash-' + v);
     if (el) el.style.display = 'none';
   });
@@ -1818,6 +2288,15 @@ function openConcept() {
 }
 
 function openDifficulty() {
+  // 전용 문제 목록 뷰를 사용하는 챕터
+  if (currentChapterId === 'eq_stability' || currentChapterId === 'newton_second') {
+    const ch = CHAPTERS[currentChapterId];
+    const subEl = document.getElementById('eq-list-sub');
+    if (subEl) subEl.textContent = ch.section + ' · ' + ch.name;
+    renderEqList();
+    showSplashView('eq-list');
+    return;
+  }
   const ch = CHAPTERS[currentChapterId];
   if (!ch) return;
   document.getElementById('diff-section').textContent = ch.section;
@@ -2091,6 +2570,856 @@ function calcNetTorque() {
     dots.forEach((d,i) => d.classList.toggle('active', i === tick % 3));
   }, 800);
 })();
+
+/* ============================================================
+   막대의 평형 문제 — SVG 헬퍼 & 데이터 & 인터랙션
+   ============================================================ */
+
+/* ── SVG 공통 헬퍼 ── */
+function _f(n) { return Math.round(n * 10) / 10; }
+
+function _arrow(x1,y1,x2,y2,color,label,side,sw) {
+  sw = sw || 2.5;
+  const dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy);
+  if(len<1) return '';
+  const ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  const bx=x2-ux*11, by=y2-uy*11;
+  const pts=`${_f(x2)},${_f(y2)} ${_f(bx+px*5)},${_f(by+py*5)} ${_f(bx-px*5)},${_f(by-py*5)}`;
+  let s=`<line x1="${_f(x1)}" y1="${_f(y1)}" x2="${_f(x2-ux*9)}" y2="${_f(y2-uy*9)}" stroke="${color}" stroke-width="${sw}"/>`;
+  s+=`<polygon points="${pts}" fill="${color}"/>`;
+  if(label&&side!=='none'){
+    const lx=side==='left'?x2-8:side==='top'?x2:x2+8;
+    const ly=side==='top'?y2-8:y2+4;
+    const a=side==='left'?'end':side==='top'?'middle':'start';
+    s+=`<text x="${_f(lx)}" y="${_f(ly)}" font-size="13" font-weight="bold" fill="${color}" text-anchor="${a}" font-family="-apple-system,sans-serif">${label}</text>`;
+  }
+  return s;
+}
+function _txt(x,y,t,color,sz,anchor,weight){
+  return `<text x="${_f(x)}" y="${_f(y)}" font-size="${sz||12}" fill="${color||'#374151'}" text-anchor="${anchor||'middle'}" font-weight="${weight||'normal'}" font-family="-apple-system,sans-serif">${t}</text>`;
+}
+function _dash(x1,y1,x2,y2,color){ color=color||'#9ca3af';
+  return `<line x1="${_f(x1)}" y1="${_f(y1)}" x2="${_f(x2)}" y2="${_f(y2)}" stroke="${color}" stroke-width="1.5" stroke-dasharray="5,4"/>`;
+}
+function _dot(x,y,c,r){ return `<circle cx="${_f(x)}" cy="${_f(y)}" r="${r||4}" fill="${c||'#1f2937'}"/>`; }
+function _dimH(x1,x2,y,label,color){ const m=(x1+x2)/2; color=color||'#9ca3af';
+  return `<line x1="${_f(x1)}" y1="${_f(y-4)}" x2="${_f(x1)}" y2="${_f(y+4)}" stroke="${color}" stroke-width="1.5"/>
+    <line x1="${_f(x1)}" y1="${_f(y)}" x2="${_f(x2)}" y2="${_f(y)}" stroke="${color}" stroke-width="1.5"/>
+    <line x1="${_f(x2)}" y1="${_f(y-4)}" x2="${_f(x2)}" y2="${_f(y+4)}" stroke="${color}" stroke-width="1.5"/>
+    ${_txt(m,y-7,label,color,11)}`;
+}
+function _ceil(x1,w,y){ let s=`<rect x="${_f(x1)}" y="${_f(y-20)}" width="${_f(w)}" height="20" fill="#d1d5db"/>
+  <line x1="${_f(x1)}" y1="${_f(y)}" x2="${_f(x1+w)}" y2="${_f(y)}" stroke="#9ca3af" stroke-width="1.5"/>`;
+  for(let i=x1;i<x1+w;i+=14) s+=`<line x1="${_f(i)}" y1="${_f(y-20)}" x2="${_f(i+10)}" y2="${_f(y)}" stroke="#9ca3af" stroke-width="1"/>`;
+  return s;
+}
+function _supp(x,y){ return `<polygon points="${_f(x)},${_f(y)} ${_f(x-18)},${_f(y+24)} ${_f(x+18)},${_f(y+24)}" fill="#6b7280" stroke="#374151" stroke-width="1.5"/>
+  <line x1="${_f(x-23)}" y1="${_f(y+24)}" x2="${_f(x+23)}" y2="${_f(y+24)}" stroke="#374151" stroke-width="2"/>`; }
+function _torqueArc(cx,cy,r,cw,color,label){
+  const x1=cx-r,x2=cx+r, sf=cw?1:0;
+  let s=`<path d="M ${_f(x1)},${_f(cy)} A ${r},${r} 0 0,${sf} ${_f(x2)},${_f(cy)}" fill="none" stroke="${color}" stroke-width="2.5"/>`;
+  s+=_arrow(cw?x2-1:x1+1,cy,cw?x2+.1:x1-.1,cw?cy+7:cy+7,color,'','none',2);
+  if(label){ const ty=cw?cy+r+15:cy-r-8; s+=_txt(cx,ty,label,color,10,'middle','bold'); }
+  return s;
+}
+function _wsvg(content,vw,vh){ return `<svg viewBox="0 0 ${vw} ${vh}" xmlns="http://www.w3.org/2000/svg">${content}</svg>`; }
+
+/* ── SVG 생성기 (문제 1) ── */
+function _svgEq1(mode){
+  const d=55,L0=70,bY=160,bH=9,BLUE='#2563eb',RED='#dc2626',TEAL='#0d9488',ORANGE='#ea580c',GREEN='#16a34a',GRAY='#9ca3af',DARK='#374151';
+  const xP=L0+2*d,xM=L0+3*d,xC=L0+4.5*d,xQ=L0+7*d,xR=L0+9*d,cY=42;
+  let s='';
+  s+=_ceil(L0,xR-L0,cY);
+  s+=`<rect x="${L0}" y="${_f(bY-bH/2)}" width="${_f(xR-L0)}" height="${bH}" fill="${DARK}" rx="3"/>`;
+  s+=`<line x1="${_f(xP)}" y1="${cY}" x2="${_f(xP)}" y2="${_f(bY-bH/2)}" stroke="#555" stroke-width="2"/>`;
+  s+=`<line x1="${_f(xQ)}" y1="${cY}" x2="${_f(xQ)}" y2="${_f(bY-bH/2)}" stroke="#555" stroke-width="2"/>`;
+  s+=`<line x1="${_f(xM)}" y1="${_f(bY+bH/2)}" x2="${_f(xM)}" y2="${bY+20}" stroke="#555" stroke-width="1.5"/>`;
+  s+=`<rect x="${_f(xM-22)}" y="${bY+20}" width="44" height="28" fill="#fecaca" stroke="${RED}" stroke-width="1.5" rx="4"/>`;
+  s+=_txt(xM,bY+38,'M',RED,14,'middle','bold');
+  if(mode===0){
+    s+=_dot(xP,bY,'#1d4ed8',5); s+=_dot(xQ,bY,'#1d4ed8',5); s+=_dot(xM,bY,RED,5);
+    s+=_dimH(L0,xP,bY+80,'2d',GRAY); s+=_dimH(xP,xM,bY+98,'d',GRAY);
+    s+=_dimH(xM,xQ,bY+80,'4d',GRAY); s+=_dimH(xQ,xR,bY+98,'2d',GRAY);
+    s+=_dash(xP,bY,xP,bY+83,GRAY); s+=_dash(xM,bY+50,xM,bY+100,GRAY);
+    s+=_dash(xQ,bY,xQ,bY+83,GRAY);
+    s+=_txt(xP,bY+14,'p',DARK,12,'middle','bold'); s+=_txt(xQ,bY+14,'q',DARK,12,'middle','bold');
+    s+=`<line x1="${_f(xC)}" y1="${_f(bY-6)}" x2="${_f(xC)}" y2="${_f(bY+6)}" stroke="#f59e0b" stroke-width="2.5"/>`;
+    s+=_txt(xC,bY-12,'▲ 무게중심 4.5d','#f59e0b',10,'middle');
+    s+=_txt(L0,bY+14,'0',GRAY,10); s+=_txt(xP,bY+14,'2d',BLUE,10,'middle','bold');
+    s+=_txt(xM,bY+55,'3d',RED,10,'middle','bold'); s+=_txt(xQ,bY+14,'7d',BLUE,10,'middle','bold'); s+=_txt(xR,bY+14,'9d',GRAY,10);
+  }
+  if(mode===1){
+    s+=_arrow(xP,bY-bH/2,xP,bY-85,TEAL,'T_p','left'); s+=_arrow(xQ,bY-bH/2,xQ,bY-85,TEAL,'T_q','right');
+    s+=_arrow(xC,bY+bH/2,xC,bY+80,RED,'mg','right'); s+=_arrow(xM,bY+bH/2,xM,bY+90,RED,'Mg','left');
+    s+=_dot(xP,bY,TEAL,5); s+=_dot(xQ,bY,TEAL,5); s+=_dot(xC,bY,RED,5); s+=_dot(xM,bY,RED,5);
+    s+=`<rect x="390" y="218" width="240" height="55" fill="#f0fdf4" stroke="#86efac" stroke-width="1" rx="5"/>`;
+    s+=_txt(510,233,'수직항력 없음 (매달린 구조)','#dc2626',10); s+=_txt(510,248,'마찰력 없음 (실 구조)','#dc2626',10);
+    s+=_txt(510,263,'작용 힘: 장력(T_p,T_q)↑ + 중력↓','#166534',10,'middle','bold');
+  }
+  if(mode===2){
+    s+=_dot(L0,bY,ORANGE,7); s+=_txt(L0,bY+18,'⭕ 기준',ORANGE,10,'middle','bold');
+    s+=_arrow(xP,bY-bH/2,xP,bY-65,TEAL,'T_p','left',2); s+=_arrow(xQ,bY-bH/2,xQ,bY-65,TEAL,'T_q','right',2);
+    s+=_arrow(xC,bY+bH/2,xC,bY+60,RED,'mg','right',2); s+=_arrow(xM,bY+bH/2,xM,bY+70,RED,'Mg','left',2);
+    s+=_dash(L0,bY+30,xP,bY+30,BLUE); s+=_txt((L0+xP)/2,bY+42,'2d',TEAL,11);
+    s+=_dash(L0,bY+50,xM,bY+50,RED); s+=_txt((L0+xM)/2,bY+62,'3d',RED,11);
+    s+=_dash(L0,bY+68,xC,bY+68,RED); s+=_txt((L0+xC)/2,bY+80,'4.5d',RED,11);
+    s+=_dash(L0,bY+86,xQ,bY+86,TEAL); s+=_txt((L0+xQ)/2,bY+98,'7d',TEAL,11);
+    s+=_torqueArc(xP,bY-38,26,false,TEAL,'CCW'); s+=_torqueArc(xQ,bY-38,26,false,TEAL,'CCW');
+    s+=_torqueArc(xC,bY+36,24,true,RED,'CW'); s+=_torqueArc(xM,bY+36,24,true,RED,'CW');
+    s+=`<rect x="8" y="6" width="355" height="22" fill="#eff6ff" stroke="#93c5fd" rx="4"/>`;
+    s+=_txt(182,20,'T_p·2d + T_q·7d = mg·4.5d + Mg·3d  (왼쪽 끝 기준)','#1e40af',9.5);
+  }
+  if(mode===3){
+    s+=_arrow(xC,bY+bH/2,xC,bY+55,RED,'','none',2); s+=_arrow(xP,bY-bH/2,xP,bY-50,TEAL,'','none',2);
+    const xW=L0+4*d;
+    s+=_dash(xW,bY-6,xW,bY-40,RED,'3,3');
+    s+=`<circle cx="${_f(xW)}" cy="${_f(bY-44)}" r="11" fill="#fecaca" stroke="${RED}" stroke-width="1.5"/>`;
+    s+=_txt(xW,bY-41,'✕',RED,12,'middle','bold'); s+=_txt(xW,bY-60,'중심을 4d로 착각',RED,10,'middle');
+    s+=`<circle cx="${_f(xC)}" cy="${_f(bY-6)}" r="11" fill="#dcfce7" stroke="${GREEN}" stroke-width="2"/>`;
+    s+=_txt(xC,bY-3,'✓',GREEN,12,'middle','bold'); s+=_txt(xC,bY-26,'올바른 중심 4.5d',GREEN,10,'middle','bold');
+    s+=`<rect x="${_f(xM-28)}" y="${_f(bY+18)}" width="56" height="35" fill="none" stroke="${ORANGE}" stroke-width="2" rx="4" stroke-dasharray="4,3"/>`;
+    s+=_txt(xM,bY+64,'⚠ 물체 위치 3d (놓치기 쉬움)',ORANGE,10,'middle','bold');
+  }
+  return _wsvg(s,640,290);
+}
+
+/* ── SVG 생성기 (문제 2) ── */
+function _svgEq2(mode){
+  const l=50,L0=60,bY=155,bH=9,BLUE='#2563eb',RED='#dc2626',ORANGE='#ea580c',GREEN='#16a34a',GRAY='#9ca3af',DARK='#374151';
+  const xP=L0+3*l,xC=L0+5*l,xQ=L0+6*l,xR=L0+10*l;
+  let s='';
+  s+=`<rect x="${L0}" y="${_f(bY-bH/2)}" width="${_f(xR-L0)}" height="${bH}" fill="${DARK}" rx="3"/>`;
+  s+=_supp(xP,bY+bH/2); s+=_supp(xQ,bY+bH/2);
+  const mTop=bY-bH/2-26;
+  s+=`<rect x="${_f(xP-22)}" y="${mTop}" width="44" height="25" fill="#fecaca" stroke="${RED}" stroke-width="1.5" rx="4"/>`;
+  s+=_txt(xP,mTop+15,'m',RED,14,'middle','bold');
+  s+=_dot(xP,bY,'#1d4ed8',5); s+=_dot(xQ,bY,'#1d4ed8',5);
+  if(mode===0){
+    const dY=bY+65;
+    s+=_dimH(L0,xP,dY,'3l',GRAY); s+=_dimH(xP,xQ,dY+18,'3l',GRAY); s+=_dimH(xQ,xR,dY,'4l',GRAY);
+    s+=_dash(xP,bY,xP,dY+3,GRAY); s+=_dash(xQ,bY,xQ,dY+3,GRAY); s+=_dash(xR,bY,xR,dY+3,GRAY);
+    s+=_dimH(L0,xR,dY+36,'전체 길이 10l','#6b7280');
+    s+=_txt(L0,bY+14,'0',GRAY,10); s+=_txt(xP,bY+14,'3l',BLUE,10,'middle','bold');
+    s+=_txt(xC,bY+14,'5l(중심)',GRAY,10); s+=_txt(xQ,bY+14,'6l',BLUE,10,'middle','bold'); s+=_txt(xR,bY+14,'10l',GRAY,10);
+    s+=_txt(xP-14,bY+40,'p',DARK,13,'middle','bold'); s+=_txt(xQ+14,bY+40,'q',DARK,13,'middle','bold');
+    s+=`<line x1="${_f(xC)}" y1="${_f(bY-6)}" x2="${_f(xC)}" y2="${_f(bY+6)}" stroke="#f59e0b" stroke-width="2.5"/>`;
+    s+=_txt(xC,bY-12,'▲ 막대 중심 5l','#f59e0b',10,'middle');
+    s+=`<rect x="390" y="8" width="240" height="22" fill="#f5f3ff" stroke="#c4b5fd" rx="4"/>`;
+    s+=_txt(510,22,'조건: N_p = N_q = N','#7c3aed',10,'middle','bold');
+  }
+  if(mode===1){
+    s+=_arrow(xP,bY-bH/2,xP,bY-80,BLUE,'N_p','left'); s+=_arrow(xQ,bY-bH/2,xQ,bY-80,BLUE,'N_q','right');
+    s+=_arrow(xP,bY+bH/2,xP,bY+75,RED,'mg','left'); s+=_arrow(xC,bY+bH/2,xC,bY+75,RED,'Mg','right');
+    s+=_dot(xC,bY,RED,5);
+    s+=`<rect x="8" y="228" width="280" height="52" fill="#f0fdf4" stroke="#86efac" rx="5"/>`;
+    s+=_txt(148,244,'받침힘 = 수직항력(위쪽만)','#166534',10,'middle','bold');
+    s+=_txt(148,258,'마찰력 없음 → 수평 힘 없음','#dc2626',10); s+=_txt(148,272,'N_p = N_q = N  →  2N = (M+m)g','#7c3aed',10,'middle','bold');
+  }
+  if(mode===2){
+    s+=_dot(L0,bY,ORANGE,7); s+=_txt(L0,bY+18,'⭕ 기준',ORANGE,10,'middle','bold');
+    s+=_arrow(xP,bY-bH/2,xP,bY-60,BLUE,'N','left',2); s+=_arrow(xQ,bY-bH/2,xQ,bY-60,BLUE,'N','right',2);
+    s+=_arrow(xP,bY+bH/2,xP,bY+55,RED,'mg','left',2); s+=_arrow(xC,bY+bH/2,xC,bY+55,RED,'Mg','right',2);
+    s+=_dash(L0,bY+30,xP,bY+30,BLUE); s+=_txt((L0+xP)/2,bY+42,'3l',BLUE,11);
+    s+=_dash(L0,bY+48,xQ,bY+48,BLUE); s+=_txt((L0+xQ)/2,bY+60,'6l',BLUE,11);
+    s+=_dash(L0,bY+66,xC,bY+66,RED); s+=_txt((L0+xC)/2,bY+78,'5l',RED,11);
+    s+=_dash(L0,bY+84,xP,bY+84,RED); s+=_txt((L0+xP)/2,bY+96,'3l',RED,11);
+    s+=_torqueArc(xP,bY-38,24,false,BLUE,'CCW(N)'); s+=_torqueArc(xQ,bY-38,24,false,BLUE,'CCW(N)');
+    s+=_torqueArc(xC,bY+36,24,true,RED,'CW(Mg)'); s+=_torqueArc(xP,bY+36,20,true,RED,'CW(mg)');
+    s+=`<rect x="8" y="8" width="360" height="22" fill="#eff6ff" stroke="#93c5fd" rx="4"/>`;
+    s+=_txt(188,22,'N·3l + N·6l = Mg·5l + mg·3l  →  9Nl = 5Mgl + 3mgl','#1e40af',9.5);
+  }
+  if(mode===3){
+    const xWm=xC;
+    s+=_arrow(xP,bY-bH/2,xP,bY-55,BLUE,'','none',2); s+=_arrow(xQ,bY-bH/2,xQ,bY-55,BLUE,'','none',2);
+    s+=_dash(xWm,bY-6,xWm,bY-38,RED,'3,3');
+    s+=`<circle cx="${_f(xWm)}" cy="${_f(bY-43)}" r="11" fill="#fecaca" stroke="${RED}" stroke-width="1.5"/>`;
+    s+=_txt(xWm,bY-40,'✕',RED,12,'middle','bold'); s+=_txt(xWm,bY-59,'물체를 가운데(5l)로 착각',RED,10,'middle');
+    s+=`<circle cx="${_f(xP)}" cy="${_f(bY-bH/2-18)}" r="11" fill="#dcfce7" stroke="${GREEN}" stroke-width="2"/>`;
+    s+=_txt(xP,bY-bH/2-15,'✓',GREEN,12,'middle','bold'); s+=_txt(xP,bY-bH/2-35,'물체 위치 3l ✓',GREEN,10,'middle','bold');
+    s+=`<circle cx="${_f(xC)}" cy="${_f(bY+8)}" r="11" fill="#dcfce7" stroke="${GREEN}" stroke-width="2"/>`;
+    s+=_txt(xC,bY+11,'✓',GREEN,12,'middle','bold'); s+=_txt(xC,bY+28,'막대 중심 5l ✓',GREEN,10,'middle','bold');
+  }
+  return _wsvg(s,640,290);
+}
+
+/* ── SVG 생성기 (문제 3) ── */
+function _svgEq3(mode){
+  const LL=100,LA0=50,aY=215,bY=135,bH=8,BLUE='#2563eb',RED='#dc2626',TEAL='#0d9488',ORANGE='#ea580c',GREEN='#16a34a',GRAY='#9ca3af',DARK='#374151';
+  const xs=LA0+LL,xc=LA0+1.5*LL,xn=LA0+2*LL,xr=LA0+3*LL,fY=268;
+  const xBL=xn,xBC=(xn+xr)/2,xBR=xr;
+  function barA(showB){
+    let t='';
+    t+=`<rect x="30" y="${fY}" width="${xr-LA0+30}" height="20" fill="#d1d5db"/>`;
+    t+=`<line x1="30" y1="${fY}" x2="${_f(xr+30)}" y2="${fY}" stroke="#9ca3af" stroke-width="1.5"/>`;
+    for(let i=30;i<xr+30;i+=14) t+=`<line x1="${_f(i)}" y1="${fY}" x2="${_f(i-10)}" y2="${_f(fY+20)}" stroke="#9ca3af" stroke-width="1"/>`;
+    t+=_supp(xs,aY+bH/2);
+    t+=`<rect x="${LA0}" y="${_f(aY-bH/2)}" width="${_f(xr-LA0)}" height="${bH}" fill="${DARK}" rx="3"/>`;
+    t+=_txt(LA0+(xr-LA0)/2,aY-18,'막대 A  (3m, 길이 3L)',DARK,10,'middle');
+    t+=`<line x1="${LA0}" y1="${_f(aY+bH/2)}" x2="${LA0}" y2="${fY}" stroke="${TEAL}" stroke-width="2"/>`;
+    t+=_txt(LA0-15,(aY+fY)/2,'p',TEAL,12,'middle','bold');
+    if(showB){
+      t+=`<rect x="${xBL}" y="${_f(bY-bH/2)}" width="${_f(xBR-xBL)}" height="${bH}" fill="#1d4ed8" rx="3"/>`;
+      t+=_txt(xBC,bY-18,'막대 B  (2m, 길이 L)','#1d4ed8',10,'middle');
+      t+=`<line x1="${_f(xn)}" y1="${_f(aY-bH/2)}" x2="${_f(xn)}" y2="${_f(bY+bH/2)}" stroke="#555" stroke-width="2"/>`;
+      t+=`<line x1="${_f(xr)}" y1="${_f(bY+bH/2)}" x2="${_f(xr)}" y2="${_f(aY-bH/2)}" stroke="${TEAL}" stroke-width="2" stroke-dasharray="6,4"/>`;
+      t+=_txt(xr+12,(aY+bY)/2,'실',TEAL,10,'start');
+    }
+    return t;
+  }
+  let s='';
+  if(mode===0){
+    s+=barA(true);
+    s+=_dimH(LA0,xs,aY+50,'L',GRAY); s+=_dimH(xs,xc,aY+68,'0.5L',GRAY);
+    s+=_dimH(xc,xn,aY+68,'0.5L',GRAY); s+=_dimH(xn,xr,aY+50,'L',GRAY);
+    s+=_dash(xs,aY,xs,aY+53,GRAY); s+=_dash(xn,aY,xn,aY+53,GRAY);
+    s+=_txt(LA0,aY+14,'0',GRAY,10); s+=_txt(xs,aY+14,'L',BLUE,10,'middle','bold');
+    s+=_txt(xc,aY+14,'1.5L',GRAY,10,'middle'); s+=_txt(xn,aY+14,'2L','#555',10,'middle','bold'); s+=_txt(xr,aY+14,'3L',GRAY,10);
+    s+=`<rect x="375" y="8" width="255" height="74" fill="#f5f3ff" stroke="#c4b5fd" rx="5"/>`;
+    s+=_txt(502,25,'구조 설명','#7c3aed',11,'middle','bold');
+    s+=_txt(502,42,'실 p: A 왼쪽 끝 → 바닥 고정','#4c1d95',10); s+=_txt(502,57,'B 왼쪽 끝: A(x=2L) 위에 놓임','#4c1d95',10);
+    s+=_txt(502,72,'A 오른쪽 끝 ↔ B 오른쪽 끝: 실 연결','#4c1d95',10);
+  }
+  if(mode===1){
+    s+=barA(false);
+    // B 분리도 (중앙에 표시)
+    const bL2=120,bR2=510,bY2=140;
+    s+=`<rect x="${bL2}" y="${_f(bY2-bH/2)}" width="${_f(bR2-bL2)}" height="${bH}" fill="#1d4ed8" rx="3"/>`;
+    s+=_txt((bL2+bR2)/2,bY2-22,'막대 B 분리도 — 힘 계산','#1d4ed8',11,'middle','bold');
+    s+=_dot(bL2,bY2,DARK,4); s+=_dot(bR2,bY2,DARK,4);
+    s+=_arrow(bL2,bY2-bH/2,bL2,bY2-80,BLUE,'N=mg','left');
+    s+=_arrow(bR2,bY2-bH/2,bR2,bY2-80,TEAL,'S=mg','right');
+    s+=_arrow((bL2+bR2)/2,bY2+bH/2,(bL2+bR2)/2,bY2+80,RED,'2mg','right');
+    s+=`<rect x="50" y="235" width="540" height="48" fill="#eff6ff" stroke="#93c5fd" rx="5"/>`;
+    s+=_txt(320,252,'풀이 과정','#1e40af',11,'middle','bold');
+    s+=_txt(320,266,'토크(B 왼쪽 끝 기준): S·L = 2mg·(L/2)  →  S = mg','#1e40af',10);
+    s+=_txt(320,280,'힘 평형: N + S = 2mg  →  N = mg   ∴ 이 결과를 A에 전달!','#16a34a',10,'middle','bold');
+  }
+  if(mode===2){
+    s+=barA(false);
+    s+=_arrow(LA0,aY+bH/2,LA0,aY+55,TEAL,'T','left');
+    s+=_arrow(xs,aY-bH/2,xs,aY-75,BLUE,'F','right');
+    s+=_arrow(xc,aY+bH/2,xc,aY+65,RED,'3mg','right');
+    s+=_arrow(xn,aY+bH/2,xn,aY+65,RED,'N=mg','right');
+    s+=_arrow(xr,aY-bH/2,xr,aY-75,TEAL,'S=mg','right');
+    s+=_dot(xs,aY,BLUE,5); s+=_dot(xc,aY,RED,5); s+=_dot(xn,aY,RED,5); s+=_dot(xr,aY,TEAL,5);
+    s+=`<rect x="375" y="8" width="255" height="65" fill="#f5f3ff" stroke="#c4b5fd" rx="5"/>`;
+    s+=_txt(502,24,'B→A 힘 전달','#7c3aed',11,'middle','bold');
+    s+=_txt(502,40,'x=2L: N=mg↓ (B가 A를 누름)','#4c1d95',10); s+=_txt(502,55,'x=3L: S=mg↑ (실이 A를 당김)','#4c1d95',10); s+=_txt(502,68,'x=0:  T↓ (실 p가 A를 당김)','#4c1d95',10);
+  }
+  if(mode===3){
+    s+=barA(false);
+    s+=_arrow(LA0,aY+bH/2,LA0,aY+50,TEAL,'T\n(팔=0)',  'left',2);
+    s+=_arrow(xs,aY-bH/2,xs,aY-60,BLUE,'F','right',2);
+    s+=_arrow(xc,aY+bH/2,xc,aY+55,RED,'3mg','right',2);
+    s+=_arrow(xn,aY+bH/2,xn,aY+55,RED,'N','right',2);
+    s+=_arrow(xr,aY-bH/2,xr,aY-60,TEAL,'S','right',2);
+    s+=_dot(LA0,aY,ORANGE,7); s+=_txt(LA0,aY+20,'⭕',ORANGE,12,'middle');
+    s+=_dash(LA0,aY+60,xs,aY+60,BLUE); s+=_txt((LA0+xs)/2,aY+73,'L',BLUE,11);
+    s+=_dash(LA0,aY+78,xc,aY+78,RED); s+=_txt((LA0+xc)/2,aY+91,'1.5L',RED,11);
+    s+=_dash(LA0,aY+96,xn,aY+96,RED); s+=_txt((LA0+xn)/2,aY+109,'2L',RED,11);
+    s+=_dash(LA0,aY+114,xr,aY+114,TEAL); s+=_txt((LA0+xr)/2,aY+127,'3L',TEAL,11);
+    s+=_torqueArc(xs,aY-35,24,false,BLUE,'CCW(F)'); s+=_torqueArc(xr,aY-35,24,false,TEAL,'CCW(S)');
+    s+=_torqueArc(xc,aY+35,24,true,RED,'CW(3mg)'); s+=_torqueArc(xn,aY+35,20,true,RED,'CW(N)');
+    s+=`<rect x="375" y="8" width="255" height="52" fill="#eff6ff" stroke="#93c5fd" rx="5"/>`;
+    s+=_txt(502,24,'A 토크 (x=0 기준)','#1e40af',10,'middle','bold');
+    s+=_txt(502,38,'F·L + S·3L = 3mg·1.5L + N·2L','#1e40af',9.5); s+=_txt(502,52,'→ F=7mg/2, T=mg/2, F/T=7','#16a34a',10,'middle','bold');
+  }
+  return _wsvg(s,640,300);
+}
+
+/* ── SVG 생성기 (문제 4) ── */
+function _svgEq4(mode){
+  const BLUE='#2563eb',RED='#dc2626',TEAL='#0d9488',GREEN='#16a34a',GRAY='#9ca3af',DARK='#374151',ORANGE='#ea580c';
+  const L=95,x0=80,bY=148,bH=9;
+  const x3L=x0+3*L,xC=x0+2*L,xR=x0+4*L,cY=38;
+  let s='';
+  // 왼쪽 벽 (힌지)
+  s+=`<rect x="18" y="55" width="58" height="188" fill="#d1d5db"/>`;
+  for(let i=58;i<240;i+=18) s+=`<line x1="18" y1="${i}" x2="56" y2="${i+14}" stroke="#9ca3af" stroke-width="1"/>`;
+  // 천장 (실 위)
+  s+=_ceil(xR-22,46,cY);
+  // 힌지
+  s+=`<circle cx="${x0}" cy="${bY}" r="9" fill="#6b7280" stroke="#374151" stroke-width="2"/>`;
+  s+=`<circle cx="${x0}" cy="${bY}" r="4" fill="#fff"/>`;
+  // 막대
+  s+=`<rect x="${x0}" y="${_f(bY-bH/2)}" width="${xR-x0}" height="${bH}" fill="${DARK}" rx="3"/>`;
+  // 실 (수직)
+  s+=`<line x1="${xR}" y1="${cY}" x2="${xR}" y2="${_f(bY-bH/2)}" stroke="#444" stroke-width="2.2"/>`;
+  // 물체 (3L 위치)
+  s+=`<line x1="${x3L}" y1="${_f(bY+bH/2)}" x2="${x3L}" y2="${bY+26}" stroke="#555" stroke-width="1.8"/>`;
+  s+=`<rect x="${x3L-28}" y="${bY+26}" width="56" height="30" fill="#fecaca" stroke="${RED}" stroke-width="1.8" rx="4"/>`;
+  s+=_txt(x3L,bY+46,'2m',RED,13,'middle','bold');
+  // 무게중심 마커
+  s+=`<line x1="${xC}" y1="${_f(bY-6)}" x2="${xC}" y2="${_f(bY+6)}" stroke="#f59e0b" stroke-width="2.5"/>`;
+  if(mode===0){
+    s+=_dot(x3L,bY,RED,4); s+=_dot(xR,bY,BLUE,4);
+    s+=_txt(xC,bY-14,'▲ 무게중심 2L','#f59e0b',10,'middle');
+    s+=_dimH(x0,x3L,bY+82,'3L',GRAY); s+=_dimH(x3L,xR,bY+82,'L',GRAY);
+    s+=_dash(x0,bY,x0,bY+85,GRAY); s+=_dash(x3L,bY+58,x3L,bY+85,GRAY); s+=_dash(xR,bY,xR,bY+85,GRAY);
+    s+=_txt(x0,bY-21,'O (힌지)',DARK,11,'middle','bold');
+    s+=_txt(xR+14,cY+22,'실 (장력 T)',DARK,10,'start');
+  }
+  if(mode===1){
+    s+=_arrow(xR,bY-bH/2,xR,bY-88,TEAL,'T','right');
+    s+=_arrow(xC,bY+bH/2,xC,bY+78,RED,'mg','right');
+    s+=_arrow(x3L,bY+bH/2,x3L,bY+78,RED,'2mg','left');
+    s+=_arrow(x0,bY,x0,bY-68,ORANGE,'V','left');
+    s+=_dot(x0,bY,ORANGE,5); s+=_dot(xR,bY,TEAL,5); s+=_dot(xC,bY,RED,5); s+=_dot(x3L,bY,RED,5);
+    s+=`<rect x="335" y="210" width="290" height="64" fill="#f0fdf4" stroke="#86efac" stroke-width="1" rx="5"/>`;
+    s+=_txt(480,226,'수직 힘 평형: V + T = mg + 2mg','#166534',10,'middle','bold');
+    s+=_txt(480,243,'수평 힘 평형: H = 0  (수직 실)','#166534',10,'middle');
+    s+=_txt(480,260,'T = 2mg → V = mg (위쪽)','#166534',10,'middle');
+  }
+  if(mode===2){
+    s+=_dot(x0,bY,ORANGE,7); s+=_txt(x0,bY+20,'⭕ 기준',ORANGE,10,'middle','bold');
+    s+=_torqueArc(x3L,bY+36,24,true,RED,'CW(2mg)'); s+=_torqueArc(xC,bY+36,20,true,RED,'CW(mg)');
+    s+=_torqueArc(xR,bY-38,26,false,TEAL,'CCW(T)');
+    s+=`<rect x="100" y="216" width="440" height="62" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320,233,'O 기준 토크 평형: T × 4L = mg × 2L + 2mg × 3L','#1e40af',11,'middle','bold');
+    s+=_txt(320,250,'4TL = 2mgL + 6mgL = 8mgL','#1e40af',11,'middle');
+    s+=_txt(320,267,'∴ T = 2mg','#16a34a',13,'middle','bold');
+  }
+  if(mode===3){
+    s+=`<rect x="62" y="206" width="516" height="72" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320,222,'⚠️ 자주 틀리는 포인트','#78350f',11,'middle','bold');
+    s+=_txt(320,240,'① 힌지 O의 토크 기여 = 0 (기준점이므로)','#78350f',10,'middle');
+    s+=_txt(320,257,'② 막대 자체 중력 mg의 작용점 = 막대 중심 (2L)','#78350f',10,'middle');
+    s+=_txt(320,274,'③ 수직 실의 토크 = T × 수평거리 (지렛대 길이 4L)','#78350f',10,'middle');
+  }
+  return _wsvg(s,640,290);
+}
+
+/* ── SVG 생성기 (문제 5) ── */
+function _svgEq5(mode){
+  const BLUE='#2563eb',RED='#dc2626',TEAL='#0d9488',GREEN='#16a34a',GRAY='#9ca3af',DARK='#374151',ORANGE='#ea580c',PURPLE='#7c3aed';
+  const L=62,x0=70,bY=148,bH=9;
+  const x2L=x0+2*L,x3L=x0+3*L,x4L=x0+4*L,xR=x0+6*L;
+  // 실이 30° 각도로 오른쪽 벽에 연결
+  const ang=Math.PI/6; // 30°
+  const sDx=112, sDy=Math.round(sDx*Math.tan(ang)); // dy ≈ 65
+  const sX2=xR+sDx, sY2=bY-sDy;
+  let s='';
+  // 왼쪽 벽 (힌지)
+  s+=`<rect x="15" y="55" width="52" height="192" fill="#d1d5db"/>`;
+  for(let i=58;i<244;i+=18) s+=`<line x1="15" y1="${i}" x2="52" y2="${i+14}" stroke="#9ca3af" stroke-width="1"/>`;
+  // 오른쪽 벽 (실 고정)
+  s+=`<rect x="${sX2}" y="${sY2-18}" width="16" height="${bY-sY2+38}" fill="#d1d5db"/>`;
+  for(let i=sY2-18;i<bY+20;i+=18) s+=`<line x1="${sX2}" y1="${i}" x2="${sX2+14}" y2="${i+14}" stroke="#9ca3af" stroke-width="1"/>`;
+  // 힌지
+  s+=`<circle cx="${x0}" cy="${bY}" r="9" fill="#6b7280" stroke="#374151" stroke-width="2"/>`;
+  s+=`<circle cx="${x0}" cy="${bY}" r="4" fill="#fff"/>`;
+  // 막대
+  s+=`<rect x="${x0}" y="${_f(bY-bH/2)}" width="${xR-x0}" height="${bH}" fill="${DARK}" rx="3"/>`;
+  // 실 (30° 경사)
+  s+=`<line x1="${xR}" y1="${bY}" x2="${sX2}" y2="${sY2}" stroke="#444" stroke-width="2.2"/>`;
+  s+=_dot(sX2,sY2,DARK,5);
+  // 각도 표시 (30°, 막대와 실 사이)
+  const arcR=36, arcX2=_f(xR+arcR*Math.cos(ang)), arcY2=_f(bY-arcR*Math.sin(ang));
+  s+=`<path d="M ${_f(xR+arcR)},${bY} A ${arcR},${arcR} 0 0,0 ${arcX2},${arcY2}" fill="none" stroke="${PURPLE}" stroke-width="2"/>`;
+  s+=_txt(xR+34,bY-14,'30°',PURPLE,11,'middle','bold');
+  // 무게중심 마커
+  s+=`<line x1="${x3L}" y1="${_f(bY-6)}" x2="${x3L}" y2="${_f(bY+6)}" stroke="#f59e0b" stroke-width="2.5"/>`;
+  // 물체 m at 2L
+  s+=`<line x1="${x2L}" y1="${_f(bY+bH/2)}" x2="${x2L}" y2="${bY+26}" stroke="#555" stroke-width="1.8"/>`;
+  s+=`<rect x="${x2L-24}" y="${bY+26}" width="48" height="28" fill="#fecaca" stroke="${RED}" stroke-width="1.5" rx="4"/>`;
+  s+=_txt(x2L,bY+45,'m',RED,13,'middle','bold');
+  // 물체 m at 4L
+  s+=`<line x1="${x4L}" y1="${_f(bY+bH/2)}" x2="${x4L}" y2="${bY+26}" stroke="#555" stroke-width="1.8"/>`;
+  s+=`<rect x="${x4L-24}" y="${bY+26}" width="48" height="28" fill="#fecaca" stroke="${RED}" stroke-width="1.5" rx="4"/>`;
+  s+=_txt(x4L,bY+45,'m',RED,13,'middle','bold');
+  if(mode===0){
+    s+=_dot(x2L,bY,RED,4); s+=_dot(x4L,bY,RED,4); s+=_dot(xR,bY,BLUE,4);
+    s+=_txt(x3L,bY-15,'▲ 무게중심 3L','#f59e0b',10,'middle');
+    s+=_dimH(x0,x2L,bY+84,'2L',GRAY); s+=_dimH(x2L,x4L,bY+84,'2L',GRAY); s+=_dimH(x4L,xR,bY+84,'2L',GRAY);
+    s+=_dash(x0,bY,x0,bY+87,GRAY); s+=_dash(x2L,bY+56,x2L,bY+87,GRAY);
+    s+=_dash(x4L,bY+56,x4L,bY+87,GRAY); s+=_dash(xR,bY,xR,bY+87,GRAY);
+    s+=_txt(x0,bY-21,'O (힌지)',DARK,11,'middle','bold');
+  }
+  if(mode===1){
+    // 장력 T 화살표 (실 방향으로)
+    const tScale=0.68;
+    s+=_arrow(xR,bY,_f(xR+sDx*tScale),_f(bY-sDy*tScale),TEAL,'T','top');
+    // 수직 성분 표시
+    s+=_arrow(_f(xR+sDx*tScale+4),bY,_f(xR+sDx*tScale+4),_f(bY-sDy*tScale),BLUE,'T·sin30°','right');
+    s+=_arrow(x3L,bY+bH/2,x3L,bY+75,RED,'2mg','right');
+    s+=_arrow(x2L,bY+bH/2,x2L,bY+75,RED,'mg','left');
+    s+=_arrow(x4L,bY+bH/2,x4L,bY+75,RED,'mg','right');
+    s+=_arrow(x0,bY,x0,bY-65,ORANGE,'V','left');
+    s+=_dot(x0,bY,ORANGE,5); s+=_dot(xR,bY,TEAL,5);
+    s+=_txt(_f(xR+sDx*tScale/2+2),bY+14,'T·cos30°',BLUE,10,'middle','bold');
+  }
+  if(mode===2){
+    s+=_dot(x0,bY,ORANGE,7); s+=_txt(x0,bY+20,'⭕ 기준',ORANGE,10,'middle','bold');
+    s+=_torqueArc(x3L,bY+36,24,true,RED,'CW(2mg)'); s+=_torqueArc(x2L,bY+36,18,true,RED,'CW(mg)');
+    s+=_torqueArc(x4L,bY+36,20,true,RED,'CW(mg)'); s+=_torqueArc(xR,bY-38,26,false,TEAL,'CCW(T)');
+    s+=`<rect x="60" y="212" width="520" height="68" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320,229,'O 기준 토크 평형: T·sin30°·6L = 2mg·3L + mg·2L + mg·4L','#1e40af',11,'middle','bold');
+    s+=_txt(320,247,'(T/2)·6L = 6mgL + 2mgL + 4mgL = 12mgL','#1e40af',11,'middle');
+    s+=_txt(320,265,'3TL = 12mgL  ∴ T = 4mg','#16a34a',13,'middle','bold');
+  }
+  if(mode===3){
+    s+=`<rect x="60" y="206" width="520" height="74" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320,223,'⚠️ 자주 틀리는 포인트','#78350f',11,'middle','bold');
+    s+=_txt(320,241,'① 경사 실의 토크 = T×sin(각도)×거리 → T·sin30°·6L','#78350f',10,'middle');
+    s+=_txt(320,258,'② 막대 중력(2mg)의 작용점 = 막대 중심 (3L)','#78350f',10,'middle');
+    s+=_txt(320,275,'③ 물체 두 개 위치(2L, 4L) 각각 따로 계산','#78350f',10,'middle');
+  }
+  return _wsvg(s,640,290);
+}
+
+/* ── 막대 문제 데이터 ── */
+const EQ_PROBLEMS = [
+  {
+    id: 1,
+    title: '1번 · 매달린 막대와 장력비',
+    badgeText: '중상', badgeClass: 'eq-badge-midh',
+    tags: ['매달린 막대','장력비','무게중심','토크 평형'],
+    stmt: `그림과 같이 질량이 m이고 길이가 9d인 막대가 실 p, q에 매달려 수평으로 정지해 있다.
+막대에는 질량이 M인 물체가 매달려 있으며, 실 p의 장력은 q의 3배이다.  M은?`,
+    choices: ['2m','3m','4m','5m','6m'],
+    answer: 3,
+    svgModes: ['구조 보기','힘 보기','토크 보기','실수 포인트'],
+    svgFn: _svgEq1,
+    hints: [
+      { t:'힌트 1: 작용점 확인', b:'왼쪽 끝 x=0 기준\n• 실 p: x=2d  • 물체 M: x=3d\n• 막대 중심: x=4.5d  • 실 q: x=7d' },
+      { t:'힌트 2: 힘 평형', b:'T_p + T_q = (m+M)g\nT_p = 3T_q 대입 → 4T_q = (m+M)g\nT_q = (m+M)g/4,  T_p = 3(m+M)g/4' },
+      { t:'힌트 3: 토크 평형', b:'왼쪽 끝 기준:\nT_p·2d + T_q·7d = mg·4.5d + Mg·3d\n13(m+M)/4 = 9m/2 + 3M → M = 5m' }
+    ],
+    answer_text: 'M = 5m → ④ 5m'
+  },
+  {
+    id: 2,
+    title: '2번 · 같은 받침힘을 받는 막대',
+    badgeText: '중', badgeClass: 'eq-badge-mid',
+    tags: ['받침힘','같은 반력','질량중심','토크 평형'],
+    stmt: `그림과 같이 길이가 10l인 막대가 받침대 p, q 위에 수평으로 정지해 있다.
+물체(질량 m)가 왼쪽 끝에서 3l 위치에 놓여 있고, p·q의 받침힘의 크기가 같다.
+막대의 질량은?`,
+    choices: ['m','2m','3m','4m','5m'],
+    answer: 2,
+    svgModes: ['구조 보기','힘 보기','토크 보기','실수 포인트'],
+    svgFn: _svgEq2,
+    hints: [
+      { t:'힌트 1: 작용점 확인', b:'왼쪽 끝 x=0 기준\n• 받침대 p: x=3l  • 물체 m: x=3l\n• 막대 중심: x=5l  • 받침대 q: x=6l' },
+      { t:'힌트 2: 힘 평형', b:'N_p = N_q = N\n2N = (M+m)g  →  N = (M+m)g/2' },
+      { t:'힌트 3: 토크 평형', b:'왼쪽 끝 기준:\nN·3l + N·6l = Mg·5l + mg·3l\n9N = 5Mg + 3mg, N 대입 → M = 3m' }
+    ],
+    answer_text: '막대 질량 = 3m → ③ 3m'
+  },
+  {
+    id: 3,
+    title: '3번 · 연결된 두 막대와 장력 전달',
+    badgeText: '상', badgeClass: 'eq-badge-high',
+    tags: ['연결된 막대','장력 전달','단계 분리','토크 평형'],
+    stmt: `그림과 같이 받침대 위의 막대 A(질량 3m, 길이 3L)와 막대 B(질량 2m)가 실로 연결되어 정지해 있다.
+A의 왼쪽 끝은 실 p로 바닥에 연결되어 있고, 받침대의 힘 F와 실 p의 장력 T에 대해  F/T는?`,
+    choices: ['7','15/2','8','17/2','9'],
+    answer: 0,
+    svgModes: ['전체 구조','B 분리도','A 힘 전달','A 토크'],
+    svgFn: _svgEq3,
+    hints: [
+      { t:'힌트 1: 막대 B 분리', b:'먼저 B만 독립적으로 분석하세요.\nB에 작용하는 힘: N↑(왼쪽 끝), S↑(오른쪽 끝), 2mg↓(중심)' },
+      { t:'힌트 2: B 계산', b:'B 왼쪽 끝 기준 토크: S·L = 2mg·(L/2) → S = mg\n힘 평형: N + mg = 2mg → N = mg' },
+      { t:'힌트 3: A에 적용', b:'A: x=0에서 T↓, x=L에서 F↑, x=1.5L에서 3mg↓\n   x=2L에서 N=mg↓, x=3L에서 S=mg↑\n토크(x=0 기준): F·L + mg·3L = 4.5mgL + 2mgL\n→ F=7mg/2, T=mg/2, F/T = 7' }
+    ],
+    answer_text: 'F/T = 7 → ① 7'
+  },
+  {
+    id: 4,
+    title: '4번 · 힌지 막대와 수직 실',
+    badgeText: '중', badgeClass: 'eq-badge-mid',
+    tags: ['힌지','수직 실','막대 중력','토크 평형'],
+    stmt: `그림과 같이 질량이 m이고 길이가 4L인 균일한 막대가 왼쪽 끝 O에서 힌지로 벽에 수평으로 고정되어 있다.
+막대 오른쪽 끝에는 수직 실이 천장에 연결되어 있고, 왼쪽 끝에서 3L 위치에 질량 2m인 물체가 매달려 있다.
+실의 장력 T는?`,
+    choices: ['mg','3mg/2','2mg','5mg/2','3mg'],
+    answer: 2,
+    svgModes: ['구조 보기','힘 보기','토크 보기','실수 포인트'],
+    svgFn: _svgEq4,
+    hints: [
+      { t:'힌트 1: 기준점 선택', b:'힌지 O를 기준점으로 잡으면 힌지 반력의 토크 = 0\n→ 미지수를 줄일 수 있어 계산이 편합니다.' },
+      { t:'힌트 2: 작용점 확인', b:'O(x=0) 기준\n• 막대 무게중심: x=2L  → 토크 = mg×2L (시계)\n• 물체(2m): x=3L  → 토크 = 2mg×3L (시계)\n• 실 장력 T: x=4L  → 토크 = T×4L (반시계)' },
+      { t:'힌트 3: 토크 평형식', b:'T×4L = mg×2L + 2mg×3L\n4TL = 2mgL + 6mgL = 8mgL\nT = 2mg' }
+    ],
+    answer_text: 'T = 2mg → ③ 2mg'
+  },
+  {
+    id: 5,
+    title: '5번 · 힌지 막대와 경사 실 (30°)',
+    badgeText: '상', badgeClass: 'eq-badge-high',
+    tags: ['힌지','경사 실','sin 분해','이중 하중'],
+    stmt: `그림과 같이 질량이 2m이고 길이가 6L인 균일한 막대가 왼쪽 끝 O에서 힌지로 벽에 수평으로 고정되어 있다.
+막대 오른쪽 끝에서 실이 벽면에 연결되어 있고, 실은 막대와 30°의 각도를 이룬다.
+막대의 2L 위치와 4L 위치에 각각 질량 m인 물체가 매달려 있을 때, 실의 장력 T는?`,
+    choices: ['2mg','3mg','7mg/2','4mg','9mg/2'],
+    answer: 3,
+    svgModes: ['구조 보기','힘 보기','토크 풀이','실수 포인트'],
+    svgFn: _svgEq5,
+    hints: [
+      { t:'힌트 1: 경사 실의 토크', b:'실이 막대와 30° 각도 → 토크에 기여하는 성분은 막대에 수직인 힘 성분\nT의 수직 성분 = T·sin30° = T/2\n토크 = T·sin30° × 6L = 3TL' },
+      { t:'힌트 2: 모든 토크 정리', b:'O(힌지) 기준 시계 방향 토크:\n• 막대(2m): 2mg × 3L = 6mgL\n• 물체(m, 2L): mg × 2L = 2mgL\n• 물체(m, 4L): mg × 4L = 4mgL\n합계 = 12mgL' },
+      { t:'힌트 3: 평형식 풀기', b:'T·sin30°·6L = 12mgL\n(T/2)·6L = 12mgL → 3TL = 12mgL\nT = 4mg' }
+    ],
+    answer_text: 'T = 4mg → ④ 4mg'
+  }
+];
+
+/* ── 상태 ── */
+let currentEqIdx = 0;
+const eqState    = EQ_PROBLEMS.map(() => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
+
+/* ── 범용 접근자: 현재 챕터에 따라 올바른 문제/상태 배열을 반환 ── */
+function getProblems()     { return currentChapterId === 'newton_second' ? NEWTON_PROBLEMS : EQ_PROBLEMS; }
+function getProblemState() { return currentChapterId === 'newton_second' ? newtonState     : eqState; }
+
+/* ── 문제 목록 렌더 ── */
+function renderEqList() {
+  const probs = getProblems();
+  const body  = document.getElementById('eq-list-body');
+  body.innerHTML = probs.map((p, i) => `
+    <div class="eq-pick-card" onclick="openEqDetail(${i})">
+      <div class="eq-pick-num">${i + 1}</div>
+      <div class="eq-pick-info">
+        <div class="eq-pick-title">${p.title}</div>
+        <div class="eq-pick-tags">${p.tags.map(t => `<span class="eq-tag">${t}</span>`).join('')}</div>
+      </div>
+      <span class="eq-pick-arrow">→</span>
+    </div>
+  `).join('');
+}
+
+/* ── 문제 상세 열기 ── */
+function openEqDetail(idx) {
+  showSplashView('eq-detail');
+  showEqProblem(idx);
+}
+
+/* ── 문제 렌더 ── */
+function showEqProblem(idx) {
+  const probs = getProblems();
+  const state = getProblemState();
+  const total = probs.length;
+  idx = Math.max(0, Math.min(total - 1, idx));
+  currentEqIdx = idx;
+
+  // 카운터 & 네비게이션
+  document.getElementById('eq-detail-counter').textContent = `문제 ${idx+1} / ${total}`;
+  document.getElementById('eq-prev').disabled = idx === 0;
+  document.getElementById('eq-next').disabled = idx === total - 1;
+
+  const p  = probs[idx];
+  const st = state[idx];
+  const svgTabsHtml = p.svgModes.map((lbl,i) =>
+    `<button class="eq-svg-tab${i===st.svgMode?' active':''}" onclick="switchEqSvg(${idx},${i})">${lbl}</button>`
+  ).join('');
+  const choicesHtml = p.choices.map((c,i) =>
+    `<label class="eq-choice${st.sel===i?' selected':''}">
+      <input type="radio" name="eq${idx}" value="${i}" ${st.sel===i?'checked':''} onchange="eqSelectChoice(${idx},${i})">
+      <span>${i+1}) ${c}</span>
+    </label>`
+  ).join('');
+  const hintsHtml = p.hints.map((h,i) =>
+    `<div class="eq-hint-block" id="eq-hint-${idx}-${i}" style="display:${i<st.hintsShown?'block':'none'}">
+      <h4>${h.t}</h4><p>${h.b}</p>
+    </div>`
+  ).join('');
+  const feedbackStyle = st.checked
+    ? (st.sel===p.answer ? 'show ok' : 'show ng') : '';
+  const feedbackMsg = st.checked
+    ? (st.sel===p.answer
+        ? '정답입니다! 해설 페이지에서 풀이를 확인해 보세요.'
+        : '아직 정답이 아닙니다. 힌트를 보고 다시 생각해 보세요.')
+    : '';
+  const showNextBtn = idx < total - 1;
+  const hintBtnVisible = st.hintsShown < p.hints.length;
+  const ansStyle = st.checked && st.sel===p.answer ? '' : 'display:none';
+
+  document.getElementById('eq-detail-body').innerHTML = `
+    <div class="eq-card-header">
+      <span class="eq-title">${p.title}</span>
+      <span class="eq-badge ${p.badgeClass}">${p.badgeText}</span>
+    </div>
+    <div class="eq-tags">${p.tags.map(t=>`<span class="eq-tag">${t}</span>`).join('')}</div>
+    <div class="eq-stmt">${p.stmt}</div>
+    <div class="eq-svg-tabs">${svgTabsHtml}</div>
+    <div class="eq-svg-wrap" id="eq-svg-${idx}">${p.svgFn(st.svgMode)}</div>
+    <div class="eq-choices">${choicesHtml}</div>
+    <div class="eq-btns">
+      <button class="eq-btn eq-btn-primary" onclick="checkEqAnswer(${idx})">정답 확인</button>
+      <button class="eq-btn eq-btn-reset"   onclick="resetEqProblem(${idx})">다시 풀기</button>
+      ${hintBtnVisible ? `<button class="eq-btn eq-btn-hint" id="eq-hbtn-${idx}" onclick="showEqHint(${idx})">힌트 ${st.hintsShown+1} 보기</button>` : ''}
+    </div>
+    <div class="eq-feedback ${feedbackStyle}" id="eq-fb-${idx}">${feedbackMsg}</div>
+    ${hintsHtml}
+    <div style="${ansStyle};margin:8px 20px 0;padding:10px 14px;background:#fefce8;border:2px solid #fde047;border-radius:8px;font-weight:700;color:#78350f" id="eq-ans-${idx}">
+      최종 정답: ${p.answer_text}
+    </div>
+    ${showNextBtn ? `<div class="eq-next-wrap"><button class="eq-next-big" onclick="showEqProblem(${idx+1})">다음 문제로 →</button></div>` : `<div style="padding:10px 20px 16px;text-align:center;color:#6b7280;font-size:.85rem">모든 문제를 완료했습니다 🎉</div>`}
+  `;
+}
+
+function eqSelectChoice(idx, i) {
+  getProblemState()[idx].sel = i;
+  document.querySelectorAll(`[name="eq${idx}"]`).forEach((r,j) => {
+    r.closest('.eq-choice').classList.toggle('selected', j===i);
+  });
+}
+
+function checkEqAnswer(idx) {
+  const st  = getProblemState()[idx];
+  const p   = getProblems()[idx];
+  const fb  = document.getElementById(`eq-fb-${idx}`);
+  const ansEl = document.getElementById(`eq-ans-${idx}`);
+  if (st.sel === null) { fb.textContent='먼저 선지를 선택해 주세요.'; fb.className='eq-feedback show ng'; return; }
+  st.checked = true;
+  if (st.sel === p.answer) {
+    fb.textContent='정답입니다! 해설 페이지에서 풀이를 확인해 보세요.';
+    fb.className='eq-feedback show ok';
+    if (ansEl) ansEl.style.display='';
+  } else {
+    fb.textContent='아직 정답이 아닙니다. 힌트를 보고 다시 생각해 보세요.';
+    fb.className='eq-feedback show ng';
+  }
+}
+
+function resetEqProblem(idx) {
+  const state = getProblemState();
+  state[idx] = { sel: null, hintsShown: 0, checked: false, svgMode: state[idx].svgMode };
+  showEqProblem(idx);
+}
+
+function showEqHint(idx) {
+  const st = getProblemState()[idx];
+  const p  = getProblems()[idx];
+  if (st.hintsShown < p.hints.length) {
+    const el = document.getElementById(`eq-hint-${idx}-${st.hintsShown}`);
+    if (el) el.style.display = 'block';
+    st.hintsShown++;
+  }
+  const btn = document.getElementById(`eq-hbtn-${idx}`);
+  if (btn) {
+    if (st.hintsShown >= p.hints.length) btn.style.display = 'none';
+    else btn.textContent = `힌트 ${st.hintsShown+1} 보기`;
+  }
+}
+
+function switchEqSvg(idx, mode) {
+  const state = getProblemState();
+  state[idx].svgMode = mode;
+  const p = getProblems()[idx];
+  document.querySelectorAll(`#eq-detail-body .eq-svg-tab`).forEach((t,i) => t.classList.toggle('active', i===mode));
+  const wrap = document.getElementById(`eq-svg-${idx}`);
+  if (wrap) wrap.innerHTML = p.svgFn(mode);
+}
+
+/* ============================================================
+   가속도 법칙 문제 — SVG & 데이터
+   ============================================================ */
+
+/* ── SVG 생성기 (뉴턴 문제 1: 알짜힘 → 가속도) ── */
+function _svgN1(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',TEAL='#0d9488',GRAY='#9ca3af',DARK='#374151',ORANGE='#ea580c',YELLOW='#f59e0b';
+  const bY=148, bH=44, bX=240, bW=100;
+  let s='';
+  // 바닥
+  s+=`<rect x="10" y="${bY+bH}" width="620" height="8" fill="#334155" rx="2"/>`;
+  for(let i=10;i<630;i+=22) s+=`<line x1="${i}" y1="${bY+bH+8}" x2="${i+14}" y2="${bY+bH+20}" stroke="#475569" stroke-width="1"/>`;
+  // 물체
+  s+=`<rect x="${bX}" y="${bY}" width="${bW}" height="${bH}" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2" rx="4"/>`;
+  s+=_txt(bX+bW/2,bY+bH/2+5,'6 kg',BLUE,13,'middle','bold');
+  if(mode===0){ // 구조 보기
+    // F 오른쪽
+    s+=_arrow(bX+bW,bY+bH/2,bX+bW+100,bY+bH/2,GREEN,'F = 24 N','top',3);
+    // f 왼쪽
+    s+=_arrow(bX,bY+bH/2,bX-80,bY+bH/2,RED,'f = 6 N','top',3);
+    s+=_txt(290,bY+bH+35,'← 마찰력 f = 6 N',RED,10,'middle');
+    s+=_txt(390,bY+bH+35,'추진력 F = 24 N →',GREEN,10,'middle');
+  }
+  if(mode===1){ // 알짜힘
+    s+=_arrow(bX+bW,bY+bH/2,bX+bW+100,bY+bH/2,GREEN,'','' ,2.5);
+    s+=_arrow(bX,bY+bH/2,bX-80,bY+bH/2,RED,'','' ,2.5);
+    // 알짜힘 화살표
+    s+=_arrow(bX+bW/2,bY-14,bX+bW/2+90,bY-14,YELLOW,'ΣF = 18 N','top',3);
+    s+=`<rect x="130" y="215" width="380" height="48" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320,233,'ΣF = F - f = 24 - 6 = 18 N (오른쪽)',BLUE,11,'middle','bold');
+    s+=_txt(320,250,'a = ΣF / m = 18 / 6 = 3 m/s²','#16a34a',12,'middle','bold');
+  }
+  if(mode===2){ // 가속도 방향
+    s+=_arrow(bX+bW/2,bY+bH/2,bX+bW/2+100,bY+bH/2,YELLOW,'a = 3 m/s²','top',3);
+    s+=`<rect x="100" y="215" width="440" height="58" fill="#fefce8" stroke="#fde047" stroke-width="1" rx="5"/>`;
+    s+=_txt(320,233,'F = ma  →  a = F/m = ΣF/m','#78350f',10,'middle','bold');
+    s+=_txt(320,249,'가속도 방향 = 알짜힘 방향 (오른쪽)','#78350f',10,'middle');
+    s+=_txt(320,265,'∴ a = 3 m/s²  →  ③번','#16a34a',13,'middle','bold');
+  }
+  if(mode===3){ // 실수 포인트
+    s+=`<rect x="60" y="206" width="520" height="62" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320,222,'⚠️ 자주 틀리는 포인트','#78350f',11,'middle','bold');
+    s+=_txt(320,240,'① F = 24 N을 그대로 a = F/m에 넣으면 안 됨','#78350f',10,'middle');
+    s+=_txt(320,257,'② 먼저 알짜힘(ΣF = F − f) 계산 후 a = ΣF/m','#78350f',10,'middle');
+  }
+  return _wsvg(s,640,290);
+}
+
+/* ── SVG 생성기 (뉴턴 문제 2: 연결된 두 물체) ── */
+function _svgN2(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',TEAL='#0d9488',GRAY='#9ca3af',DARK='#374151',ORANGE='#ea580c',YELLOW='#f59e0b';
+  const bY=140, bH=44;
+  const xA=80, wA=70, xB=220, wB=90;
+  const xRopeL=xA+wA, xRopeR=xB;
+  let s='';
+  // 바닥
+  s+=`<rect x="10" y="${bY+bH}" width="620" height="8" fill="#334155" rx="2"/>`;
+  for(let i=10;i<630;i+=22) s+=`<line x1="${i}" y1="${bY+bH+8}" x2="${i+14}" y2="${bY+bH+20}" stroke="#475569" stroke-width="1"/>`;
+  // 물체 A
+  s+=`<rect x="${xA}" y="${bY}" width="${wA}" height="${bH}" fill="#1d4ed8" stroke="#93c5fd" stroke-width="2" rx="4"/>`;
+  s+=_txt(xA+wA/2,bY+bH/2+5,'A  2kg',BLUE,11,'middle','bold');
+  // 실
+  s+=`<line x1="${xRopeL}" y1="${bY+bH/2}" x2="${xRopeR}" y2="${bY+bH/2}" stroke="#94a3b8" stroke-width="2.5"/>`;
+  s+=_txt((xRopeL+xRopeR)/2,bY+bH/2-10,'실 (장력 T)',GRAY,9,'middle');
+  // 물체 B
+  s+=`<rect x="${xB}" y="${bY}" width="${wB}" height="${bH}" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2" rx="4"/>`;
+  s+=_txt(xB+wB/2,bY+bH/2+5,'B  3kg',BLUE,11,'middle','bold');
+  // 외력 F
+  s+=_arrow(xB+wB,bY+bH/2,xB+wB+100,bY+bH/2,GREEN,'F = 10 N','top',3);
+  if(mode===0){ // 구조
+    s+=_txt(320,bY+bH+34,'마찰 없는 수평면 — A와 B가 실로 연결',GRAY,10,'middle');
+  }
+  if(mode===1){ // 전체 계
+    s+=`<rect x="60" y="210" width="520" height="60" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="5"/>`;
+    s+=_txt(320,228,'전체 계: 총 질량 = 2 + 3 = 5 kg','#1e40af',10,'middle','bold');
+    s+=_txt(320,245,'a = F / (m_A + m_B) = 10 / 5 = 2 m/s²','#1e40af',11,'middle','bold');
+    s+=_txt(320,261,'→ 두 물체 모두 같은 가속도 a = 2 m/s²','#16a34a',10,'middle');
+  }
+  if(mode===2){ // A만 분리
+    // A에 T만 작용
+    s+=_arrow(xA+wA,bY+bH/2,xA+wA+55,bY+bH/2,YELLOW,'T','top',2.5);
+    s+=`<rect x="60" y="210" width="520" height="60" fill="#f0fdf4" stroke="#86efac" stroke-width="1" rx="5"/>`;
+    s+=_txt(320,228,'A만 분리: T = m_A × a','#166534',10,'middle','bold');
+    s+=_txt(320,245,'T = 2 × 2 = 4 N','#16a34a',13,'middle','bold');
+    s+=_txt(320,261,'(B에 적용: F − T = m_B × a  →  10 − 4 = 3×2 = 6 ✓)','#166534',9,'middle');
+  }
+  if(mode===3){ // 실수 포인트
+    s+=`<rect x="60" y="206" width="520" height="62" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320,222,'⚠️ 자주 틀리는 포인트','#78350f',11,'middle','bold');
+    s+=_txt(320,240,'① T = F = 10 N 이 아님 — 실은 전체 힘을 전달하지 않는다','#78350f',10,'middle');
+    s+=_txt(320,257,'② 전체 a 먼저 구한 뒤, 한 물체에만 F = ma 적용해 T 산출','#78350f',10,'middle');
+  }
+  return _wsvg(s,640,290);
+}
+
+/* ── SVG 생성기 (뉴턴 문제 3: 엘리베이터 겉보기 무게) ── */
+function _svgN3(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',GRAY='#9ca3af',DARK='#374151',ORANGE='#ea580c',YELLOW='#f59e0b',TEAL='#0d9488';
+  let s='';
+  // 엘리베이터 외곽
+  s+=`<rect x="200" y="20" width="200" height="220" fill="rgba(30,58,95,.4)" stroke="#475569" stroke-width="2.5" rx="6"/>`;
+  s+=_txt(300,14,'엘리베이터 (위로 가속)',GRAY,9,'middle');
+  // 가속도 화살표 (오른쪽 외부)
+  s+=_arrow(420,130,420,60,YELLOW,'a = 2 m/s²','right',2.5);
+  // 사람 (스틱 피겨)
+  s+=`<circle cx="300" cy="90" r="18" fill="#60a5fa" stroke="#93c5fd" stroke-width="2"/>`;
+  s+=_txt(300,94,'60 kg',BLUE,9,'middle','bold');
+  s+=`<line x1="300" y1="108" x2="300" y2="160" stroke="#60a5fa" stroke-width="3"/>`;
+  s+=`<line x1="270" y1="135" x2="330" y2="135" stroke="#60a5fa" stroke-width="2.5"/>`;
+  s+=`<line x1="300" y1="160" x2="278" y2="195" stroke="#60a5fa" stroke-width="2.5"/>`;
+  s+=`<line x1="300" y1="160" x2="322" y2="195" stroke="#60a5fa" stroke-width="2.5"/>`;
+  // 체중계
+  s+=`<rect x="265" y="196" width="70" height="18" fill="#334155" stroke="#64748b" stroke-width="1.5" rx="3"/>`;
+  s+=_txt(300,209,'체중계',GRAY,8,'middle');
+  // 수직 반력 N (위)
+  s+=_arrow(300,196,300,140,GREEN,'N','right',2.5);
+  // 중력 mg (아래)
+  s+=_arrow(265,120,265,165,RED,'mg','left',2.5);
+  if(mode===0){ // 구조
+    s+=_txt(108,80,'작용하는 힘',GRAY,9,'middle');
+    s+=_txt(108,96,'↑ N  (수직항력)',GREEN,9,'middle','bold');
+    s+=_txt(108,112,'↓ mg (중력)',RED,9,'middle','bold');
+    s+=_txt(108,128,'→ 위로 가속 a',YELLOW,9,'middle','bold');
+  }
+  if(mode===1){ // 운동방정식
+    s+=`<rect x="18" y="60" width="168" height="90" fill="#eff6ff" stroke="#93c5fd" stroke-width="1" rx="6"/>`;
+    s+=_txt(102,78,'운동 방정식','#1e40af',9,'middle','bold');
+    s+=_txt(102,96,'N - mg = ma','#1e40af',10,'middle','bold');
+    s+=_txt(102,113,'N = m(g + a)','#1e40af',10,'middle','bold');
+    s+=_txt(102,130,'= 60(10 + 2)','#16a34a',10,'middle','bold');
+    s+=_txt(102,147,'= 720 N','#16a34a',12,'middle','bold');
+  }
+  if(mode===2){ // 풀이 정리
+    s+=`<rect x="18" y="55" width="168" height="105" fill="#f0fdf4" stroke="#86efac" stroke-width="1" rx="6"/>`;
+    s+=_txt(102,73,'풀이 정리','#166534',9,'middle','bold');
+    s+=_txt(102,91,'① 위로 가속 → N > mg','#166534',9,'middle');
+    s+=_txt(102,108,'② N−mg = ma 적용','#166534',9,'middle');
+    s+=_txt(102,125,'③ N = 60×12 = 720 N','#166534',10,'middle','bold');
+    s+=_txt(102,143,'∴ ④번 720 N','#16a34a',12,'middle','bold');
+  }
+  if(mode===3){ // 실수 포인트
+    s+=`<rect x="18" y="55" width="168" height="120" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="6"/>`;
+    s+=_txt(102,73,'⚠️ 실수 포인트','#78350f',9,'middle','bold');
+    s+=_txt(102,91,'아래 가속 시:','#78350f',9,'middle');
+    s+=_txt(102,107,'N = m(g − a) < mg','#78350f',9,'middle','bold');
+    s+=_txt(102,123,'자유낙하: a = g','#78350f',9,'middle');
+    s+=_txt(102,139,'N = 0  (무중력!!)','#78350f',9,'middle','bold');
+    s+=_txt(102,158,'→ 방향에 따라 ± 부호 주의','#78350f',8,'middle');
+  }
+  return _wsvg(s,640,280);
+}
+
+/* ── 뉴턴 법칙 문제 데이터 ── */
+const NEWTON_PROBLEMS = [
+  {
+    id: 1,
+    title: '1번 · 알짜힘과 가속도',
+    badgeText: '중', badgeClass: 'eq-badge-mid',
+    tags: ['알짜힘','마찰력','F=ma','가속도 계산'],
+    stmt: `그림과 같이 질량이 6 kg인 물체에 오른쪽으로 24 N의 힘이 작용하고,
+마찰력 6 N이 왼쪽으로 작용한다. 물체의 가속도는?`,
+    choices: ['1 m/s²','2 m/s²','3 m/s²','4 m/s²','5 m/s²'],
+    answer: 2,
+    svgModes: ['구조 보기','알짜힘 계산','가속도 방향','실수 포인트'],
+    svgFn: _svgN1,
+    hints: [
+      { t:'힌트 1: 알짜힘 먼저', b:'F = 24 N (오른쪽), f = 6 N (왼쪽)\n알짜힘 ΣF = 24 − 6 = 18 N (오른쪽)' },
+      { t:'힌트 2: F = ma 적용', b:'a = ΣF / m = 18 / 6 = 3 m/s²\n가속도 방향 = 알짜힘 방향 (오른쪽)' }
+    ],
+    answer_text: 'a = 3 m/s² → ③'
+  },
+  {
+    id: 2,
+    title: '2번 · 실로 연결된 두 물체',
+    badgeText: '중상', badgeClass: 'eq-badge-midh',
+    tags: ['연결된 물체','실의 장력','전체 계','F=ma 분리'],
+    stmt: `그림과 같이 마찰 없는 수평면 위에서 질량 2 kg인 물체 A와 3 kg인 물체 B가
+실로 연결되어 있다. B에 오른쪽으로 10 N의 힘을 가할 때, 실의 장력 T는?`,
+    choices: ['2 N','3 N','4 N','5 N','6 N'],
+    answer: 2,
+    svgModes: ['구조 보기','전체 계 분석','A만 분리','실수 포인트'],
+    svgFn: _svgN2,
+    hints: [
+      { t:'힌트 1: 전체 계로 가속도 구하기', b:'전체 질량 = 2 + 3 = 5 kg\nΣF = 10 N (마찰 없음)\na = 10 / 5 = 2 m/s²' },
+      { t:'힌트 2: A만 분리해 T 구하기', b:'A에 작용하는 힘: T만 (오른쪽)\nT = m_A × a = 2 × 2 = 4 N' }
+    ],
+    answer_text: 'T = 4 N → ③'
+  },
+  {
+    id: 3,
+    title: '3번 · 엘리베이터 겉보기 무게',
+    badgeText: '상', badgeClass: 'eq-badge-high',
+    tags: ['겉보기 무게','엘리베이터','수직항력','가속하는 계'],
+    stmt: `질량 60 kg인 사람이 엘리베이터 안에서 체중계를 밟고 있다.
+엘리베이터가 위로 2 m/s²의 가속도로 움직일 때, 체중계가 나타내는 값은? (g = 10 m/s²)`,
+    choices: ['540 N','600 N','660 N','720 N','780 N'],
+    answer: 3,
+    svgModes: ['구조 보기','운동 방정식','풀이 정리','실수 포인트'],
+    svgFn: _svgN3,
+    hints: [
+      { t:'힌트 1: 위로 가속 시 운동방정식', b:'↑ 방향이 +\nN − mg = ma (N이 mg보다 큼)\nN = m(g + a)' },
+      { t:'힌트 2: 수치 대입', b:'N = 60 × (10 + 2)\n= 60 × 12 = 720 N' }
+    ],
+    answer_text: 'N = 720 N → ④'
+  }
+];
+
+const newtonState = NEWTON_PROBLEMS.map(() => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
 
 /* ============================================================
    INIT
