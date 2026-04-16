@@ -553,11 +553,11 @@
   }
   .curr-ch.locked { opacity: .42; cursor: default; }
   .curr-ch.concept-ch {
-    border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.07); cursor: pointer;
+    border-color: rgba(96,165,250,.45); background: rgba(96,165,250,.1); cursor: pointer;
   }
-  .curr-ch.concept-ch:hover { background: rgba(251,191,36,.15); transform: translateX(5px); }
-  .curr-ch-num.concept { background: rgba(251,191,36,.25); color: #fde68a; }
-  .curr-badge.concept { background: rgba(251,191,36,.18); color: #fde68a; }
+  .curr-ch.concept-ch:hover { background: rgba(96,165,250,.2); transform: translateX(5px); box-shadow: 0 4px 20px rgba(59,130,246,.25); }
+  .curr-ch-num.concept { background: var(--blue-600); color: #fff; }
+  .curr-badge.concept { background: rgba(96,165,250,.2); color: #93c5fd; }
   .curr-ch.active-ch {
     border-color: rgba(96,165,250,.45);
     background: rgba(96,165,250,.1);
@@ -669,6 +669,15 @@
   .eq-badge-mid  { background: #fef9c3; color: #92400e; }
   .eq-badge-midh { background: #fed7aa; color: #7c2d12; }
   .eq-badge-high { background: #fecaca; color: #7f1d1d; }
+  /* 챕터 서브카테고리 탭 */
+  .nt3-cat-tabs { display: flex; gap: 8px; padding: 14px 14px 8px; }
+  .nt3-cat-tab {
+    flex: 1; padding: 9px 0; border-radius: 10px; font-size: .85rem; font-weight: 700;
+    border: 2px solid rgba(96,165,250,.3); background: rgba(96,165,250,.06);
+    color: rgba(255,255,255,.55); cursor: pointer; transition: all .18s;
+  }
+  .nt3-cat-tab:hover { background: rgba(96,165,250,.15); color: rgba(255,255,255,.8); }
+  .nt3-cat-tab.active { border-color: #60a5fa; background: rgba(96,165,250,.22); color: #fff; }
   /* 태그 */
   .eq-tags { display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 18px 4px; }
   .eq-tag  { background: #dbeafe; color: #1d4ed8; padding: 2px 10px; border-radius: 999px; font-size: .72rem; font-weight: 500; }
@@ -2345,7 +2354,88 @@ const CHAPTERS = {
       </div>
 
       <div class="cv-block">
-        <div class="cv-block-title">4. 운동량 보존 법칙</div>
+        <div class="cv-block-title">4. 운동량</div>
+        <p class="cv-p"><b>운동량(p)</b>은 물체의 질량과 속도의 곱으로, 물체가 얼마나 강하게 운동하고 있는지를 나타내는 벡터량입니다.</p>
+        <div class="cv-formula-box">
+          <b>운동량</b>$$\vec{p} = m\vec{v}$$
+          <div style="font-size:.8rem;margin-top:6px;color:rgba(255,255,255,.55)">단위: kg·m/s &nbsp;·&nbsp; $m$: 질량(kg) &nbsp;·&nbsp; $v$: 속도(m/s) &nbsp;·&nbsp; 속도와 같은 방향</div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">예시 · 두 물체의 운동량 비교</div>
+          <svg viewBox="0 0 340 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 물체 A -->
+            <rect x="10" y="25" width="60" height="36" fill="#1e3a5f" stroke="#60a5fa" stroke-width="1.5" rx="3"/>
+            <text x="40" y="40" font-size="9" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">m = 2 kg</text>
+            <text x="40" y="53" font-size="9" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">v = 3 m/s</text>
+            <line x1="70" y1="43" x2="105" y2="43" stroke="#60a5fa" stroke-width="2.5"/>
+            <polygon points="105,43 95,38 95,48" fill="#60a5fa"/>
+            <text x="86" y="34" font-size="8.5" fill="#60a5fa" text-anchor="middle" font-family="-apple-system,sans-serif">→</text>
+            <rect x="10" y="72" width="60" height="20" fill="rgba(96,165,250,.15)" stroke="rgba(96,165,250,.3)" stroke-width="1" rx="3"/>
+            <text x="40" y="85" font-size="9" fill="#60a5fa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">p = 6 kg·m/s</text>
+            <!-- 물체 B -->
+            <rect x="130" y="25" width="70" height="36" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5" rx="3"/>
+            <text x="165" y="40" font-size="9" fill="#fde68a" text-anchor="middle" font-family="-apple-system,sans-serif">m = 10 kg</text>
+            <text x="165" y="53" font-size="9" fill="#fde68a" text-anchor="middle" font-family="-apple-system,sans-serif">v = 1 m/s</text>
+            <line x1="200" y1="43" x2="225" y2="43" stroke="#f59e0b" stroke-width="2.5"/>
+            <polygon points="225,43 215,38 215,48" fill="#f59e0b"/>
+            <rect x="130" y="72" width="70" height="20" fill="rgba(245,158,11,.12)" stroke="rgba(245,158,11,.3)" stroke-width="1" rx="3"/>
+            <text x="165" y="85" font-size="9" fill="#f59e0b" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">p = 10 kg·m/s</text>
+            <!-- 설명 -->
+            <rect x="240" y="20" width="95" height="72" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.1)" stroke-width="1" rx="6"/>
+            <text x="287" y="38" font-size="8.5" fill="rgba(255,255,255,.6)" text-anchor="middle" font-family="-apple-system,sans-serif">질량이 크면</text>
+            <text x="287" y="51" font-size="8.5" fill="rgba(255,255,255,.6)" text-anchor="middle" font-family="-apple-system,sans-serif">속도가 작아도</text>
+            <text x="287" y="64" font-size="8.5" fill="#a78bfa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">운동량이 클 수</text>
+            <text x="287" y="77" font-size="8.5" fill="#a78bfa" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">있습니다</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">5. 충격량과 운동량의 변화</div>
+        <p class="cv-p"><b>충격량(J)</b>은 힘과 그 힘이 작용한 시간의 곱입니다. 충격량은 물체의 <b>운동량 변화량</b>과 같습니다.</p>
+        <div class="cv-formula-box">
+          <b>충격량 = 운동량 변화량</b>$$\vec{J} = \vec{F}\Delta t = \Delta\vec{p} = m\vec{v'} - m\vec{v}$$
+          <div style="font-size:.8rem;margin-top:6px;color:rgba(255,255,255,.55)">단위: N·s = kg·m/s &nbsp;·&nbsp; $\Delta t$: 힘이 작용한 시간 &nbsp;·&nbsp; $v'$: 나중 속도 &nbsp;·&nbsp; $v$: 처음 속도</div>
+        </div>
+        <div class="cv-cond" style="margin-top:12px">
+          <div class="cv-cond-item">
+            <span class="cv-tag">같은 충격량, 긴 시간</span>
+            <div>같은 운동량 변화라도 힘이 작용하는 시간이 길수록 힘의 크기는 작아집니다. 에어백·무릎 굽히기 등이 원리입니다. ($F = \Delta p / \Delta t$)</div>
+          </div>
+          <div class="cv-cond-item">
+            <span class="cv-tag">같은 충격량, 짧은 시간</span>
+            <div>시간이 짧을수록 힘의 크기는 커집니다. 야구 배트로 공을 세게 치는 것이 예시입니다.</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;background:rgba(0,0,0,.28);border-radius:10px;padding:10px 10px 6px">
+          <div style="font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;margin-bottom:8px;letter-spacing:.3px">F-t 그래프 · 넓이 = 충격량</div>
+          <svg viewBox="0 0 340 130" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+            <!-- 축 -->
+            <line x1="30" y1="100" x2="310" y2="100" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+            <line x1="30" y1="15" x2="30" y2="100" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
+            <text x="318" y="104" font-size="9" fill="rgba(255,255,255,.4)" font-family="-apple-system,sans-serif">t</text>
+            <text x="20" y="13" font-size="9" fill="rgba(255,255,255,.4)" font-family="-apple-system,sans-serif">F</text>
+            <!-- 큰 힘·짧은 시간 (왼쪽, 파랑) -->
+            <polygon points="50,100 50,28 110,28 110,100" fill="rgba(96,165,250,.2)" stroke="none"/>
+            <line x1="50" y1="100" x2="50" y2="28" stroke="#60a5fa" stroke-width="2"/>
+            <line x1="50" y1="28" x2="110" y2="28" stroke="#60a5fa" stroke-width="2"/>
+            <line x1="110" y1="28" x2="110" y2="100" stroke="#60a5fa" stroke-width="2"/>
+            <text x="80" y="70" font-size="8.5" fill="#93c5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">큰 F</text>
+            <text x="80" y="82" font-size="8" fill="#93c5fd" text-anchor="middle" font-family="-apple-system,sans-serif">짧은 Δt</text>
+            <!-- 작은 힘·긴 시간 (오른쪽, 보라) -->
+            <polygon points="150,100 150,64 290,64 290,100" fill="rgba(167,139,250,.2)" stroke="none"/>
+            <line x1="150" y1="100" x2="150" y2="64" stroke="#a78bfa" stroke-width="2"/>
+            <line x1="150" y1="64" x2="290" y2="64" stroke="#a78bfa" stroke-width="2"/>
+            <line x1="290" y1="64" x2="290" y2="100" stroke="#a78bfa" stroke-width="2"/>
+            <text x="220" y="82" font-size="8.5" fill="#c4b5fd" text-anchor="middle" font-weight="bold" font-family="-apple-system,sans-serif">작은 F · 긴 Δt</text>
+            <!-- 넓이 같음 표시 -->
+            <text x="170" y="115" font-size="9" fill="rgba(255,255,255,.5)" text-anchor="middle" font-family="-apple-system,sans-serif">두 그래프의 넓이(충격량) = 동일 → 운동량 변화 동일</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="cv-block">
+        <div class="cv-block-title">6. 운동량 보존 법칙</div>
         <p class="cv-p">외력이 없는 계에서 충돌 전후의 <b>전체 운동량</b>은 보존됩니다.</p>
         <div class="cv-formula-box">
           <b>운동량 보존</b>$$m_1 v_1 + m_2 v_2 = m_1 v_1' + m_2 v_2'$$
@@ -2401,6 +2491,7 @@ function showSplashView(view) {
 
 function selectChapter(id) {
   currentChapterId = id;
+  if (id === 'newton_third') currentNT3SubCat = 'action';
   const ch = CHAPTERS[id];
   if (!ch) return;
   document.getElementById('ch-menu-section').textContent = ch.section;
@@ -3208,12 +3299,12 @@ const eqState    = EQ_PROBLEMS.map(() => ({ sel: null, hintsShown: 0, checked: f
 /* ── 범용 접근자: 현재 챕터에 따라 올바른 문제/상태 배열을 반환 ── */
 function getProblems()     {
   if (currentChapterId === 'newton_second') return NEWTON_PROBLEMS;
-  if (currentChapterId === 'newton_third')  return NEWTON_THIRD_PROBLEMS;
+  if (currentChapterId === 'newton_third')  return currentNT3SubCat === 'action' ? NT3_ACTION_PROBLEMS : NT3_MOMENTUM_PROBLEMS;
   return EQ_PROBLEMS;
 }
 function getProblemState() {
   if (currentChapterId === 'newton_second') return newtonState;
-  if (currentChapterId === 'newton_third')  return newtonThirdState;
+  if (currentChapterId === 'newton_third')  return currentNT3SubCat === 'action' ? nt3ActionState : nt3MomentumState;
   return eqState;
 }
 
@@ -3221,7 +3312,14 @@ function getProblemState() {
 function renderEqList() {
   const probs = getProblems();
   const body  = document.getElementById('eq-list-body');
-  body.innerHTML = probs.map((p, i) => `
+  let tabsHtml = '';
+  if (currentChapterId === 'newton_third') {
+    tabsHtml = `<div class="nt3-cat-tabs">
+      <button class="nt3-cat-tab${currentNT3SubCat==='action'?' active':''}" onclick="selectNT3Cat('action')">작용·반작용</button>
+      <button class="nt3-cat-tab${currentNT3SubCat==='momentum'?' active':''}" onclick="selectNT3Cat('momentum')">운동량과 충격량</button>
+    </div>`;
+  }
+  body.innerHTML = tabsHtml + probs.map((p, i) => `
     <div class="eq-pick-card" onclick="openEqDetail(${i})">
       <div class="eq-pick-num">${i + 1}</div>
       <div class="eq-pick-info">
@@ -3231,6 +3329,11 @@ function renderEqList() {
       <span class="eq-pick-arrow">→</span>
     </div>
   `).join('');
+}
+
+function selectNT3Cat(cat) {
+  currentNT3SubCat = cat;
+  renderEqList();
 }
 
 /* ── 문제 상세 열기 ── */
@@ -3635,7 +3738,119 @@ function _svgNT3(mode){
 }
 
 /* ── 작용반작용 문제 데이터 ── */
-const NEWTON_THIRD_PROBLEMS = [
+/* ── SVG 생성기 (작용반작용 문제 3: 엘리베이터) ── */
+function _svgNT4(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',GRAY='#9ca3af',PURPLE='#8b5cf6';
+  let s='';
+  // 엘리베이터 외곽
+  s+=`<rect x="200" y="40" width="180" height="170" fill="#1e293b" stroke="#60a5fa" stroke-width="2.5" rx="6"/>`;
+  s+=_txt(290, 30, '엘리베이터', GRAY, 9.5, 'middle');
+  // 사람
+  s+=`<circle cx="290" cy="130" r="18" fill="#334155" stroke="#93c5fd" stroke-width="2"/>`;
+  s+=`<line x1="290" y1="148" x2="290" y2="185" stroke="#93c5fd" stroke-width="2.5"/>`;
+  s+=_txt(290, 127, '60 kg', '#93c5fd', 9, 'middle', 'bold');
+  // 바닥
+  s+=`<rect x="200" y="195" width="180" height="8" fill="#334155" rx="2"/>`;
+  if(mode===0){
+    // 위 화살표 (가속)
+    s+=_arrow(370, 130, 370, 60, '#f59e0b', 'a = 2 m/s²', 'right', 3);
+    s+=_txt(290, 240, '위로 가속하는 엘리베이터', GRAY, 9.5, 'middle');
+  }
+  if(mode===1){
+    // 중력
+    s+=_arrow(270, 148, 270, 200, RED, 'mg=600 N', 'left', 2.5);
+    // 수직항력
+    s+=_arrow(310, 195, 310, 130, GREEN, 'N=?', 'right', 2.5);
+    s+=`<rect x="100" y="230" width="440" height="38" fill="rgba(96,165,250,.08)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 246, 'ΣF = N − mg = ma  →  N = m(g + a)', BLUE, 10, 'middle', 'bold');
+    s+=_txt(320, 262, 'N = 60 × (10 + 2) = 720 N', GREEN, 10, 'middle', 'bold');
+  }
+  if(mode===2){
+    s+=_arrow(270, 195, 270, 240, RED, '사람 → 바닥\n720 N', 'left', 2.5);
+    s+=_arrow(310, 195, 310, 140, GREEN, '바닥 → 사람\n720 N', 'right', 2.5);
+    s+=`<rect x="100" y="255" width="440" height="28" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.25)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 272, '작용·반작용: 두 힘의 크기 같고 방향 반대, 서로 다른 물체에 작용', GREEN, 9.5, 'middle');
+  }
+  if(mode===3){
+    s+=`<rect x="100" y="230" width="440" height="52" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320, 248, '⚠️ 실수 포인트', '#78350f', 11, 'middle', 'bold');
+    s+=_txt(320, 264, '위로 가속 → N = m(g + a)  ,  아래로 가속 → N = m(g − a)', '#78350f', 9.5, 'middle');
+    s+=_txt(320, 279, '자유낙하(a = g)이면 N = 0 (무중력 상태)', '#78350f', 9.5, 'middle');
+  }
+  return _wsvg(s, 640, 300);
+}
+
+/* ── SVG 생성기 (운동량·충격량 문제 1: 충격량 계산) ── */
+function _svgNTM1(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',GRAY='#9ca3af';
+  const bY=110, bH=44, xA=60, wA=80;
+  let s='';
+  s+=`<rect x="10" y="${bY+bH}" width="620" height="8" fill="#334155" rx="2"/>`;
+  for(let i=10;i<630;i+=22) s+=`<line x1="${i}" y1="${bY+bH+8}" x2="${i+14}" y2="${bY+bH+20}" stroke="#475569" stroke-width="1"/>`;
+  s+=`<rect x="${xA}" y="${bY}" width="${wA}" height="${bH}" fill="#1d4ed8" stroke="#93c5fd" stroke-width="2" rx="4"/>`;
+  s+=_txt(xA+wA/2, bY+bH/2+5, '5 kg', '#93c5fd', 11, 'middle', 'bold');
+  if(mode===0){
+    s+=_txt(320, bY-16, '처음 정지', GRAY, 9, 'middle');
+    s+=_arrow(xA+wA, bY+bH/2, xA+wA+120, bY+bH/2, GREEN, 'F = 10 N', 'top', 2.5);
+    s+=_txt(320, bY+bH+32, '10 N의 힘이 4초 동안 오른쪽으로 작용', GRAY, 9.5, 'middle');
+  }
+  if(mode===1){
+    s+=`<rect x="80" y="195" width="480" height="52" fill="rgba(96,165,250,.08)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 213, '충격량 J = F × Δt = 10 N × 4 s = 40 N·s', BLUE, 10.5, 'middle', 'bold');
+    s+=_txt(320, 232, '방향: 힘의 방향(오른쪽)과 같다', GRAY, 9.5, 'middle');
+    s+=_txt(320, 246, '단위: N·s = kg·m/s (운동량과 같은 단위)', GRAY, 9, 'middle');
+  }
+  if(mode===2){
+    s+=_arrow(xA+wA, bY+bH/2, 480, bY+bH/2, GREEN, 'v\' = 8 m/s', 'top', 2.5);
+    s+=`<rect x="80" y="195" width="480" height="52" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.25)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 213, 'J = Δp = mv\' − 0  →  40 = 5 × v\'', GREEN, 10.5, 'middle', 'bold');
+    s+=_txt(320, 232, 'v\' = 40 / 5 = 8 m/s (오른쪽)', GREEN, 11, 'middle', 'bold');
+  }
+  if(mode===3){
+    s+=`<rect x="80" y="193" width="480" height="56" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320, 211, '⚠️ 실수 포인트', '#78350f', 11, 'middle', 'bold');
+    s+=_txt(320, 228, '충격량 = F × Δt (힘과 시간의 곱)', '#78350f', 10, 'middle');
+    s+=_txt(320, 245, '충격량 = Δp = mv\' − mv₀ (운동량 변화량과 같다)', '#78350f', 10, 'middle');
+  }
+  return _wsvg(s, 640, 270);
+}
+
+/* ── SVG 생성기 (운동량·충격량 문제 2: 공-벽 충돌) ── */
+function _svgNTM2(mode){
+  const BLUE='#2563eb',RED='#dc2626',GREEN='#10b981',GRAY='#9ca3af';
+  let s='';
+  // 벽
+  s+=`<rect x="510" y="60" width="20" height="160" fill="#334155" stroke="#64748b" stroke-width="1.5" rx="2"/>`;
+  for(let y=65;y<215;y+=22) s+=`<line x1="510" y1="${y}" x2="530" y2="${y+14}" stroke="#475569" stroke-width="1"/>`;
+  // 공
+  s+=`<circle cx="260" cy="140" r="24" fill="#1d4ed8" stroke="#93c5fd" stroke-width="2"/>`;
+  s+=_txt(260, 145, '0.5 kg', '#93c5fd', 9, 'middle', 'bold');
+  if(mode===0){
+    s+=_arrow(284, 132, 490, 132, GREEN, '10 m/s →', 'top', 2.5);
+    s+=_arrow(480, 152, 290, 152, RED, '← 5 m/s (튀어 나옴)', 'bottom', 2.5);
+    s+=_txt(320, 220, '오른쪽(+)으로 날아와 벽에 부딪힌 후 왼쪽(−)으로 튀어남', GRAY, 9, 'middle');
+  }
+  if(mode===1){
+    s+=`<rect x="60" y="195" width="480" height="52" fill="rgba(96,165,250,.08)" stroke="rgba(96,165,250,.2)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 213, '처음 운동량: p₀ = 0.5 × (+10) = +5 kg·m/s', BLUE, 10, 'middle', 'bold');
+    s+=_txt(320, 232, '나중 운동량: p\' = 0.5 × (−5) = −2.5 kg·m/s', RED, 10, 'middle', 'bold');
+  }
+  if(mode===2){
+    s+=`<rect x="60" y="195" width="480" height="52" fill="rgba(16,185,129,.08)" stroke="rgba(16,185,129,.25)" stroke-width="1" rx="5"/>`;
+    s+=_txt(320, 213, 'J = Δp = p\' − p₀ = −2.5 − 5 = −7.5 N·s', GREEN, 10.5, 'middle', 'bold');
+    s+=_txt(320, 232, '크기: |J| = 7.5 N·s  (방향: 왼쪽)', GREEN, 11, 'middle', 'bold');
+  }
+  if(mode===3){
+    s+=`<rect x="60" y="193" width="480" height="56" fill="#fefce8" stroke="#fde047" stroke-width="1.5" rx="5"/>`;
+    s+=_txt(320, 211, '⚠️ 실수 포인트', '#78350f', 11, 'middle', 'bold');
+    s+=_txt(320, 228, '방향이 반대이면 부호를 반드시 다르게 표시!', '#78350f', 10, 'middle');
+    s+=_txt(320, 245, 'Δp = mv\' − mv₀ = 0.5×(−5) − 0.5×(+10) = −7.5 N·s', '#78350f', 9.5, 'middle');
+  }
+  return _wsvg(s, 640, 270);
+}
+
+/* ── 작용·반작용 문제 ── */
+const NT3_ACTION_PROBLEMS = [
   {
     id: 1,
     title: '1번 · 두 물체가 서로 미는 힘',
@@ -3672,9 +3887,64 @@ A가 B를 오른쪽으로 미는 힘의 크기가 10 N일 때, B가 A를 미는 
   },
   {
     id: 3,
+    title: '3번 · 엘리베이터 안에서의 힘',
+    badgeText: '중상', badgeClass: 'eq-badge-midh',
+    tags: ['작용·반작용','수직항력','중력','힘의 평형'],
+    stmt: `체중 60 kg인 사람이 엘리베이터 안에 서 있다. 엘리베이터가 위로 2 m/s²의 가속도로 상승할 때,
+사람이 바닥을 누르는 힘의 크기는? (g = 10 m/s²)`,
+    choices: ['480 N','540 N','600 N','660 N','720 N'],
+    answer: 3,
+    svgModes: ['구조 보기','힘 분석','작용·반작용','실수 포인트'],
+    svgFn: _svgNT4,
+    hints: [
+      { t:'힌트 1: 가속도 방향과 합력', b:'위로 가속 → 합력이 위로 필요\nΣF = N − mg = ma\nN = m(g + a) = 60 × (10 + 2) = 720 N' },
+      { t:'힌트 2: 작용·반작용', b:'바닥이 사람을 위로 누르는 힘(N = 720 N)\n→ 사람이 바닥을 아래로 누르는 힘도 720 N (작용·반작용)' }
+    ],
+    answer_text: '사람이 바닥을 누르는 힘 = 720 N → ④'
+  }
+];
+
+/* ── 운동량과 충격량 문제 ── */
+const NT3_MOMENTUM_PROBLEMS = [
+  {
+    id: 1,
+    title: '1번 · 충격량 계산',
+    badgeText: '중', badgeClass: 'eq-badge-mid',
+    tags: ['충격량','운동량 변화','F·Δt'],
+    stmt: `정지해 있던 질량 5 kg인 물체에 10 N의 힘이 오른쪽으로 4초 동안 작용하였다.
+물체가 받은 충격량의 크기와 나중 속도는?`,
+    choices: ['20 N·s, 4 m/s','40 N·s, 8 m/s','40 N·s, 4 m/s','50 N·s, 10 m/s','20 N·s, 2 m/s'],
+    answer: 1,
+    svgModes: ['구조 보기','충격량 계산','속도 변화','실수 포인트'],
+    svgFn: _svgNTM1,
+    hints: [
+      { t:'힌트 1: 충격량 = F × Δt', b:'J = F × Δt = 10 × 4 = 40 N·s\n충격량의 방향은 힘의 방향과 같다.' },
+      { t:'힌트 2: 충격량 = 운동량 변화', b:'J = Δp = mv\' − mv₀\n40 = 5 × v\' − 0\nv\' = 40 / 5 = 8 m/s' }
+    ],
+    answer_text: '충격량 40 N·s, 나중 속도 8 m/s → ②'
+  },
+  {
+    id: 2,
+    title: '2번 · 공이 벽에 충돌할 때 충격량',
+    badgeText: '중상', badgeClass: 'eq-badge-midh',
+    tags: ['충격량','운동량 변화','방향 고려','반발'],
+    stmt: `질량 0.5 kg인 공이 10 m/s로 오른쪽으로 날아가 벽에 수직으로 부딪혔다.
+공이 5 m/s로 반대 방향(왼쪽)으로 튀어 나왔다면, 공이 받은 충격량의 크기는?`,
+    choices: ['2.5 N·s','5 N·s','7.5 N·s','10 N·s','12.5 N·s'],
+    answer: 2,
+    svgModes: ['구조 보기','운동량 계산','충격량 계산','실수 포인트'],
+    svgFn: _svgNTM2,
+    hints: [
+      { t:'힌트 1: 방향 설정', b:'오른쪽을 (+)로 설정\n처음 운동량: p₀ = 0.5 × (+10) = +5 kg·m/s\n나중 운동량: p\' = 0.5 × (−5) = −2.5 kg·m/s' },
+      { t:'힌트 2: 충격량 = Δp', b:'J = p\' − p₀ = −2.5 − 5 = −7.5 N·s\n크기: |J| = 7.5 N·s (방향은 왼쪽)' }
+    ],
+    answer_text: '충격량의 크기 = 7.5 N·s → ③'
+  },
+  {
+    id: 3,
     title: '3번 · 충돌 후 속도 (운동량 보존)',
     badgeText: '상', badgeClass: 'eq-badge-high',
-    tags: ['운동량 보존','충돌','합체','뉴턴 제3법칙'],
+    tags: ['운동량 보존','충돌','합체'],
     stmt: `마찰 없는 수평면에서 4 kg인 물체 A가 5 m/s로 오른쪽으로 움직이다가
 정지해 있는 6 kg인 물체 B와 충돌하여 합체되었다. 합체 후 속도는? (단위: m/s)`,
     choices: ['1 m/s','1.5 m/s','2 m/s','2.5 m/s','3 m/s'],
@@ -3689,7 +3959,13 @@ A가 B를 오른쪽으로 미는 힘의 크기가 10 N일 때, B가 A를 미는 
   }
 ];
 
-const newtonThirdState = NEWTON_THIRD_PROBLEMS.map(() => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
+/* 하위호환을 위해 유지 (getProblems에서 직접 쓰지 않음) */
+const NEWTON_THIRD_PROBLEMS = [...NT3_ACTION_PROBLEMS, ...NT3_MOMENTUM_PROBLEMS];
+
+let currentNT3SubCat = 'action'; // 'action' | 'momentum'
+const nt3ActionState    = NT3_ACTION_PROBLEMS.map(()    => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
+const nt3MomentumState  = NT3_MOMENTUM_PROBLEMS.map(()  => ({ sel: null, hintsShown: 0, checked: false, svgMode: 0 }));
+const newtonThirdState  = nt3ActionState; // 레거시 참조용
 
 /* ── 뉴턴 법칙 문제 데이터 ── */
 const NEWTON_PROBLEMS = [
